@@ -30,7 +30,6 @@ import org.telosys.tools.commons.cfg.TelosysToolsCfg;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.PluginImages;
 import org.telosys.tools.eclipse.plugin.commons.Util;
-import org.telosys.tools.eclipse.plugin.commons.listeners.ListenerForTableToolTip;
 import org.telosys.tools.eclipse.plugin.commons.listeners.OpenTemplateFileInEditor;
 import org.telosys.tools.eclipse.plugin.commons.widgets.BundleComboBox;
 import org.telosys.tools.eclipse.plugin.commons.widgets.GenerateButton;
@@ -348,7 +347,14 @@ import org.telosys.tools.repository.model.RepositoryModel;
 		gdTableEntities.heightHint = TABLE_HEIGHT ;
 		gdTableEntities.widthHint  = 420 ;
 		tableEntities.setLayoutData(gdTableEntities);
-				
+		
+		//--- Add "fake tool tip" ( since v 3.0.0 )
+		tableEntities.setToolTipText(""); // Disable the native tooltip
+		Listener toolTipListener = new ToolTipListenerForEntitiesTable(tableEntities) ;
+		tableEntities.addListener(SWT.MouseMove, toolTipListener);
+		tableEntities.addListener(SWT.MouseDown, toolTipListener);
+		tableEntities.addListener(SWT.MouseUp,   toolTipListener);
+
 		return tableEntities ;
 	}
 
@@ -426,11 +432,11 @@ import org.telosys.tools.repository.model.RepositoryModel;
 		int iColumnIndex = 0 ;
 
 		col = new TableColumn(table, SWT.LEFT, iColumnIndex++);
-		col.setText("Table / Entity name");
+		col.setText("Table name");
 		col.setWidth(220);
 		
 		col = new TableColumn(table, SWT.LEFT, iColumnIndex++);
-		col.setText("Entity class");
+		col.setText("Entity class name");
 		col.setWidth(200);
 		
 		return table;
@@ -469,7 +475,8 @@ import org.telosys.tools.repository.model.RepositoryModel;
 
 		//--- Add "fake tool tip" ( since v 2.0.7 )
 		table.setToolTipText(""); // Disable the native tooltip
-		Listener tableListener = new ListenerForTableToolTip(table) ;
+//		Listener tableListener = new ListenerForTableToolTip(table) ;
+		Listener tableListener = new ToolTipListenerForTargetsTable(table) ; // v 3.0.0
 		//-- ON
 //		table.addListener(SWT.MouseHover, tableListener);
 		//-- OFF
@@ -514,15 +521,17 @@ import org.telosys.tools.repository.model.RepositoryModel;
 //				Entity entity = entities[i];
 			for ( EntityInDbModel entity : entities ) { // v 3.0.0
 				//String sTableName = entity.getName() ;
-				String sTableName = entity.getDatabaseTable() ; // v 3.0.0
-				
+				String tableName = entity.getDatabaseTable() ; // v 3.0.0
+				if ( entity.getWarnings() != null && entity.getWarnings().size() > 0 ) {
+					tableName = "(!) " + tableName;
+				}
 				//String sBeanClass = entity.getBeanJavaClass();
 				String entityClassName = entity.getClassName(); // v 3.0.0
 				
 				if ( entityClassName == null ) entityClassName = "???" ;
 				
                 //--- Create the row content 
-                String[] row = new String[] { sTableName, entityClassName };
+                String[] row = new String[] { tableName, entityClassName };
 				
                 //--- Create the TableItem and set the row content 
             	TableItem tableItem = new TableItem(_tableEntities, SWT.NONE );
