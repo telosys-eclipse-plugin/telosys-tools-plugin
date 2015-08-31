@@ -1,0 +1,3 @@
+
+VM args ( PermGen => -XX:MaxPermSize=128m ) :
+-Dosgi.requiredJavaVersion=1.5 -Xms40m -Xmx768m -XX:MaxPermSize=128m

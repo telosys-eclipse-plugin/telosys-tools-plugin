@@ -1,0 +1,27 @@
+2.1.1 libraries replaced by 3.0.0 libraries :
+               lib/telosys-tools-database-3.0.0.jar,\
+               lib/telosys-tools-repository-3.0.0.jar,\
+               lib/telosys-tools-generic-model-3.0.0.jar,\  (NEW)
+               lib/telosys-tools-generator-3.0.0.jar,\
+               lib/telosys-tools-generator-engine-3.0.0.jar,\  (NEW)
+               lib/telosys-tools-commons-3.0.0.jar,\
+
+ERRORS :
+ "org.telosys.tools.repository.model.Column" replaced by "AttributeInDbModel"
+ new enum "DateType"
+
+
+Errors in classes :
+ . SpecialValue (fixed)
+ . SpecialValueForBoolean (fixed)
+ . SpecialValueForDate (fixed)
+ . SpecialValueForNumber (fixed)
+ . SpecialValueForString (fixed)
+
+"org.telosys.tools.repository.model.Link" replaced by "LinkInDbModel"
+ . DialogBoxForLink (fixed)
+ . LinksComparer (fixed)
+ . LinksList (fixed)
+ . LinksManager (fixed)
+ 
+ etc
