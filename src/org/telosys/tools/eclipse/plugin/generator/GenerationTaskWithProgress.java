@@ -19,6 +19,7 @@ import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.Util;
 import org.telosys.tools.generator.target.TargetDefinition;
 import org.telosys.tools.generator.task.AbstractGenerationTask;
+import org.telosys.tools.generator.task.GenerationTask;
 import org.telosys.tools.generator.task.GenerationTaskResult;
 import org.telosys.tools.generator.task.ITaskMonitor;
 import org.telosys.tools.repository.model.RepositoryModel;
@@ -31,7 +32,7 @@ import org.telosys.tools.repository.model.RepositoryModel;
  * @author Laurent Guerin
  *
  */
-public class GenerationTaskWithProgress extends AbstractGenerationTask implements IRunnableWithProgress 
+public class GenerationTaskWithProgress extends AbstractGenerationTask implements GenerationTask, IRunnableWithProgress 
 {
 	
 	/**

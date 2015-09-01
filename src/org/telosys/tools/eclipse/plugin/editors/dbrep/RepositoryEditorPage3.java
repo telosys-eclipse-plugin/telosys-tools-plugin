@@ -40,6 +40,7 @@ import org.telosys.tools.eclipse.plugin.commons.widgets.TargetsButton;
 import org.telosys.tools.eclipse.plugin.generator.GenerationTaskWithProgress;
 import org.telosys.tools.eclipse.plugin.settings.SettingsManager;
 import org.telosys.tools.generator.target.TargetDefinition;
+import org.telosys.tools.generator.task.GenerationTask;
 import org.telosys.tools.generator.task.GenerationTaskResult;
 import org.telosys.tools.repository.model.EntityInDbModel;
 import org.telosys.tools.repository.model.RepositoryModel;
@@ -793,7 +794,8 @@ import org.telosys.tools.repository.model.RepositoryModel;
     	TelosysToolsLogger telosysToolsLogger = ( editor.getLogger() != null ? editor.getLogger() : new ConsoleLogger() ) ;
     	
     	//--- Create the generation task
-    	GenerationTaskWithProgress generationTaskWithProgress = null ;
+//    	GenerationTaskWithProgress generationTaskWithProgress = null ;
+    	GenerationTask generationTaskWithProgress = null ;
 		try {
 			generationTaskWithProgress = new GenerationTaskWithProgress(
 					editor.getDatabaseRepository(),
