@@ -1245,7 +1245,7 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
     	TelosysToolsCfg telosysToolsCfg = ProjectConfigManager.loadProjectConfig( _editor.getProject() ); // v 3.0.0
         //String dir   = projectConfig.getRepositoriesFolder();
 //        String dir   = projectConfig.getTelosysToolsCfg().getRepositoriesFolder();
-        String dir   = telosysToolsCfg.getRepositoriesFolder(); // v 3.0.0
+        String dir   = telosysToolsCfg.getModelsFolder(); // v 3.0.0
         return FileUtil.buildFilePath(dir, sDatabaseName+".dbrep" );
     }
     
@@ -1749,16 +1749,16 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 //    	TelosysToolsCfg telosysToolsCfg = projectConfig.getTelosysToolsCfg();
     	TelosysToolsCfg telosysToolsCfg = ProjectConfigManager.loadProjectConfig(project); // v 3.0.0
 		
-    	log("repositoriesFolder = " + telosysToolsCfg.getRepositoriesFolder() );
-		IFolder repositoriesFolder = project.getFolder(telosysToolsCfg.getRepositoriesFolder());
+    	log("repositoriesFolder = " + telosysToolsCfg.getModelsFolder() );
+		IFolder modelsFolder = project.getFolder(telosysToolsCfg.getModelsFolder());
 		
-		log("is repositories Folder Synchronized = " + repositoriesFolder.isSynchronized(IResource.DEPTH_INFINITE) );
+		log("is repositories Folder Synchronized = " + modelsFolder.isSynchronized(IResource.DEPTH_INFINITE) );
 		try {
-			repositoriesFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
+			modelsFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
 		} catch (CoreException e) {
 			log("refreshLocal : CoreException " );
 		}
-		log("is repositories Folder Synchronized = " + repositoriesFolder.isSynchronized(IResource.DEPTH_INFINITE) );
+		log("is repositories Folder Synchronized = " + modelsFolder.isSynchronized(IResource.DEPTH_INFINITE) );
     	
     }
 

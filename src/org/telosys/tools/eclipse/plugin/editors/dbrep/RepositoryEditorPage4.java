@@ -116,7 +116,7 @@ import org.telosys.tools.repository.model.RepositoryModel;
 
 		addConfigRow(body, "Templates folder :", telosysToolsCfg.getTemplatesFolder() );
 		addConfigRow(body, "Templates folder full path :", telosysToolsCfg.getTemplatesFolderAbsolutePath() );
-		addConfigRow(body, "Repositories folder :", telosysToolsCfg.getRepositoriesFolder() );
+		addConfigRow(body, "Repositories folder :", telosysToolsCfg.getModelsFolder() );
 		
 		addConfigRow(body, "", "" );
 		

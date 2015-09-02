@@ -44,6 +44,10 @@
 			  todir="${lib_dir}" 
 			  overwrite="true" verbose="true" />
 
+		<copy file="${maven_repo}/org/telosys/tools/telosys-tools-dsl-parser/${VERSION}/telosys-tools-dsl-parser-${VERSION}.jar" 
+			  todir="${lib_dir}" 
+			  overwrite="true" verbose="true" />
+
 		<copy file="${maven_repo}/org/telosys/tools/telosys-tools-generic-model/${VERSION}/telosys-tools-generic-model-${VERSION}.jar" 
 			  todir="${lib_dir}" 
 			  overwrite="true" verbose="true" />
