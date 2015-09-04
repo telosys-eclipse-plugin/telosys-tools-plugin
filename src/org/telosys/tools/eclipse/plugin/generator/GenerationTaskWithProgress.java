@@ -13,7 +13,6 @@ import org.telosys.tools.commons.TelosysToolsLogger;
 import org.telosys.tools.commons.cfg.TelosysToolsCfg;
 import org.telosys.tools.commons.io.CopyHandler;
 import org.telosys.tools.commons.io.OverwriteChooser;
-import org.telosys.tools.commons.variables.Variable;
 import org.telosys.tools.eclipse.plugin.commons.EclipseWksUtil;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.Util;
@@ -80,17 +79,8 @@ public class GenerationTaskWithProgress extends AbstractGenerationTask implement
 	
 	@Override  // Implementation for AbstractGenerationTask
 	protected void afterFileGeneration(String fullFileName) {
-		
-//		// IFile iFile = _project.getFile( outputFileNameInProject );
-//		IFile iFile = EclipseWksUtil.toIFile( new File(fullFileName) );
-//		try {
-//			iFile.refreshLocal(IResource.DEPTH_ZERO, null);
-//		} catch (CoreException e) {
-//			MsgBox.error("Cannot refresh file \n " + fullFileName, e );
-//			//throw new InterruptedException("Cannot refresh file.");
-//		}
 		log("afterFileGeneration(" + fullFileName + ")");
-		// Refresh the Eclipse Workspace 
+		// Refresh the generated file in the Eclipse Workspace 
 		EclipseWksUtil.refresh( new File(fullFileName) );	
 	}
 
@@ -149,25 +139,31 @@ public class GenerationTaskWithProgress extends AbstractGenerationTask implement
 		// It copies the required resources and generates the selected targets 
 		// by calling the super class standard methods
 		//---------------------------------------------------------------------------
-		
-		//Variable[] projectVariables = _generatorConfig.getTelosysToolsCfg().getAllVariables();
-		Variable[] projectVariables = super.getAllProjectVariables(); // call SUPER CLASS
-		
-		//--- 1) Copy the given resources (or do nothing if null)
-		//int numberOfResourcesCopied = copyResourcesIfAny(_resourcesTargets);
+//		
+//		//Variable[] projectVariables = _generatorConfig.getTelosysToolsCfg().getAllVariables();
+//		Variable[] projectVariables = super.getAllProjectVariables(); // call SUPER CLASS
+//		
+//		//--- 1) Copy the given resources (or do nothing if null)
+//		//int numberOfResourcesCopied = copyResourcesIfAny(_resourcesTargets);
+//		OverwriteChooser overwriteChooser = new OverwriteChooserDialogBox() ; 
+//		CopyHandler copyHandler = new CopyHandlerForRefresh() ;
+//
+//		int numberOfResourcesCopied = super.copyResourcesIfAny(overwriteChooser, copyHandler); // call SUPER CLASS
+//
+//		//--- 2) Launch the generation
+////		int numberOfFilesGenerated = generateSelectedTargets(progressMonitor, projectVariables);
+//		ITaskMonitor taskMonitor = new TaskMonitor(progressMonitor);
+//		int numberOfFilesGenerated = super.generateSelectedTargets(taskMonitor, projectVariables); // call SUPER CLASS
+//		
+//		//--- Task result
+//		//_result = new GenerationTaskResult(numberOfResourcesCopied, numberOfFilesGenerated);
+//		super.setResult(numberOfResourcesCopied, numberOfFilesGenerated); // call SUPER CLASS
+
 		OverwriteChooser overwriteChooser = new OverwriteChooserDialogBox() ; 
 		CopyHandler copyHandler = new CopyHandlerForRefresh() ;
-
-		int numberOfResourcesCopied = super.copyResourcesIfAny(overwriteChooser, copyHandler); // call SUPER CLASS
-
-		//--- 2) Launch the generation
-//		int numberOfFilesGenerated = generateSelectedTargets(progressMonitor, projectVariables);
 		ITaskMonitor taskMonitor = new TaskMonitor(progressMonitor);
-		int numberOfFilesGenerated = super.generateSelectedTargets(taskMonitor, projectVariables); // call SUPER CLASS
 		
-		//--- Task result
-		//_result = new GenerationTaskResult(numberOfResourcesCopied, numberOfFilesGenerated);
-		super.setResult(numberOfResourcesCopied, numberOfFilesGenerated); // call SUPER CLASS
+		super.runTask(taskMonitor, overwriteChooser, copyHandler);
 	}
 
 }

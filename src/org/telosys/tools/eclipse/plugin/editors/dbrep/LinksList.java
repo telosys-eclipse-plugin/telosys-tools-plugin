@@ -100,7 +100,8 @@ public class LinksList extends CompositesList
 	        b.setData(row);
 	        //b.setText(text);
 	        b.setLayoutData( gd ) ;
-	        b.setSelection( link.isUsed() );
+//	        b.setSelection( link.isUsed() );
+	        b.setSelection( link.isSelected() ); // v 3.0.0
 	        b.setBackground(white);
 	        b.addSelectionListener( new SelectionListener() 
 	    	{
@@ -429,8 +430,12 @@ public class LinksList extends CompositesList
 		LinkInDbModel link = getLinkFromButton(button); // v 3.0.0
 		if ( null == link ) return ;
 
-		if ( button.getSelection() != link.isUsed() ) {
-			link.setUsed( button.getSelection() );
+//		if ( button.getSelection() != link.isUsed() ) {
+//			link.setUsed( button.getSelection() );
+//			pluginPage.setDirty();
+//		}
+		if ( button.getSelection() != link.isSelected() ) { // v 3.0.0
+			link.setSelected( button.getSelection() );
 			pluginPage.setDirty();
 		}
 	}
