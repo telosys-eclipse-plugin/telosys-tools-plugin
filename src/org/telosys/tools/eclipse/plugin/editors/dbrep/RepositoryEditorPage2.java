@@ -1,6 +1,7 @@
 package org.telosys.tools.eclipse.plugin.editors.dbrep;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -22,6 +23,7 @@ import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 import org.telosys.tools.eclipse.plugin.commons.Util;
 import org.telosys.tools.repository.LinksGenerator;
 import org.telosys.tools.repository.model.LinkInDbModel;
+import org.telosys.tools.repository.model.LinksCriteria;
 import org.telosys.tools.repository.model.RepositoryModel;
 import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 
@@ -40,7 +42,7 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 	private Button ckFilterOneToOne   ;
 	
 	private LinksList    linksView ;
-	private LinksManager linksManager ;
+//	private LinksManager linksManager ; // removed in v 3.0.0
 	
 	private Label     linksCount ;
 	
@@ -51,7 +53,7 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 	 */
 	public RepositoryEditorPage2(FormEditor editor, String id, String title) {
 		super(editor, id, title);
-		linksManager = new LinksManager( getRepositoryModel() );
+//		linksManager = new LinksManager( getRepositoryModel() ); // v 3.0.0
 	}
 
 	/* (non-Javadoc)
@@ -112,7 +114,8 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 			gd.heightHint = 400 ;
 			gd.widthHint  = 800;
 
-			linksView = new LinksList(scrolledFormBody, gd, linksManager, this );
+//			linksView = new LinksList(scrolledFormBody, gd, linksManager, this );
+			linksView = new LinksList(scrolledFormBody, gd, this ); // v 3.0.0
 	
 			//---------------------------------------------------------------
 			// Line 4 - Column 1 : Number of links
@@ -129,7 +132,9 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 			// Populate the links view
 			//---------------------------------------------------------------
 			//LinkedList<Link> links = linksManager.getAllLinks();
-			LinkedList<LinkInDbModel> links = linksManager.getAllLinks(); // v 3.0.0
+//			LinkedList<LinkInDbModel> links = linksManager.getAllLinks(); // v 3.0.0
+//			List<LinkInDbModel> links = linksManager.getAllLinks(); // v 3.0.0
+			List<LinkInDbModel> links = getRepositoryModel().getAllLinks(); // v 3.0.0
 			linksView.populate( links );
 			
 			refreshCount();
@@ -162,7 +167,8 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 	}
 	
 	protected void refreshCount() {
-		linksCount.setText( "" + linksView.getSize() + "/" + linksManager.countAllLinks() );
+//		linksCount.setText( "" + linksView.getSize() + "/" + linksManager.countAllLinks() );
+		linksCount.setText( "" + linksView.getSize() + "/" + getRepositoryModel().getNumberOfLinks() );
 	}
 	
 	protected void applyFilterCriteria() {
@@ -179,7 +185,8 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 		log("applyFilterCriteria() : " + criteria );
 		
 		//LinkedList<Link> links = linksManager.getLinks(criteria);
-		LinkedList<LinkInDbModel> links = linksManager.getLinks(criteria); // v 3.0.0
+//		LinkedList<LinkInDbModel> links = linksManager.getLinks(criteria); // v 3.0.0
+		LinkedList<LinkInDbModel> links = getRepositoryModel().getLinks(criteria); // v 3.0.0
 		linksView.repopulate( links );
 		refreshCount();
 	}

@@ -21,18 +21,25 @@ import org.telosys.tools.repository.model.EntityInDbModel;
 import org.telosys.tools.repository.model.ForeignKeyInDbModel;
 import org.telosys.tools.repository.model.LinkInDbModel;
 import org.telosys.tools.repository.model.RelationLinksInDbModel;
+import org.telosys.tools.repository.model.RepositoryModel;
 import org.telosys.tools.repository.persistence.util.RepositoryConst;
 
 public class LinksList extends CompositesList 
 {
-	private LinksManager           linksManager ;
+//	private LinksManager           linksManager ;
+	private final RepositoryModel  repositoryModel ; // v 3.0.0 replaces linksManager
 	private RepositoryEditorPage2  pluginPage;
 	
 	//----------------------------------------------------------------------------------------
-	public LinksList(Composite parent, Object layoutData, LinksManager linksManager, RepositoryEditorPage2 pluginPage) 
+//	public LinksList(Composite parent, Object layoutData, LinksManager linksManager, RepositoryEditorPage2 pluginPage) 
+	public LinksList(Composite parent, Object layoutData, RepositoryEditorPage2 pluginPage) // v 3.0.0
 	{
 		super(parent, layoutData);
-		this.linksManager = linksManager ;
+		if ( pluginPage.getRepositoryModel() == null ) {
+			MsgBox.error("Repository model is not yet set in the editor page");
+		}
+//		this.linksManager = linksManager ;
+		this.repositoryModel = pluginPage.getRepositoryModel() ; // v 3.0.0
 		this.pluginPage = pluginPage ;
 	}
 
@@ -364,7 +371,8 @@ public class LinksList extends CompositesList
 			if ( link.isBasedOnForeignKey() ) {
 				String fkName = link.getForeignKeyName();
 				// ForeignKey fk = linksManager.getForeignKey(fkName);
-				ForeignKeyInDbModel fk = linksManager.getForeignKey(fkName); // v 3.0.0
+//				ForeignKeyInDbModel fk = linksManager.getForeignKey(fkName); // v 3.0.0
+				ForeignKeyInDbModel fk = repositoryModel.getForeignKeyByName(fkName); // v 3.0.0
 				if ( fk != null ) {
 					label.setImage( PluginImages.getImage(PluginImages.FOREIGNKEY) );
 					label.setToolTipText(" Foreign Key : \"" + fkName + "\" ");
@@ -378,7 +386,8 @@ public class LinksList extends CompositesList
 				//JoinTable joinTable = link.getJoinTable();
 				String joinTableName = link.getJoinTableName();
 				//Entity entity = linksManager.getEntity(joinTableName);
-				EntityInDbModel entity = linksManager.getEntityByTableName(joinTableName);
+//				EntityInDbModel entity = linksManager.getEntityByTableName(joinTableName);
+				EntityInDbModel entity = repositoryModel.getEntityByTableName(joinTableName);// v 3.0.0
 				if ( entity != null ) {
 					label.setImage( PluginImages.getImage(PluginImages.JOINTABLE) );
 					label.setToolTipText(" Join Table : \"" + joinTableName + "\"" );
@@ -464,7 +473,8 @@ public class LinksList extends CompositesList
 				{
 					//--- Owning side => update inverse side if any 
 //					RelationLinks relation = linksManager.getRelationByLinkId( link.getId() );
-					RelationLinksInDbModel relation = linksManager.getRelationByLinkId( link.getId() ); // v 3.0.0
+//					RelationLinksInDbModel relation = linksManager.getRelationByLinkId( link.getId() ); // v 3.0.0
+					RelationLinksInDbModel relation = repositoryModel.getRelationByLinkId( link.getId() ); // v 3.0.0
 //					Link inverseSideLink = relation.getInverseSideLink();
 					LinkInDbModel inverseSideLink = relation.getInverseSideLink(); // v 3.0.0
 					if ( inverseSideLink != null ) {
@@ -555,7 +565,8 @@ public class LinksList extends CompositesList
 		{
 			//--- Owning side => remove inverse side if any 
 //			RelationLinks relation = linksManager.getRelationByLinkId( link.getId() );
-			RelationLinksInDbModel relation = linksManager.getRelationByLinkId( link.getId() ); // v 3.0.0
+//			RelationLinksInDbModel relation = linksManager.getRelationByLinkId( link.getId() ); // v 3.0.0
+			RelationLinksInDbModel relation = repositoryModel.getRelationByLinkId( link.getId() ); // v 3.0.0
 			String s = "\n ( no inverse side )" ;
 //			Link inverseSideLink = relation.getInverseSideLink();
 			LinkInDbModel inverseSideLink = relation.getInverseSideLink(); // v 3.0.0
@@ -567,7 +578,8 @@ public class LinksList extends CompositesList
 			if ( MsgBox.confirm("Do you realy want to remove this link (owning side)"
 					+ s 
 					+ "\n from the repository ? ") ) {
-				linksManager.removeRelation(relation); // Remove the 2 links
+//				linksManager.removeRelation(relation); // Remove the 2 links
+				repositoryModel.removeRelation(relation); // Remove the 2 links // v 3.0.0
 				deleteRow(row);
 				if ( rowInvSide != null ) {
 					deleteRow(rowInvSide);
@@ -582,7 +594,9 @@ public class LinksList extends CompositesList
 			//--- Inverse side => remove only the current link
 			if ( MsgBox.confirm("Do you realy want to remove this link (inverse side)"
 					+ "\n from the repository ? ") ) {
-				linksManager.removeLink( link.getId() );
+//				linksManager.removeLink( link.getId() );
+//				linksManager.removeLink( link.getId() );
+				repositoryModel.removeLinkById( link.getId() ); // v 3.0.0
 				deleteRow(row);
 				refresh();
 				pluginPage.setDirty();
@@ -641,7 +655,8 @@ public class LinksList extends CompositesList
 			if ( item instanceof LinkInDbModel ) { // v 3.0.0
 //				Link link = (Link)item ;
 				LinkInDbModel link = (LinkInDbModel)item ; // v 3.0.0
-				linksManager.removeLink( link.getId() );
+//				linksManager.removeLink( link.getId() );
+				repositoryModel.removeLinkById( link.getId() );// v 3.0.0
 			}
 			else
 			{

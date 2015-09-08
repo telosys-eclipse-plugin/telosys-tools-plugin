@@ -515,7 +515,8 @@ import org.telosys.tools.repository.model.RepositoryModel;
 		RepositoryModel dbRep = repEditor.getDatabaseRepository();
 		
 		//Entity[] entities = dbRep.getEntities();
-		EntityInDbModel[] entities = dbRep.getEntitiesArray(); // v 3.0.0
+//		EntityInDbModel[] entities = dbRep.getEntitiesArray(); // v 3.0.0
+		EntityInDbModel[] entities = dbRep.getEntitiesArraySortedByTableName(); // v 3.0.0
 		if ( entities != null )
 		{
 //			for ( int i = 0 ; i < entities.length ; i++ ){
