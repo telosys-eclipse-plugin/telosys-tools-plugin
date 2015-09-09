@@ -53,6 +53,11 @@ public class MsgBox
 //	    error(" Error ", sb.toString() );
 //	}
 	//----------------------------------------------------------------------------------
+	public static void error(String title, String message, Throwable e) 
+	{
+	    error( title, message + "\n\n" + ExceptionUtil.getExceptionSummary(e) );
+	}
+	//----------------------------------------------------------------------------------
 	public static void error(String message, Throwable e) 
 	{
 	    error(" Error ", message + "\n\n" + ExceptionUtil.getExceptionSummary(e) );

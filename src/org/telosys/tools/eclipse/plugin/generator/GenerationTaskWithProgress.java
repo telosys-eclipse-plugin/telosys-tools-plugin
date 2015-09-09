@@ -16,8 +16,10 @@ import org.telosys.tools.commons.io.OverwriteChooser;
 import org.telosys.tools.eclipse.plugin.commons.EclipseWksUtil;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.Util;
+import org.telosys.tools.generator.context.Target;
 import org.telosys.tools.generator.target.TargetDefinition;
 import org.telosys.tools.generator.task.AbstractGenerationTask;
+import org.telosys.tools.generator.task.ErrorReport;
 import org.telosys.tools.generator.task.GenerationTask;
 import org.telosys.tools.generator.task.GenerationTaskResult;
 import org.telosys.tools.generator.task.ITaskMonitor;
@@ -57,8 +59,6 @@ public class GenerationTaskWithProgress extends AbstractGenerationTask implement
 			throws TelosysToolsException 
 	{
 		// Just call the super class constructor
-//		super(repositoryModel, selectedEntities, selectedTargets, resourcesTargets,
-//				generatorConfig, logger);
 		super(repositoryModel, selectedEntities, 
 				bundleName, selectedTargets, resourcesTargets, 
 				telosysToolsCfg, logger);
@@ -68,23 +68,22 @@ public class GenerationTaskWithProgress extends AbstractGenerationTask implement
 	// Methods implementation for super class 'AbstractGenerationTask'
 	//--------------------------------------------------------------------------------------
 	@Override  // Implementation for AbstractGenerationTask
-	protected void showErrorMessage(String message, Throwable exception) {
-		MsgBox.error( message, exception );
-	}
-
-	@Override  // Implementation for AbstractGenerationTask
-	protected void showErrorMessage(String message1, String message2) {
-		MsgBox.error( message1, message2 );
+	protected boolean onError(ErrorReport errorReport) {
+		MsgBox.error(errorReport.getMessageTitle(), 
+					errorReport.getMessageBody(), 
+					errorReport.getException() );
+		return true ; // continue the task
+		// TODO : choose continue or interrupt
 	}
 	
 	@Override  // Implementation for AbstractGenerationTask
-	protected void afterFileGeneration(String fullFileName) {
+	protected void afterFileGeneration(Target target, String fullFileName) {
 		log("afterFileGeneration(" + fullFileName + ")");
 		// Refresh the generated file in the Eclipse Workspace 
 		EclipseWksUtil.refresh( new File(fullFileName) );	
 	}
 
-	@Override  // Implementation for AbstractGenerationTask
+	@Override  // Implementation for GenerationTask
 	public GenerationTaskResult launch() { 
 		
 		//-----------------------------------------------------------------------------------
@@ -92,9 +91,6 @@ public class GenerationTaskWithProgress extends AbstractGenerationTask implement
 		// Creates a 'ProgressMonitor (Eclipse object)' and use it to run this task instance
 		//-----------------------------------------------------------------------------------
 
-		//GenerationTaskResult generationTaskResult = null ;
-		//GenerationTaskWithProgress generationTaskWithProgress = this ;
-		
 		//--- 1) De-activate "Build Automatically"
 		boolean originalFlag = EclipseWksUtil.setBuildAutomatically(false);
 		
@@ -103,18 +99,17 @@ public class GenerationTaskWithProgress extends AbstractGenerationTask implement
 		try {
 			log("Run generation task ..."  );
 			//--- RUN THE ECLIPSE TASK ( 'this' task ) ....
-			progressMonitorDialog.run(false, false, this);  
+			progressMonitorDialog.run(false, false, this); // call the 'run' method
 			log("End of generation task."  );
 			
 			GenerationTaskResult generationTaskResult = super.getResult() ;
-			MsgBox.info("Normal end of generation." 
+			MsgBox.info("End of generation task." 
 					+ "\n\n" + generationTaskResult.getNumberOfResourcesCopied() + " resources(s) copied."
-					+ "\n\n" + generationTaskResult.getNumberOfFilesGenerated() + " file(s) generated.");
+					+ "\n\n" + generationTaskResult.getNumberOfFilesGenerated() + " file(s) generated."
+					+ "\n\n" + generationTaskResult.getNumberOfGenerationErrors() + " generation error(s).");
 			
 		} catch (InvocationTargetException invocationTargetException) {
-//			showGenerationError(invocationTargetException, 
-//					generationTaskWithProgress.getCurrentTemplateName(), generationTaskWithProgress.getCurrentEntityName() ); // v 2.0.7
-			super.showGenerationError(invocationTargetException);
+			onError( buildErrorReport(invocationTargetException) ) ;
 		} catch (InterruptedException e) {
 			MsgBox.info("Generation interrupted");
 		}
@@ -122,10 +117,9 @@ public class GenerationTaskWithProgress extends AbstractGenerationTask implement
 		//--- 3) Re-activate "Build Automatically" 
 		EclipseWksUtil.setBuildAutomatically(originalFlag);
 		
-//    	return generationTaskResult;	
     	return super.getResult();
 	}
-	
+
 	//--------------------------------------------------------------------------------------
 	// Methods implementation for Eclipse interface 'IRunnableWithProgress'
 	//--------------------------------------------------------------------------------------
@@ -139,25 +133,6 @@ public class GenerationTaskWithProgress extends AbstractGenerationTask implement
 		// It copies the required resources and generates the selected targets 
 		// by calling the super class standard methods
 		//---------------------------------------------------------------------------
-//		
-//		//Variable[] projectVariables = _generatorConfig.getTelosysToolsCfg().getAllVariables();
-//		Variable[] projectVariables = super.getAllProjectVariables(); // call SUPER CLASS
-//		
-//		//--- 1) Copy the given resources (or do nothing if null)
-//		//int numberOfResourcesCopied = copyResourcesIfAny(_resourcesTargets);
-//		OverwriteChooser overwriteChooser = new OverwriteChooserDialogBox() ; 
-//		CopyHandler copyHandler = new CopyHandlerForRefresh() ;
-//
-//		int numberOfResourcesCopied = super.copyResourcesIfAny(overwriteChooser, copyHandler); // call SUPER CLASS
-//
-//		//--- 2) Launch the generation
-////		int numberOfFilesGenerated = generateSelectedTargets(progressMonitor, projectVariables);
-//		ITaskMonitor taskMonitor = new TaskMonitor(progressMonitor);
-//		int numberOfFilesGenerated = super.generateSelectedTargets(taskMonitor, projectVariables); // call SUPER CLASS
-//		
-//		//--- Task result
-//		//_result = new GenerationTaskResult(numberOfResourcesCopied, numberOfFilesGenerated);
-//		super.setResult(numberOfResourcesCopied, numberOfFilesGenerated); // call SUPER CLASS
 
 		OverwriteChooser overwriteChooser = new OverwriteChooserDialogBox() ; 
 		CopyHandler copyHandler = new CopyHandlerForRefresh() ;
@@ -165,5 +140,5 @@ public class GenerationTaskWithProgress extends AbstractGenerationTask implement
 		
 		super.runTask(taskMonitor, overwriteChooser, copyHandler);
 	}
-
+	
 }

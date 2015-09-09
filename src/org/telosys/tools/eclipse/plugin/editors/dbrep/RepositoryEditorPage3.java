@@ -41,7 +41,6 @@ import org.telosys.tools.eclipse.plugin.generator.GenerationTaskWithProgress;
 import org.telosys.tools.eclipse.plugin.settings.SettingsManager;
 import org.telosys.tools.generator.target.TargetDefinition;
 import org.telosys.tools.generator.task.GenerationTask;
-import org.telosys.tools.generator.task.GenerationTaskResult;
 import org.telosys.tools.repository.model.EntityInDbModel;
 import org.telosys.tools.repository.model.RepositoryModel;
 
@@ -771,7 +770,7 @@ import org.telosys.tools.repository.model.RepositoryModel;
     	}
     }
     
-    private GenerationTaskResult launchBulkGenerationTask(
+    private void launchBulkGenerationTask(
     		LinkedList<String> selectedEntities, 
     		LinkedList<TargetDefinition> selectedTargets,
     		List<TargetDefinition> resourcesTargets )
@@ -813,11 +812,11 @@ import org.telosys.tools.repository.model.RepositoryModel;
     	
     	//--- Launch the generation task
 		if ( generationTaskWithProgress != null ) {
-	    	GenerationTaskResult result = generationTaskWithProgress.launch();
-	    	return result ;
+	    	generationTaskWithProgress.launch();
+//	    	return result ;
 		}
-		else {
-			return new GenerationTaskResult();
-		}
+//		else {
+//			return new GenerationTaskResult();
+//		}
     }
 }
