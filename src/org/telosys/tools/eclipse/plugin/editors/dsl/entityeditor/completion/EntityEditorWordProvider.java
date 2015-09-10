@@ -13,38 +13,46 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
-import org.telosys.tools.eclipse.plugin.editors.dsl.common.EditorsUtils;
+import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditorContext;
 import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditorException;
+import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditorUtil;
 
 /**
- * Word provider for autocompletion.
+ * Word provider for auto-completion.
  * 
  */
 public class EntityEditorWordProvider {
 
-    public List<String> suggest(String word, int context)
+	private final static String DOT_ENTITY = ".entity";
+	
+//    public List<String> suggest(String word, int context)
+    public List<String> suggest(String word, EntityEditorContext context)
             throws EntityEditorException {
-        ArrayList<String> wordBuffer = new ArrayList<String>();
+        ArrayList<String> suggestedWords = new ArrayList<String>();
         switch (context) {
-        case EditorsUtils.TYPE:
-            for (String str : EditorsUtils.getProperty("entity.types").split(
-                    ",")) {
+//        case EditorsUtils.TYPE:
+        case TYPE: // suggest for a "type"
+//            for (String str : EditorsUtils.getProperty("entity.types").split(
+//                    ",")) {
+        	for ( String str : EntityEditorUtil.getEntityFieldTypes() ) {
                 if (str.startsWith(word)) {
-                    wordBuffer.add(str + " ");
+                    suggestedWords.add(str + " ");
                 }
             }
-            for (String str : getFileDirectory()) {
+            for (String str : getListOfDefinedEntities()) {
                 if (str.startsWith(word)) {
-                    wordBuffer.add(str);
+                    suggestedWords.add(str + " ");
                 }
             }
             break;
 
-        case EditorsUtils.ANNOTATION:
-            for (String str : EditorsUtils.getProperty("validation.rules")
-                    .split(",")) {
+//        case EditorsUtils.ANNOTATION:
+        case ANNOTATION: // suggest for an "annotation"
+//            for (String str : EditorsUtils.getProperty("validation.rules")
+//                    .split(",")) {
+        	for ( String str : EntityEditorUtil.getEntityFieldAnnotations() ) {
                 if (str.startsWith(word)) {
-                    wordBuffer.add(str);
+                    suggestedWords.add(str);
                 }
             }
             break;
@@ -53,19 +61,21 @@ public class EntityEditorWordProvider {
             break;
         }
 
-        return wordBuffer;
+        return suggestedWords;
     }
 
     /**
      * 
-     * @return List of entity and enum name in the same directory
+     * @return List of '.entity' files located in the same directory
      */
-    private List<String> getFileDirectory() {
+    private List<String> getListOfDefinedEntities() {
 
         List<String> fileList = new ArrayList<String>();
-        FilenameFilter telosysFilter = new FilenameFilter() {
+        
+        FilenameFilter entitiesFilter = new FilenameFilter() {
             public boolean accept(File arg0, String arg1) {
-                return arg1.endsWith(".enum") || arg1.endsWith(".entity");
+                //return arg1.endsWith(".enum") || arg1.endsWith(".entity");
+                return arg1.endsWith(DOT_ENTITY);
             }
         };
 
@@ -76,16 +86,19 @@ public class EntityEditorWordProvider {
         IEditorInput input = editor.getEditorInput();
         IPath path = ((FileEditorInput) input).getPath();
 
-        File repertoire = new File(path.toFile().getParent());
-        for (String str : repertoire.list(telosysFilter)) {
-            if (str.contains(".enum")) {
-                str = str.replace(".enum", "");
-                str = str.substring(0, 1).toUpperCase() + str.substring(1);
-                str = "#" + str;
-            } else {
-                str = str.replace(".entity", "");
-                str = str.substring(0, 1).toUpperCase() + str.substring(1);
-            }
+        File currentFolder = new File(path.toFile().getParent());
+        for (String str : currentFolder.list(entitiesFilter)) {
+//            if (str.contains(".enum")) {
+//                str = str.replace(".enum", "");
+//                str = str.substring(0, 1).toUpperCase() + str.substring(1);
+//                str = "#" + str;
+//            } else {
+//                str = str.replace(".entity", "");
+//                str = str.substring(0, 1).toUpperCase() + str.substring(1);
+//            }
+        	// transform "foo.entity" or "Foo.entity" to "Foo"
+            str = str.replace(DOT_ENTITY, "");
+            str = str.substring(0, 1).toUpperCase() + str.substring(1);
             fileList.add(str);
         }
 

@@ -11,8 +11,8 @@ import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.jface.text.contentassist.IContextInformationValidator;
-
 import org.telosys.tools.eclipse.plugin.editors.dsl.common.EditorsUtils;
+import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditorContext;
 import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditorException;
 
 /*
@@ -21,15 +21,20 @@ import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditorExc
 public class EntityEditorContentAssistProcessor implements
         IContentAssistProcessor {
 
+    private final EntityEditorWordProvider wordProvider;
+    private String lastError;
+
+    /**
+     * Constructor
+     */
     public EntityEditorContentAssistProcessor() {
         this.wordProvider = new EntityEditorWordProvider();
     }
 
-    private EntityEditorWordProvider wordProvider;
-    private String lastError;
-
-    public ICompletionProposal[] computeCompletionProposals(
-            ITextViewer textViewer, int documentOffset) {
+    @Override
+    public ICompletionProposal[] computeCompletionProposals(ITextViewer textViewer, int documentOffset) {
+    	
+    	
         IDocument document = textViewer.getDocument();
         int currOffset = documentOffset > 0 ? documentOffset - 1
                 : documentOffset;
@@ -63,7 +68,8 @@ public class EntityEditorContentAssistProcessor implements
          * } catch (BadLocationException e1) { throw new
          * EditorsException("Error while proposing a word : " + e1); }
          */
-        int context = chooseContext(currWord);
+//        int context = chooseContext(currWord);
+        EntityEditorContext context = chooseContext(currWord);
 
         String oldCurrWord = currWord;
         String wordInProgressRev = "";
@@ -159,11 +165,13 @@ public class EntityEditorContentAssistProcessor implements
      *            : the line of the current word
      * @return the type of context DEFAULT, ANNOTATION, TYPE
      */
-    public int chooseContext(String line) {
+//    public int chooseContext(String line) {
+      public EntityEditorContext chooseContext(String line) {
 
         // empty line
         if (line.length() == 0) {
-            return EditorsUtils.DEFAULT;
+//            return EditorsUtils.DEFAULT;
+            return EntityEditorContext.DEFAULT;
         } else {
             String reverseWord = new StringBuilder(line).reverse().toString();
             int indexType = reverseWord.indexOf(':');
@@ -171,14 +179,26 @@ public class EntityEditorContentAssistProcessor implements
 
             if (reverseWord.charAt(0) == '[' || indexType == -1
                     && indexAnnotation == -1) {
-                return EditorsUtils.DEFAULT;
+//                return EditorsUtils.DEFAULT;
+                return EntityEditorContext.DEFAULT;
+                
             } else if (indexType == -1 && indexAnnotation != -1) {
-                return EditorsUtils.ANNOTATION;
+//                return EditorsUtils.ANNOTATION;
+                return EntityEditorContext.ANNOTATION;
+                
             } else if (indexAnnotation == -1 && indexType != -1) {
-                return EditorsUtils.TYPE;
+//                return EditorsUtils.TYPE;
+                return EntityEditorContext.TYPE;
+                
             } else {
-                return indexAnnotation < indexType ? EditorsUtils.ANNOTATION
-                        : EditorsUtils.TYPE;
+//                return indexAnnotation < indexType ? EditorsUtils.ANNOTATION
+//                        : EditorsUtils.TYPE;
+                if ( indexAnnotation < indexType ) {
+                	return EntityEditorContext.ANNOTATION;
+                }
+                else {
+                	return EntityEditorContext.TYPE;
+                }
             }
         }
     }

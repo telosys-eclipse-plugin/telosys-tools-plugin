@@ -10,62 +10,61 @@ import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
 import org.eclipse.jface.text.rules.WordPatternRule;
 import org.eclipse.jface.text.rules.WordRule;
-import org.telosys.tools.eclipse.plugin.editors.dsl.common.ColorManager;
 import org.telosys.tools.eclipse.plugin.editors.dsl.common.EditorsUtils;
+import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditorColorManager;
 import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditorException;
+import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditorUtil;
 
 /**
  * Scanner rules.
  */
 public class EntityScanner extends RuleBasedScanner {
 
-    public EntityScanner(ColorManager manager) throws EntityEditorException {
+    public EntityScanner(EntityEditorColorManager manager) throws EntityEditorException {
 
-        IRule[] rules = new IRule[6];
+    	int ruleIndex = 0; 
+        IRule[] rules = new IRule[5];
 
-        // Add generic whitespace rule.
-        rules[0] = new WhitespaceRule(new EntityWhitespaceDetector());
+        //----- Add generic whitespace rule.
+        rules[ruleIndex++] = new WhitespaceRule(new EntityWhitespaceDetector());
 
-        // Entity Rule - MAJ
+        //----- Entity Rule - MAJ
         IToken entityRule = new Token(new TextAttribute(
-                manager.getColor(ColorManager.ENTITY_COLOR)));
-        rules[1] = new WordRule(new EntityObjectDetector(), entityRule);
+                manager.getColor(EntityEditorColorManager.ENTITY_COLOR)));
+        rules[ruleIndex++] = new WordRule(new EntityObjectDetector(), entityRule);
 
-        // Entity Rule - Enum
-        rules[2] = new WordPatternRule(new EntityEnumDetector(), "#", null,
-                entityRule);
+//        //----- Entity Rule - Enum
+//        rules[ruleIndex++] = new WordPatternRule(new EntityEnumDetector(), "#", null,
+//                entityRule);
 
-        // Comment rule
-        IToken commentRule = new Token(new TextAttribute(
-                manager.getColor(ColorManager.COMMENT_COLOR)));
-        rules[3] = new EndOfLineRule("//", commentRule);
+        //----- Comment rule
+        IToken commentRule = new Token(new TextAttribute( manager.getColor(EntityEditorColorManager.COMMENT_COLOR)));
+        rules[ruleIndex++] = new EndOfLineRule("//", commentRule);
 
-        // String rule
-        IToken stringRule = new Token(new TextAttribute(
-                manager.getColor(ColorManager.STRING_COLOR)));
-        rules[4] = new SingleLineRule("\"", "\"", stringRule);
+        //----- String rule
+        IToken stringRule = new Token(new TextAttribute( manager.getColor(EntityEditorColorManager.STRING_COLOR)));
+        rules[ruleIndex++] = new SingleLineRule("\"", "\"", stringRule);
 
-        // Default Rule
-        IToken defaultRule = new Token(new TextAttribute(
-                manager.getColor(ColorManager.DEFAULT_COLOR)));
-        WordRule typewr = new WordRule(new EntityDefaultDetector(), defaultRule);
+        //----- Default Rule
+        IToken defaultRule = new Token(new TextAttribute( manager.getColor(EntityEditorColorManager.DEFAULT_COLOR)) );
+        WordRule wordRule = new WordRule(new EntityDefaultDetector(), defaultRule);
 
-        // Type Rule
-        IToken typeRule = new Token(new TextAttribute(
-                manager.getColor(ColorManager.TYPE_COLOR)));
-        for (String str : EditorsUtils.getProperty("entity.types").split(",")) {
-            typewr.addWord(str, typeRule);
+        // Type Rule (list of specific words)
+        IToken typeToken = new Token(new TextAttribute( manager.getColor(EntityEditorColorManager.TYPE_COLOR)) );
+//        for (String str : EditorsUtils.getProperty("entity.types").split(",")) {
+        for (String str : EntityEditorUtil.getEntityFieldTypes() ) {
+            wordRule.addWord(str, typeToken);
         }
 
         // Validation Rule
-        IToken validationRule = new Token(new TextAttribute(
-                manager.getColor(ColorManager.VALIDATION_COLOR)));
-        for (String str : EditorsUtils.getProperty("validation.rules").split(
-                ",")) {
-            typewr.addWord(str, validationRule);
+        IToken annotationToken = new Token(new TextAttribute( manager.getColor(EntityEditorColorManager.ANNOTATION_COLOR)));
+//        for (String str : EditorsUtils.getProperty("validation.rules").split(
+//                ",")) {
+        for (String str : EntityEditorUtil.getEntityFieldAnnotations()) {
+            wordRule.addWord(str, annotationToken);
         }
 
-        rules[5] = typewr;
+        rules[ruleIndex++] = wordRule;
 
         setRules(rules);
     }
