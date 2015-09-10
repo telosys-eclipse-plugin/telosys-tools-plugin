@@ -103,14 +103,23 @@
             name="Telosys Tools Dbconfig editor"
             extensions="dbcfg"/>
       <editor
-      		id="org.telosys.tools.eclipse.plugin.editors.velocity.VelocityEditor"
-      		class="org.telosys.tools.eclipse.plugin.editors.velocity.VelocityEditor"
-      		icon="icons/velocity_file.png"
-      		default="true"
             name="Telosys Velocity Template Editor"
             extensions="vm"
-            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor">
-      </editor>            
+      		icon="icons/velocity_file.png"
+      		   id="org.telosys.tools.eclipse.plugin.editors.velocity.VelocityEditor"
+      		class="org.telosys.tools.eclipse.plugin.editors.velocity.VelocityEditor"
+      		default="true"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor" 
+            />
+      <editor
+            name="Telosys DSL Entity Editor"
+            extensions="entity"
+            icon="icons/entity.png"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            class="org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditor"
+               id="org.telosys.tools.eclipse.plugin.editors.dsl.entityEditor.EntityEditor" 
+            />
+      
    </extension>
    
    <!-- DECORATORS -->
