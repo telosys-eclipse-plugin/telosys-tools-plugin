@@ -16,6 +16,7 @@ import org.telosys.tools.commons.io.OverwriteChooser;
 import org.telosys.tools.eclipse.plugin.commons.EclipseWksUtil;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.Util;
+import org.telosys.tools.eclipse.plugin.commons.dialogbox.GenerationTaskMsgBox;
 import org.telosys.tools.generator.context.Target;
 import org.telosys.tools.generator.target.TargetDefinition;
 import org.telosys.tools.generator.task.AbstractGenerationTask;
@@ -69,11 +70,11 @@ public class GenerationTaskWithProgress extends AbstractGenerationTask implement
 	//--------------------------------------------------------------------------------------
 	@Override  // Implementation for AbstractGenerationTask
 	protected boolean onError(ErrorReport errorReport) {
-		MsgBox.error(errorReport.getMessageTitle(), 
+		boolean r = GenerationTaskMsgBox.error(errorReport.getMessageTitle(), 
 					errorReport.getMessageBody(), 
 					errorReport.getException() );
-		return true ; // continue the task
-		// TODO : choose continue or interrupt
+//		MsgBox.info("Continue ? : " + r );
+		return r ; // continue the task or cancel
 	}
 	
 	@Override  // Implementation for AbstractGenerationTask
@@ -110,8 +111,14 @@ public class GenerationTaskWithProgress extends AbstractGenerationTask implement
 			
 		} catch (InvocationTargetException invocationTargetException) {
 			onError( buildErrorReport(invocationTargetException) ) ;
+			
 		} catch (InterruptedException e) {
-			MsgBox.info("Generation interrupted");
+			GenerationTaskResult generationTaskResult = super.getResult() ;
+			MsgBox.warning("GENERATION CANCELED !" 
+					+ "\n\n"
+					+ "\n\n" + generationTaskResult.getNumberOfResourcesCopied() + " resources(s) copied."
+					+ "\n\n" + generationTaskResult.getNumberOfFilesGenerated() + " file(s) generated."
+					+ "\n\n" + generationTaskResult.getNumberOfGenerationErrors() + " generation error(s).");
 		}
 		
 		//--- 3) Re-activate "Build Automatically" 
