@@ -26,7 +26,17 @@ public class EntityEditorWordProvider {
 	private final static String DOT_ENTITY = ".entity";
 	
 //    public List<String> suggest(String word, int context)
-    public List<String> suggest(String word, EntityEditorContext context)
+    /**
+     * Returns a list of words to be suggested to the user <br>
+     * 2 kinds of suggestions : <br>
+     * - 'type' : neutral types ( 'string', 'integer' ) and entities ( 'Book', 'Country' ) <br>
+     * - 'annotation' ( '@Id', '@NotNull', etc ) <br>
+     * @param beginningOfWord
+     * @param context 'type' or 'annotation'
+     * @return
+     * @throws EntityEditorException
+     */
+    public List<String> suggest(String beginningOfWord, EntityEditorContext context)
             throws EntityEditorException {
         ArrayList<String> suggestedWords = new ArrayList<String>();
         switch (context) {
@@ -35,12 +45,12 @@ public class EntityEditorWordProvider {
 //            for (String str : EditorsUtils.getProperty("entity.types").split(
 //                    ",")) {
         	for ( String str : EntityEditorUtil.getEntityFieldTypes() ) {
-                if (str.startsWith(word)) {
+                if (str.startsWith(beginningOfWord)) {
                     suggestedWords.add(str + " ");
                 }
             }
             for (String str : getListOfDefinedEntities()) {
-                if (str.startsWith(word)) {
+                if (str.startsWith(beginningOfWord)) {
                     suggestedWords.add(str + " ");
                 }
             }
@@ -51,7 +61,7 @@ public class EntityEditorWordProvider {
 //            for (String str : EditorsUtils.getProperty("validation.rules")
 //                    .split(",")) {
         	for ( String str : EntityEditorUtil.getEntityFieldAnnotations() ) {
-                if (str.startsWith(word)) {
+                if (str.startsWith(beginningOfWord)) {
                     suggestedWords.add(str);
                 }
             }
@@ -65,8 +75,10 @@ public class EntityEditorWordProvider {
     }
 
     /**
+     * Returns a list of all the entities defined for the current model <br>
+     * List of '.entity' files located in the same directory 
      * 
-     * @return List of '.entity' files located in the same directory
+     * @return list of entities names ( eg : 'Book', 'Country', etc )
      */
     private List<String> getListOfDefinedEntities() {
 

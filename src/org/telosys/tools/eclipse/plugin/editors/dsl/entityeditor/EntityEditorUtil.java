@@ -17,12 +17,12 @@ public class EntityEditorUtil {
 	private final static String[] ANNOTATIONS = {
 		"@Future",
 		"@Id",
-		"@Max",
-		"@Min",
+		"@Max()",
+		"@Min()",
 		"@NotNull",
 		"@Past",
-		"@SizeMax",
-		"@SizeMin",
+		"@SizeMax()",
+		"@SizeMin()",
 	} ;
 	
 	public final static String[] getEntityFieldTypes() {

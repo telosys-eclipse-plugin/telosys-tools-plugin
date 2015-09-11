@@ -1,6 +1,12 @@
-package org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor;
+package org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.completion;
 
-public class EntityDocUtil {
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.IDocument;
+import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditorContext;
+import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditorException;
+import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditorSuggestContext;
+
+public class EntityEditorContentAssistTools {
 	
 	public static void main(String arg[]) {
 
@@ -28,6 +34,7 @@ public class EntityDocUtil {
 		callGetContext(": string \n { \t@aa, \n @bb");
 		callGetContext(": string { @aa , @bb}");
 		callGetContext(": string { @aa , @bb;");
+		callGetContext("Foo {");
 
 	}
 	private static void callGetContext(String s) {
@@ -37,26 +44,62 @@ public class EntityDocUtil {
 		System.out.println("  context = " + suggestContext.getContext() );
 	}
 	
+	public static String getDocumentSubPart(IDocument document, int documentOffset) {
+		StringBuffer sb = new StringBuffer() ;
+		char lastChar = 0 ;
+        int offset = documentOffset > 0 ? documentOffset - 1 : documentOffset;
+        // build the string from right to left (reversed string)
+        try {
+            char c = document.getChar(offset);
+            while ( offset > 0 ) {
+            	sb.append(c);
+            	lastChar = c ;
+            	if ( c == ':') {
+            		break; // this is the end
+            	}
+                offset--;
+                c = document.getChar(offset);
+            }
+        } catch (BadLocationException e1) {
+            throw new EntityEditorException("Error in document parsing for suggest (BadLocationException)");
+        }
+        if ( lastChar == ':') {
+            return sb.reverse().toString();
+        }
+        else {
+        	return null ;
+        }
+	}	
+	
 	private final static char[] VOID_CHARACTERS    = { ' ', '\t', '\n', '\r' };
 	private final static char[] SPECIAL_CHARACTERS = { ':', ';', ',', '{', '}', '[', ']' };
 	
 	public static EntityEditorSuggestContext getSuggestContext(String s) {
 		int bracesFound = 0 ;
 		int commasFound = 0 ;
+		char lastChar = 0 ;
+
 		boolean endOfWord = false ;
 		char firstLeftSeparator = 0 ;
+		char firstLeftChar = 0 ;
 		StringBuffer sbReversedWord = new StringBuffer();
 		// read from end to beginning (reversed order of characters)
 		for ( int i = s.length() -1 ; i >= 0 ; i-- ) {
 			char c = s.charAt(i);
+			lastChar = c ;
 //			System.out.println(c);
 			if ( isVoidChar(c) ) {
 				endOfWord = true ;
 			}
-			else if ( isSpecialChar(c) ) { // separator and not void
-				endOfWord = true ;
-				if ( firstLeftSeparator == 0 ) { // not yet set 
-					firstLeftSeparator = c ; // set only once
+			else {
+				if ( isSpecialChar(c) ) { // separator and not void
+					endOfWord = true ;
+					if ( firstLeftSeparator == 0 ) { // not yet set 
+						firstLeftSeparator = c ; // set only once
+					}
+				}
+				if ( endOfWord && firstLeftChar == 0 ) { // not yet set 
+					firstLeftChar = c ; // set only once
 				}
 			}
 			if ( ! endOfWord ) {
@@ -75,14 +118,21 @@ public class EntityDocUtil {
 			}
 		}
 		String word = sbReversedWord.reverse().toString();
+		if (lastChar != ':') {
+			// no suggestion if not after ':'
+			return new EntityEditorSuggestContext(word, EntityEditorContext.DEFAULT ) ;
+		}
 //		System.out.println("  word = '" + word + "'");
-		if ( firstLeftSeparator == '{' ) {
+//		else if ( firstLeftSeparator == '{' ) {
+		else if ( firstLeftChar == '{' ) {
 			return new EntityEditorSuggestContext(word, EntityEditorContext.ANNOTATION ) ;
 		}
-		else if ( firstLeftSeparator == ',' && bracesFound > 0 ) {
+//		else if ( firstLeftSeparator == ',' && bracesFound > 0 ) {
+		else if ( firstLeftChar == ',' && bracesFound > 0 ) {
 			return new EntityEditorSuggestContext(word, EntityEditorContext.ANNOTATION ) ;
 		}
-		else if ( firstLeftSeparator == ':' ) {
+//		else if ( firstLeftSeparator == ':' ) {
+		else if ( firstLeftChar == ':' ) {
 			return new EntityEditorSuggestContext(word, EntityEditorContext.TYPE ) ;
 		}
 		else {
