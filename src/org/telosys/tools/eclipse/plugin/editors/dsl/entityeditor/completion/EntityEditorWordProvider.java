@@ -13,8 +13,6 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
-import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditorContext;
-import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditorException;
 import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditorUtil;
 
 /**
@@ -34,10 +32,9 @@ public class EntityEditorWordProvider {
      * @param beginningOfWord
      * @param context 'type' or 'annotation'
      * @return
-     * @throws EntityEditorException
      */
-    public List<String> suggest(String beginningOfWord, EntityEditorContext context)
-            throws EntityEditorException {
+    public List<String> suggest(String beginningOfWord, EntityEditorContext context) {
+//            throws EntityEditorException {
         ArrayList<String> suggestedWords = new ArrayList<String>();
         switch (context) {
 //        case EditorsUtils.TYPE:
@@ -60,7 +57,7 @@ public class EntityEditorWordProvider {
         case ANNOTATION: // suggest for an "annotation"
 //            for (String str : EditorsUtils.getProperty("validation.rules")
 //                    .split(",")) {
-        	for ( String str : EntityEditorUtil.getEntityFieldAnnotations() ) {
+        	for ( String str : EntityEditorUtil.getAnnotationsWithParenthesis() ) {
                 if (str.startsWith(beginningOfWord)) {
                     suggestedWords.add(str);
                 }

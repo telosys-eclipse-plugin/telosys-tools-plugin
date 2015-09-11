@@ -2,9 +2,6 @@ package org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.completion;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
-import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditorContext;
-import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditorException;
-import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditorSuggestContext;
 
 public class EntityEditorContentAssistTools {
 	
@@ -61,7 +58,7 @@ public class EntityEditorContentAssistTools {
                 c = document.getChar(offset);
             }
         } catch (BadLocationException e1) {
-            throw new EntityEditorException("Error in document parsing for suggest (BadLocationException)");
+            throw new RuntimeException("Error in document parsing for suggest (BadLocationException)");
         }
         if ( lastChar == ':') {
             return sb.reverse().toString();

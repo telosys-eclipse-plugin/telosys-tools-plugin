@@ -17,6 +17,17 @@ public class EntityEditorUtil {
 	private final static String[] ANNOTATIONS = {
 		"@Future",
 		"@Id",
+		"@Max",
+		"@Min",
+		"@NotNull",
+		"@Past",
+		"@SizeMax",
+		"@SizeMin",
+	} ;
+
+	private final static String[] ANNOTATIONS_WITH_PARENTHESIS = {
+		"@Future",
+		"@Id",
 		"@Max()",
 		"@Min()",
 		"@NotNull",
@@ -25,11 +36,15 @@ public class EntityEditorUtil {
 		"@SizeMin()",
 	} ;
 	
+	
 	public final static String[] getEntityFieldTypes() {
 		return TYPES ;
 	}
 
-	public final static String[] getEntityFieldAnnotations() {
+	public final static String[] getAnnotations() {
 		return ANNOTATIONS ;
+	}
+	public final static String[] getAnnotationsWithParenthesis() {
+		return ANNOTATIONS_WITH_PARENTHESIS ;
 	}
 }

@@ -9,7 +9,6 @@ import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.jface.text.contentassist.IContextInformationValidator;
-import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditorSuggestContext;
 
 /**
  * 

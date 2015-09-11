@@ -1,4 +1,5 @@
-package org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor;
+package org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.completion;
+
 
 public class EntityEditorSuggestContext {
 

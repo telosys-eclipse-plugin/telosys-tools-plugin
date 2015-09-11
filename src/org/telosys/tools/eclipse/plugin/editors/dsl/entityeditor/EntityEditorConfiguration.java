@@ -10,7 +10,7 @@ import org.eclipse.jface.text.rules.ITokenScanner;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.completion.EntityEditorContentAssistProcessor;
-import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.scanner.EntityScanner;
+import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.scanner.EntityEditorScanner;
 
 public class EntityEditorConfiguration extends TextSourceViewerConfiguration {
     private ITokenScanner scanner = null;
@@ -44,7 +44,7 @@ public class EntityEditorConfiguration extends TextSourceViewerConfiguration {
     private ITokenScanner getScanner() {
         if (scanner == null) {
             EntityEditorColorManager manager = new EntityEditorColorManager();
-            scanner = new EntityScanner(manager);
+            scanner = new EntityEditorScanner(manager);
         }
         return scanner;
     }
