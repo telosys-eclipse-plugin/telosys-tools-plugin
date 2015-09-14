@@ -1,11 +1,5 @@
 package org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
-
 import org.eclipse.ui.editors.text.TextEditor;
 
 /**
@@ -17,7 +11,10 @@ public class EntityEditor extends TextEditor {
 
     public EntityEditor() {
         super();
-        setSourceViewerConfiguration(new EntityEditorConfiguration());
+        // Set this editor's source viewer configuration used to configure its internal source viewer.
+        // This method must be called before the editor's control is created.  
+        // AbstractTextEditor.setSourceViewerConfiguration
+        setSourceViewerConfiguration(new EntityEditorConfiguration()); 
     }
 
 //    @Override
@@ -51,25 +48,25 @@ public class EntityEditor extends TextEditor {
 //        setAction("ContentAssist", action);
     }
     
-    /**
-     * Returns the resource bundle managed by the receiver.
-     * 
-     * @return the resource bundle
-     */
-    private ResourceBundle getResourceBundle() {
-    	ResourceBundle resourceBundle ;
-    	String properties = 
-    		  "ContentAssistProposal.label=Content assist"  + "\n" 
-    		+ "ContentAssistProposal.tooltip=Content assist" + "\n" 
-    		+ "ContentAssistProposal.description=Provides Content Assistance" ;
-    	
-    	InputStream is = new ByteArrayInputStream(properties.getBytes());
-    	try {
-			resourceBundle = new PropertyResourceBundle(is);
-		} catch (IOException e) {
-			throw new RuntimeException("Cannot init ResourceBundle : IOException / new PropertyResourceBundle(is)");
-		}
-		return resourceBundle ;
-    }
+//    /**
+//     * Returns the resource bundle managed by the receiver.
+//     * 
+//     * @return the resource bundle
+//     */
+//    private ResourceBundle getResourceBundle() {
+//    	ResourceBundle resourceBundle ;
+//    	String properties = 
+//    		  "ContentAssistProposal.label=Content assist"  + "\n" 
+//    		+ "ContentAssistProposal.tooltip=Content assist" + "\n" 
+//    		+ "ContentAssistProposal.description=Provides Content Assistance" ;
+//    	
+//    	InputStream is = new ByteArrayInputStream(properties.getBytes());
+//    	try {
+//			resourceBundle = new PropertyResourceBundle(is);
+//		} catch (IOException e) {
+//			throw new RuntimeException("Cannot init ResourceBundle : IOException / new PropertyResourceBundle(is)");
+//		}
+//		return resourceBundle ;
+//    }
 
 }

@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="lib/telosys-tools-generic-model-3.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/telosys-tools-repository-3.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/telosys-tools-dsl-parser-3.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

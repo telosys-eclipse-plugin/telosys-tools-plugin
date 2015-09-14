@@ -21,6 +21,7 @@ Bundle-ClassPath: .,
  lib/telosys-tools-generic-model-3.0.0.jar,
  lib/telosys-tools-generator-3.0.0.jar,
  lib/telosys-tools-generator-engine-3.0.0.jar,
+ lib/telosys-tools-dsl-parser-3.0.0.jar,
  lib/velocity-1.7-dep.jar,
  lib/json-simple-1.1.1.jar
 Bundle-Vendor: Telosys Project
