@@ -89,12 +89,19 @@
   <extension
          point="org.eclipse.ui.editors">
       <editor
-            id="org.telosys.tools.eclipse.plugin.editors.dbrep.RepositoryEditor"
+            id=   "org.telosys.tools.eclipse.plugin.editors.dbrep.RepositoryEditor"
             class="org.telosys.tools.eclipse.plugin.editors.dbrep.RepositoryEditor"
             icon="icons/dbrep4_16.png"
             default="true"
-            name="Telosys Tools Repository editor"
-            extensions="rep,dbrep"/>
+            name="Telosys Tools database model editor"
+            extensions="dbmodel,dbrep"/>
+      <editor
+            id=   "org.telosys.tools.eclipse.plugin.editors.dsl.model.ModelEditor"
+            class="org.telosys.tools.eclipse.plugin.editors.dsl.model.ModelEditor"
+            icon="icons/dbrep4_16.png"
+            default="true"
+            name="Telosys Tools model editor"
+            extensions="model"/>
       <editor
             id="org.telosys.tools.eclipse.plugin.editors.dbconfig.DbConfigEditor"
             class="org.telosys.tools.eclipse.plugin.editors.dbconfig.DbConfigEditor"

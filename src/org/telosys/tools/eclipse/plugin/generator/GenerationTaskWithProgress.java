@@ -24,7 +24,7 @@ import org.telosys.tools.generator.task.ErrorReport;
 import org.telosys.tools.generator.task.GenerationTask;
 import org.telosys.tools.generator.task.GenerationTaskResult;
 import org.telosys.tools.generator.task.ITaskMonitor;
-import org.telosys.tools.repository.model.RepositoryModel;
+import org.telosys.tools.generic.model.Model;
 
 
 /**
@@ -39,7 +39,7 @@ public class GenerationTaskWithProgress extends AbstractGenerationTask implement
 	
 	/**
 	 * Constructor
-	 * @param repositoryModel
+	 * @param model
 	 * @param selectedEntities
 	 * @param bundleName
 	 * @param selectedTargets
@@ -49,7 +49,8 @@ public class GenerationTaskWithProgress extends AbstractGenerationTask implement
 	 * @throws TelosysToolsException
 	 */
 	public GenerationTaskWithProgress(
-			RepositoryModel repositoryModel,
+//			RepositoryModel model,
+			Model model,
 			LinkedList<String> selectedEntities,
 			String bundleName,
 			LinkedList<TargetDefinition> selectedTargets,
@@ -60,7 +61,7 @@ public class GenerationTaskWithProgress extends AbstractGenerationTask implement
 			throws TelosysToolsException 
 	{
 		// Just call the super class constructor
-		super(repositoryModel, selectedEntities, 
+		super(model, selectedEntities, 
 				bundleName, selectedTargets, resourcesTargets, 
 				telosysToolsCfg, logger);
 	}
