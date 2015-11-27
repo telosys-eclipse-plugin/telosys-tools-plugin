@@ -1,54 +1,19 @@
 package org.telosys.tools.eclipse.plugin.editors.dsl.model;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Layout;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.telosys.tools.commons.StrUtil;
-import org.telosys.tools.commons.javatypes.JavaTypes;
-import org.telosys.tools.commons.javatypes.JavaTypesManager;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
-import org.telosys.tools.eclipse.plugin.commons.PluginImages;
 import org.telosys.tools.eclipse.plugin.commons.Util;
-import org.telosys.tools.eclipse.plugin.commons.widgets.BundleComboBox;
-import org.telosys.tools.eclipse.plugin.commons.widgets.SelectDeselectButtons;
-import org.telosys.tools.eclipse.plugin.editors.dbrep.ColumnNames;
-import org.telosys.tools.eclipse.plugin.editors.dbrep.SpecialDialogCellEditor;
-import org.telosys.tools.eclipse.plugin.editors.dbrep.TableUtil;
-import org.telosys.tools.generator.target.TargetDefinition;
 import org.telosys.tools.generic.model.Model;
-import org.telosys.tools.repository.model.AttributeInDbModel;
 import org.telosys.tools.repository.model.EntityInDbModel;
-import org.telosys.tools.repository.model.RepositoryModel;
 
 
 /**

@@ -16,6 +16,7 @@ import org.telosys.tools.commons.ConsoleLogger;
 import org.telosys.tools.commons.TelosysToolsLogger;
 import org.telosys.tools.commons.cfg.TelosysToolsCfg;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
+import org.telosys.tools.eclipse.plugin.editors.commons.EditorWithCodeGeneration;
 import org.telosys.tools.generic.model.Model;
 
 public abstract class ModelEditorPage extends FormPage 
@@ -76,7 +77,7 @@ public abstract class ModelEditorPage extends FormPage
 		return _editor.getModel();
 	}
 	//----------------------------------------------------------------------------------------------
-	protected ModelEditor getModelEditor() {
+	protected EditorWithCodeGeneration getModelEditor() {
 		return _editor ;
 	}
 	//----------------------------------------------------------------------------------------------

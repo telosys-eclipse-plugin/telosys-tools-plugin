@@ -30,20 +30,23 @@ import org.telosys.tools.commons.cfg.TelosysToolsCfg;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.PluginImages;
 import org.telosys.tools.eclipse.plugin.commons.Util;
-import org.telosys.tools.eclipse.plugin.commons.widgets.GenerateButton;
-import org.telosys.tools.eclipse.plugin.commons.widgets.GridPanel;
-import org.telosys.tools.eclipse.plugin.commons.widgets.SelectDeselectButtons;
 import org.telosys.tools.eclipse.plugin.editors.commons.BundleComboBox;
 import org.telosys.tools.eclipse.plugin.editors.commons.EditorWithCodeGeneration;
+import org.telosys.tools.eclipse.plugin.editors.commons.GenerateButton;
+import org.telosys.tools.eclipse.plugin.editors.commons.GridPanel;
 import org.telosys.tools.eclipse.plugin.editors.commons.OpenTemplateFileInEditor;
 import org.telosys.tools.eclipse.plugin.editors.commons.RefreshButton;
+import org.telosys.tools.eclipse.plugin.editors.commons.SelectDeselectButtons;
 import org.telosys.tools.eclipse.plugin.editors.commons.TargetsButton;
 import org.telosys.tools.eclipse.plugin.editors.dbrep.TargetsUtil;
 import org.telosys.tools.eclipse.plugin.editors.dbrep.ToolTipListenerForEntitiesTable;
 import org.telosys.tools.eclipse.plugin.editors.dbrep.ToolTipListenerForTargetsTable;
 import org.telosys.tools.eclipse.plugin.generator.GenerationTaskWithProgress;
 import org.telosys.tools.eclipse.plugin.settings.SettingsManager;
+import org.telosys.tools.generator.GeneratorException;
 import org.telosys.tools.generator.target.TargetDefinition;
+import org.telosys.tools.generator.target.TargetsDefinitions;
+import org.telosys.tools.generator.target.TargetsLoader;
 import org.telosys.tools.generator.task.GenerationTask;
 import org.telosys.tools.generic.model.Entity;
 import org.telosys.tools.generic.model.Model;
@@ -541,6 +544,30 @@ import org.telosys.tools.generic.model.Model;
 			}
 		}
 	}
+
+	public void refreshAllTargetsTablesFromConfigFile()
+	{
+		String currentBundleName = getModelEditor().getCurrentBundleName() ;
+		log("refreshAllTargetsTablesFromConfigFile() : current bundle = " + currentBundleName);
+		TelosysToolsCfg telosysToolsCfg = getProjectConfig(); // v 3.0.0
+		if ( telosysToolsCfg != null ) {
+
+			// v 3.0.0 -----------------------------------
+	    	String sTemplatesFolder = telosysToolsCfg.getTemplatesFolderAbsolutePath(); // v 3.0.0
+			TargetsLoader targetsLoader = new TargetsLoader(sTemplatesFolder);
+			TargetsDefinitions targetsDefinitions;
+			try {
+				targetsDefinitions = targetsLoader.loadTargetsDefinitions(currentBundleName);
+				//return targetsDefinitions ;
+			} catch (GeneratorException e) {
+				MsgBox.error("Cannot load targets definitions", e);
+				// if error : void lists for templates and resources 
+				targetsDefinitions = new TargetsDefinitions(new LinkedList<TargetDefinition>(), new LinkedList<TargetDefinition>());
+			} 
+
+			refreshTargetsTable(targetsDefinitions.getTemplatesTargets(), targetsDefinitions.getResourcesTargets());
+		}
+	}
 	
 	//----------------------------------------------------------------------------------------------
 	/**
@@ -774,7 +801,8 @@ import org.telosys.tools.generic.model.Model;
     		List<TargetDefinition> resourcesTargets )
     {
     	//--- Prepare the generation task environment 	
-    	ModelEditor editor = getModelEditor();
+    	//ModelEditor editor = getModelEditor();
+    	EditorWithCodeGeneration editor = getModelEditor();
 //		ProjectConfig projectConfig = editor.getProjectConfig();
 		TelosysToolsCfg telosysToolsCfg = getProjectConfig(); // v3.0.0
 //		GeneratorConfigManager configManager = new GeneratorConfigManager(null);

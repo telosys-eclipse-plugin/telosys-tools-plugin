@@ -1,7 +1,6 @@
 package org.telosys.tools.eclipse.plugin.editors.dbrep;
 
 import java.util.Arrays;
-import java.util.List;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
@@ -15,7 +14,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -36,16 +34,7 @@ import org.telosys.tools.commons.StrUtil;
 import org.telosys.tools.commons.javatypes.JavaTypes;
 import org.telosys.tools.commons.javatypes.JavaTypesManager;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
-import org.telosys.tools.eclipse.plugin.commons.PluginImages;
 import org.telosys.tools.eclipse.plugin.commons.Util;
-import org.telosys.tools.eclipse.plugin.commons.listeners.OpenTemplateFileInEditor;
-import org.telosys.tools.eclipse.plugin.commons.widgets.BundleComboBox;
-import org.telosys.tools.eclipse.plugin.commons.widgets.GenerateButton;
-import org.telosys.tools.eclipse.plugin.commons.widgets.GridPanel;
-import org.telosys.tools.eclipse.plugin.commons.widgets.RefreshButton;
-import org.telosys.tools.eclipse.plugin.commons.widgets.SelectDeselectButtons;
-import org.telosys.tools.eclipse.plugin.commons.widgets.TargetsButton;
-import org.telosys.tools.generator.target.TargetDefinition;
 import org.telosys.tools.repository.model.AttributeInDbModel;
 import org.telosys.tools.repository.model.EntityInDbModel;
 import org.telosys.tools.repository.model.ForeignKeyColumnInDbModel;
@@ -100,15 +89,11 @@ import org.telosys.tools.repository.model.RepositoryModel;
 	//--- Tab 2 : "Foreign Keys" 
 	private Table  _tableForeignKeys     = null ;
 
-	//--- Tab 3 : "Generation Targets" 
-	private Table  _tableSpecificTargets = null ;
-	
-	private SelectDeselectButtons _buttonsSelectDeselect = null ;
-	private BundleComboBox  _comboBundles = null ;
-	private Button _buttonGenerate = null ;
+//	//--- Tab 3 : "Generation Targets" 
+//	private Table  _tableSpecificTargets = null ;
+//	
+//	private BundleComboBox  _comboBundles = null ;
 
-	//private final List<TargetDefinition> initialTargetsList ; // v 2.0.7
-	
 	/**
 	 * @param editor
 	 * @param id
@@ -301,7 +286,7 @@ import org.telosys.tools.repository.model.RepositoryModel;
 		//--- Creates the 3 tabs 
 		createTabFolderMapping(tabFolder);
 		createTabFolderForeignKeys(tabFolder);
-		createTabFolderGeneration(tabFolder);
+		// createTabFolderGeneration(tabFolder);
 
 		//--------------------------------------------------------------
 		
@@ -520,86 +505,19 @@ import org.telosys.tools.repository.model.RepositoryModel;
 	}
 	
 	//----------------------------------------------------------------------------------------------
-	private void createTabFolderGeneration(TabFolder tabFolder) {
-		log(this, "createTabFolder2() ..." );
-		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText(" Generation ");
-		
-//		Composite tabContent = new Composite(tabFolder, SWT.NONE);
-//		RowLayout rowLayout = new RowLayout();
-//		rowLayout.type = SWT.VERTICAL;
-//		rowLayout.marginHeight = 5;
-//		rowLayout.marginWidth  = 5;
-//		tabContent.setLayout(rowLayout);
-		Composite tabContent = createTabFolderContainer(tabFolder);
-		
-		
-	    //----- Buttons
-	    createButtonsPanel(tabContent);
-	    
-		//----- Targets Table 
-		_tableSpecificTargets = createTableGenerationTargets( tabContent );
-		
-		GridData gridData = createStandardTableGridData() ;
-		int heightCorrection = 40 ; // NOT OK WITH PANEL SIZE : buttonsPanelSize.y ; // y = height 
-		gridData.heightHint    = gridData.heightHint    - heightCorrection ;
-		gridData.minimumHeight = gridData.minimumHeight - heightCorrection ;
-		_tableSpecificTargets.setLayoutData ( gridData );
-		
-		tabItem.setControl(tabContent);
-		
-		_buttonsSelectDeselect.setTable(_tableSpecificTargets);
-		
-		//populateTableGenerationTargets(_tableSpecificTargets, initialTargetsList); // v 2.0.7 		
-		_comboBundles.refresh(); 
-		
-	}
 	//----------------------------------------------------------------------------------------------
-	private Composite createButtonsPanel(Composite composite) 
-	{		
-		GridPanel gridPanel = new GridPanel(composite, 8); // 8 columns
-		
-		_buttonsSelectDeselect = new SelectDeselectButtons( gridPanel.getPanel() ) ; // 2 buttons
-
-		gridPanel.addFiller(50); // 1 filler
-		
-		new RefreshButton(gridPanel.getPanel(), getRepositoryEditor() );  // 1 button // v 2.0.7
-
-		_comboBundles = new BundleComboBox(gridPanel.getPanel(), getRepositoryEditor() ); 
-		
-		new TargetsButton(gridPanel.getPanel(), this.getRepositoryEditor(), getProject() );  // 1 button
-			
-		gridPanel.addFiller(50); // 1 filler
-		
-		GenerateButton generateButton = new GenerateButton(gridPanel.getPanel()); // 1 button
-		generateButton.addSelectionListener( new SelectionListener() 
-    	{
-            public void widgetSelected(SelectionEvent arg0)
-            {
-            	buttonGenerateSelectedTargets();
-            }
-            public void widgetDefaultSelected(SelectionEvent arg0)
-            {
-            }
-        });
-		generateButton.setEnabled(false);
-		_buttonGenerate = generateButton.getButton();
-		
-		return gridPanel.getPanel();
-	}
-
 	//----------------------------------------------------------------------------------------------
-	/**
-	 * Refresh the targets table from the current configuration supposed to be up to date 
-	 */
-	//protected void refreshTargetsTable()
-	protected void refreshTargetsTable(List<TargetDefinition> targetslist)	
-	{
-		log("refreshTargetsTable");
-		_comboBundles.refresh();
-		//--- Re-populate the SWT table
-		populateTableGenerationTargets(_tableSpecificTargets, targetslist);
-	}
+//	/**
+//	 * Refresh the targets table from the current configuration supposed to be up to date 
+//	 */
+//	//protected void refreshTargetsTable()
+//	protected void refreshTargetsTable(List<TargetDefinition> targetslist)	
+//	{
+//		log("refreshTargetsTable");
+//		_comboBundles.refresh();
+//		//--- Re-populate the SWT table
+//		populateTableGenerationTargets(_tableSpecificTargets, targetslist);
+//	}
 	//----------------------------------------------------------------------------------------------
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.IEditorPart#init(org.eclipse.ui.IEditorSite, org.eclipse.ui.IEditorInput)
@@ -762,8 +680,6 @@ import org.telosys.tools.repository.model.RepositoryModel;
 		//--- Tab 2
 		populateTableForeignKeys(_currentEntity, _tableForeignKeys);
 
-		//--- Tab 3
-		_buttonGenerate.setEnabled(true);		
 	}
 	
 	//private void populateTableMapping(Entity entity)
@@ -916,83 +832,37 @@ import org.telosys.tools.repository.model.RepositoryModel;
 		return table;
 	}
 	
-	private Table createTableGenerationTargets(Composite composite)
-	{
-		log(this, "createSpecificClassesTable(..)..." );
-		
-		Table table = new Table(composite, BASIC_TABLE_STYLE | SWT.CHECK );
-		
-		//table.setSize(650, 400);
-
-		table.setLinesVisible(false);
-		table.setHeaderVisible(true);
-		
-		//--- Columns
-		TableColumn col = null ;
-		int iColumnIndex = 0 ;
-
-//		col = new TableColumn(table, SWT.LEFT, iColumnIndex++);
-//		col.setText("");
-//		col.setWidth(20);
-		
-		col = new TableColumn(table, SWT.LEFT, iColumnIndex++);
-		col.setText("Target name");
-		col.setWidth(200);
-		
-		col = new TableColumn(table, SWT.LEFT, iColumnIndex++);
-		col.setText("Generated file");
-		col.setWidth(200);
-		
-		col = new TableColumn(table, SWT.LEFT, iColumnIndex++);
-		col.setText("Folder");
-		col.setWidth(270);
-		
-		col = new TableColumn(table, SWT.LEFT, iColumnIndex++);
-		col.setText("Template");
-		col.setWidth(200);
-		
-		col = new TableColumn(table, SWT.LEFT, iColumnIndex++);
-		col.setText("");
-		col.setWidth(20);
-		
-		// Edit template file if click on column 2
-		OpenTemplateFileInEditor listener = new OpenTemplateFileInEditor( getRepositoryEditor(), getProject(), table, 4 ) ;
-		table.addListener(SWT.MouseDown, listener );
-		
-		return table;
-	}
 	
-	//private void populateTableGenerationTargets(Table table)
-	private void populateTableGenerationTargets(Table table, List<TargetDefinition> list) // v 2.0.7
-	{
-//		ProjectConfig projectConfig = getProjectConfig();
-//		if ( projectConfig == null )
+//	private void populateTableGenerationTargets(Table table, List<TargetDefinition> list) // v 2.0.7
+//	{
+////		ProjectConfig projectConfig = getProjectConfig();
+////		if ( projectConfig == null )
+////		{
+////			return ;
+////		}
+////		List<TargetDefinition> list = projectConfig.getTemplates(); // NB : the list can be null 
+//		if ( list != null )
 //		{
-//			return ;
+//			table.removeAll();
+//	        TableItem tableItem ; 
+//	        for ( TargetDefinition t : list ) {
+//	        	// Do not add "once" target ( not entity dependent )
+//	        	if ( t.isOnce() != true ) {
+//	        		
+//					tableItem = new TableItem(table, SWT.NONE );
+//			        tableItem.setChecked(false);
+//			        tableItem.setText(0, t.getName() );
+//			        tableItem.setText(1, t.getFile() ) ; //  st.getTargetFile() );			
+//			        tableItem.setText(2, t.getFolder() ) ; // st.getTargetFolder() );
+//			        tableItem.setText(3, t.getTemplate() );
+//			        tableItem.setImage(4, PluginImages.getImage(PluginImages.EDIT_ICON ) );
+//			        
+//			        // Keep the target definition associated with the table item
+//			        tableItem.setData(t);		        
+//	        	}
+//			}
 //		}
-//		List<TargetDefinition> list = projectConfig.getTemplates(); // NB : the list can be null 
-		if ( list != null )
-		{
-			table.removeAll();
-	        TableItem tableItem ; 
-	        for ( TargetDefinition t : list ) {
-	        	// Do not add "once" target ( not entity dependent )
-	        	if ( t.isOnce() != true ) {
-	        		
-					tableItem = new TableItem(table, SWT.NONE );
-			        tableItem.setChecked(false);
-			        tableItem.setText(0, t.getName() );
-			        tableItem.setText(1, t.getFile() ) ; //  st.getTargetFile() );			
-			        tableItem.setText(2, t.getFolder() ) ; // st.getTargetFolder() );
-			        tableItem.setText(3, t.getTemplate() );
-			        tableItem.setImage(4, PluginImages.getImage(PluginImages.EDIT_ICON ) );
-			        
-			        // Keep the target definition associated with the table item
-			        tableItem.setData(t);		        
-	        	}
-			}
-		}
-	}
+//	}
 	
     /**
      * Listener for DATABASE TABLE COMBO BOX 
@@ -1071,46 +941,4 @@ import org.telosys.tools.repository.model.RepositoryModel;
     	});
     }
     
-    private boolean checkCurrentEntity()
-    {
-    	if ( _currentEntity != null ) {
-    		return true ;
-    	}
-    	else {
-    		MsgBox.info("No current entity.");
-    		return false ;
-    	}
-    }
-    
-    private void buttonGenerateSelectedTargets()
-    {
-    	if ( checkCurrentEntity() ) {
-    		generateSelectedTargets() ;
-    	}
-    }
-    
-    private void generateSelectedTargets() 
-    {
-    	log ("generateSelectedTargets()...");
-    	/***
-		//--- Get the entities for generation : here a list with only the current entity 
-    	//String sEntityName = _currentEntity.getName();
-    	String sEntityName = _currentEntity.getDatabaseTable(); // v 3.0.0
-		LinkedList<String> entities = new LinkedList<String>();
-		entities.addLast(sEntityName);
-		
-		//--- Get the generic targets for generation : here the selected targets
-		LinkedList<TargetDefinition> selectedTargets = new LinkedList<TargetDefinition>();
-		
-		//--- Specific targets 
-		TargetsUtil.addSelectedItemsToList(selectedTargets, _tableSpecificTargets);
-		
-		log ("generateSelectedTargets() : targets list size : " + selectedTargets.size() );
-		
-		//--- Run the generation task
-    	GenerationTask generationTask = new GenerationTask( getRepositoryEditor() );
-    	generationTask.generateTargets(entities, selectedTargets, null); // no resources to copy
-    	***/
-    	MsgBox.warning("This generation is deprecated, use 'bulk generation' instead");
-    }
 }

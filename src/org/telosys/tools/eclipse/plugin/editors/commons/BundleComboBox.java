@@ -1,5 +1,7 @@
 package org.telosys.tools.eclipse.plugin.editors.commons;
 
+import java.io.File;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -10,7 +12,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.telosys.tools.commons.StrUtil;
-import org.telosys.tools.eclipse.plugin.commons.dialogbox.TemplateBundleUtil;
+import org.telosys.tools.commons.cfg.TelosysToolsCfg;
+import org.telosys.tools.eclipse.plugin.commons.EclipseProjUtil;
+import org.telosys.tools.eclipse.plugin.commons.MsgBox;
+import org.telosys.tools.eclipse.plugin.config.ProjectConfigManager;
 
 public class BundleComboBox {
 
@@ -84,7 +89,8 @@ public class BundleComboBox {
 		
 		//--- Populate combo items 
         IProject eclipseProject = _editor.getProject() ;
-        List<String> bundles = TemplateBundleUtil.getBundlesFromTemplatesFolder(eclipseProject);
+//        List<String> bundles = TemplateBundleUtil.getBundlesFromTemplatesFolder(eclipseProject);
+        List<String> bundles = getBundlesFromTemplatesFolder(eclipseProject);
         _combo.removeAll();
 		for ( String s : bundles ) {
 			_combo.add(s); 
@@ -102,4 +108,34 @@ public class BundleComboBox {
 			}
 		}
 	}
+	
+	private List<String> getBundlesFromTemplatesFolder( IProject eclipseProject ) {
+		List<String> bundles = new LinkedList<String>();
+		
+		TelosysToolsCfg telosysToolsCfg = ProjectConfigManager.loadProjectConfig( eclipseProject ); // v 3.0.0		
+		if ( telosysToolsCfg != null ) { // v 3.0.0	
+			String templatesFolder = telosysToolsCfg.getTemplatesFolder(); // v 3.0.0
+//			log( "  templates folder = " + templatesFolder );
+			File dir = EclipseProjUtil.getResourceAsFile( eclipseProject, templatesFolder);			
+			if ( dir != null) {
+				if ( dir.isDirectory() ) {
+					File[] entries = dir.listFiles();
+					for ( File f : entries ) {
+						if ( f.isDirectory() ) {
+							bundles.add(f.getName());
+						}
+					}
+					return bundles ;
+				}
+				else {
+					MsgBox.error("Templates folder '" + templatesFolder + "' is not a folder !");
+				}
+			}
+			else {
+				MsgBox.error("Templates folder '" + templatesFolder + "' not found !");
+			}
+		}
+		return null ;
+	}
+	
 }

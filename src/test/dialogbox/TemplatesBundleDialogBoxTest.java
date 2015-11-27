@@ -4,7 +4,6 @@ import java.util.LinkedList;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.telosys.tools.eclipse.plugin.commons.dialogbox.TemplatesBundleDialogBox;
 
 public class TemplatesBundleDialogBoxTest 
 {	

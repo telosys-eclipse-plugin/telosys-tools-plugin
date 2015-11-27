@@ -56,6 +56,67 @@ public class ModelEditor extends FormEditor implements EditorWithCodeGeneration
     private TelosysToolsLogger _logger = new ConsoleLogger() ;
 
 	//----------------------------------------------------------------------------------------
+    public ModelEditor() {
+    	super();
+    }
+    
+	//----------------------------------------------------------------------------------------
+	@Override
+	public IProject getProject () {	
+		return _file.getProject() ;
+	}
+	
+	@Override
+	public TelosysToolsLogger getLogger() {
+		return _logger ;
+	}
+	
+	@Override
+	public Model getModel() {
+		return _model ;
+	}
+
+	@Override
+	public void setCurrentBundleName(String bundleName) {
+		_currentBundle = bundleName ;
+	}
+	
+	@Override
+	public String getCurrentBundleName() {
+		return _currentBundle ;
+	}
+
+	//----------------------------------------------------------------------------------------------
+	@Override
+	public void refreshAllTargetsTablesFromConfigFile()
+	{
+		_logger.log("refreshAllTargetsTablesFromConfigFile() : current bundle = " + _currentBundle);
+//		ProjectConfig projectConfig = getProjectConfig();
+//		if ( projectConfig != null ) {
+		TelosysToolsCfg telosysToolsCfg = getProjectConfig(); // v 3.0.0
+		if ( telosysToolsCfg != null ) {
+
+			// v 3.0.0 -----------------------------------
+			//TargetsDefinitions targetsDefinitions = projectConfig.getTargetsDefinitions(_currentBundle);
+//	    	String sTemplatesFolder = projectConfig.getTelosysToolsCfg().getTemplatesFolderAbsolutePath();
+	    	String sTemplatesFolder = telosysToolsCfg.getTemplatesFolderAbsolutePath(); // v 3.0.0
+			TargetsLoader targetsLoader = new TargetsLoader(sTemplatesFolder);
+			TargetsDefinitions targetsDefinitions;
+			try {
+				targetsDefinitions = targetsLoader.loadTargetsDefinitions(_currentBundle);
+				//return targetsDefinitions ;
+			} catch (GeneratorException e) {
+				MsgBox.error("Cannot load targets definitions", e);
+				// if error : void lists for templates and resources 
+				targetsDefinitions = new TargetsDefinitions(new LinkedList<TargetDefinition>(), new LinkedList<TargetDefinition>());
+			} 
+
+//			_page1.refreshTargetsTable(targetsDefinitions.getTemplatesTargets());
+			_page1.refreshTargetsTable(targetsDefinitions.getTemplatesTargets(), targetsDefinitions.getResourcesTargets());
+		}
+	}
+
+	//----------------------------------------------------------------------------------------
 	public String getFileName() {
 		return _fileName ;
 	}
@@ -64,22 +125,10 @@ public class ModelEditor extends FormEditor implements EditorWithCodeGeneration
 		return _file ;
 	}
 	
-	public IProject getProject () {	
-		return _file.getProject() ;
-	}
-	
 	public TelosysToolsCfg getProjectConfig() {
 		return ProjectConfigManager.loadProjectConfig( getProject() ); 
 	}
 	
-	public TelosysToolsLogger getLogger() {
-		return _logger ;
-	}
-	
-	public Model getModel() {
-		return _model ;
-	}
-
 	//----------------------------------------------------------------------------------------
 	public boolean isDirty() {
 		return _dirty;
@@ -92,14 +141,6 @@ public class ModelEditor extends FormEditor implements EditorWithCodeGeneration
 	private void setDirty(boolean flag) {
 		_dirty = flag ;
 		editorDirtyStateChanged(); // Notify the editor 
-	}
-
-	//----------------------------------------------------------------------------------------
-	public void setCurrentBundleName(String bundleName) {
-		_currentBundle = bundleName ;
-	}
-	public String getCurrentBundleName() {
-		return _currentBundle ;
 	}
 
 	//========================================================================================
@@ -229,32 +270,5 @@ public class ModelEditor extends FormEditor implements EditorWithCodeGeneration
 	}
 
 	//----------------------------------------------------------------------------------------------
-	@Override
-	public void refreshAllTargetsTablesFromConfigFile()
-	{
-		_logger.log("refreshAllTargetsTablesFromConfigFile() : current bundle = " + _currentBundle);
-//		ProjectConfig projectConfig = getProjectConfig();
-//		if ( projectConfig != null ) {
-		TelosysToolsCfg telosysToolsCfg = getProjectConfig(); // v 3.0.0
-		if ( telosysToolsCfg != null ) {
-
-			// v 3.0.0 -----------------------------------
-			//TargetsDefinitions targetsDefinitions = projectConfig.getTargetsDefinitions(_currentBundle);
-//	    	String sTemplatesFolder = projectConfig.getTelosysToolsCfg().getTemplatesFolderAbsolutePath();
-	    	String sTemplatesFolder = telosysToolsCfg.getTemplatesFolderAbsolutePath(); // v 3.0.0
-			TargetsLoader targetsLoader = new TargetsLoader(sTemplatesFolder);
-			TargetsDefinitions targetsDefinitions;
-			try {
-				targetsDefinitions = targetsLoader.loadTargetsDefinitions(_currentBundle);
-				//return targetsDefinitions ;
-			} catch (GeneratorException e) {
-				MsgBox.error("Cannot load targets definitions", e);
-				// if error : void lists for templates and resources 
-				targetsDefinitions = new TargetsDefinitions(new LinkedList<TargetDefinition>(), new LinkedList<TargetDefinition>());
-			} 
-
-			_page1.refreshTargetsTable(targetsDefinitions.getTemplatesTargets(), targetsDefinitions.getResourcesTargets());
-		}
-	}
 	
 }
