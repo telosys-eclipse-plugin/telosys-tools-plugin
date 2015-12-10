@@ -13,6 +13,7 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.telosys.tools.commons.cfg.TelosysToolsCfg;
 import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 import org.telosys.tools.eclipse.plugin.commons.Util;
+import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 import org.telosys.tools.repository.model.RepositoryModel;
 
 /**
@@ -21,7 +22,8 @@ import org.telosys.tools.repository.model.RepositoryModel;
  * Shows the project configuration 
  * 
  */
-/* package */ class RepositoryEditorPage4 extends RepositoryEditorPage 
+///* package */ class RepositoryEditorPage4 extends RepositoryEditorPage 
+/* package */ class RepositoryEditorPage4 extends AbstractModelEditorPage 
 {
 
 	//--------------------------------------------------------------------------------------------------

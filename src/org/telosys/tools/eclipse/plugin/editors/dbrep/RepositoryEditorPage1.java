@@ -35,6 +35,7 @@ import org.telosys.tools.commons.javatypes.JavaTypes;
 import org.telosys.tools.commons.javatypes.JavaTypesManager;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.Util;
+import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 import org.telosys.tools.repository.model.AttributeInDbModel;
 import org.telosys.tools.repository.model.EntityInDbModel;
 import org.telosys.tools.repository.model.ForeignKeyColumnInDbModel;
@@ -46,7 +47,8 @@ import org.telosys.tools.repository.model.RepositoryModel;
  * First page of the editor : Model attributes mapping and foreign keys <br>
  *  
  */
-/* package */  class RepositoryEditorPage1 extends RepositoryEditorPage 
+///* package */  class RepositoryEditorPage1 extends RepositoryEditorPage 
+/* package */  class RepositoryEditorPage1 extends AbstractModelEditorPage
 {
 
 //	private final static int GROUP_X = 12 ;
@@ -244,7 +246,8 @@ import org.telosys.tools.repository.model.RepositoryModel;
 		// marginWidth specifies the number of pixels of horizontal margin 
 		// that will be placed along the left and right edges of the layout. The default value is 5.
 		//bodyLayout.marginWidth = 20 ;
-		bodyLayout.marginWidth = RepositoryEditor.LAYOUT_MARGIN_WIDTH ;
+//		bodyLayout.marginWidth = RepositoryEditor.LAYOUT_MARGIN_WIDTH ;
+		bodyLayout.marginWidth = LAYOUT_MARGIN_WIDTH ;
 		
 		scrolledFormBody.setLayout( bodyLayout );
 		
@@ -668,6 +671,7 @@ import org.telosys.tools.repository.model.RepositoryModel;
 	{
 		log(this, "loadTableEntity('" + sTableName + "')");
 		
+//		RepositoryModel repositoryModel = getRepositoryModel();
 		RepositoryModel repositoryModel = getRepositoryModel();
 
 		//_currentEntity = repositoryModel.getEntityByName(sTableName);
@@ -921,10 +925,10 @@ import org.telosys.tools.repository.model.RepositoryModel;
         		
         		log(this, "*** TABLE : widgetSelected : checked ? " + tableItem.getChecked()  );				
         		// Column row = TableUtil.getTableColumn(tableItem);
-        		AttributeInDbModel row = TableUtil.getTableColumn(tableItem); // v 3.0.0
-        		log(this, "*** TABLE : widgetSelected : row : " + row );
+        		AttributeInDbModel attribute = TableUtil.getTableColumn(tableItem); // v 3.0.0
+        		log(this, "*** TABLE : widgetSelected : row : " + attribute );
         		//if ( row.isPrimaryKey() ) {
-            	if ( row.isKeyElement() ) { // v 3.0.0
+            	if ( attribute.isKeyElement() ) { // v 3.0.0
     				// Must be always checked : unselect not allowed
             		tableItem.setChecked(true);
             		return ;
@@ -932,9 +936,10 @@ import org.telosys.tools.repository.model.RepositoryModel;
         		else {
     				// Can be checked or not
         			//if ( row.getSelected() != tableItem.getChecked() ) {
-            		if ( row.isSelected() != tableItem.getChecked() ) {
-                		row.setSelected( tableItem.getChecked() );
+            		if ( attribute.isSelected() != tableItem.getChecked() ) {
+                		attribute.setSelected( tableItem.getChecked() );
         				setDirty();
+        				
         			}
         		}
 			}

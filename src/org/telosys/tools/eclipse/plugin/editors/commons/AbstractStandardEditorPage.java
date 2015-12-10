@@ -1,4 +1,4 @@
-package org.telosys.tools.eclipse.plugin.editors.dsl.model;
+package org.telosys.tools.eclipse.plugin.editors.commons;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
@@ -16,37 +16,44 @@ import org.telosys.tools.commons.ConsoleLogger;
 import org.telosys.tools.commons.TelosysToolsLogger;
 import org.telosys.tools.commons.cfg.TelosysToolsCfg;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
-import org.telosys.tools.eclipse.plugin.editors.commons.EditorWithCodeGeneration;
-import org.telosys.tools.generic.model.Model;
+import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 
-public abstract class ModelEditorPage extends FormPage 
-{
+public abstract class AbstractStandardEditorPage extends FormPage {
+
+	private final AbstractStandardEditor  _standardEditor ; // Ref on the Editor this page belongs to
 	
-	private ModelEditor        _editor = null ; // Ref on the Editor this page belongs to
+	private final TelosysToolsLogger      _logger ;
 	
-	private TelosysToolsLogger _logger = null ;
-	
-	private Color              _backgroundColor = null ;
-	
+	private final Color                   _backgroundColor  ;
+
 	//----------------------------------------------------------------------------------------------
 	/**
-	 * Constructor 
+	 * Constructor
 	 * @param editor
 	 * @param id
 	 * @param title
 	 */
-	public ModelEditorPage(FormEditor editor, String id, String title) 
-	{
-		super(editor, id, title);		
+	public AbstractStandardEditorPage(FormEditor editor, String id, String title ) {
+		super(editor, id, title);
+		PluginLogger.log(this, "constructor(.., '"+id+"', '"+ title +"')..." );
 		//super(editor, id, null); // ERROR if title is null
-		_editor = (ModelEditor) editor;
-		if ( null == _editor ) {
-			MsgBox.error("RepositoryEditor is null");
+		if ( editor == null ) {
+			MsgBox.error("FormEditor is null");
+		}
+		if ( editor instanceof AbstractStandardEditor ) {
+			_standardEditor = (AbstractStandardEditor) editor;
+		}
+		else {
+			_standardEditor = null ;
+			MsgBox.error("FormEditor is not an instance of StandardEditor");
 		}
 		
 		//--- Init the logger
-		_logger = _editor.getLogger();		
-		if ( null == _logger ) {
+		TelosysToolsLogger editorLogger = _standardEditor.getLogger();		
+		if ( editorLogger != null ) {
+			_logger = editorLogger;
+		}
+		else {
 			_logger = new ConsoleLogger();
 		}
 		log(this, "ancestor constructor(.., '"+id+"', '"+ title +"')..." );
@@ -54,75 +61,48 @@ public abstract class ModelEditorPage extends FormPage
 //		//--- Init the default background color // ERROR / Eclipse !!!
 //		Display display = new Display();// ERROR / Eclipse !!!
 //		_backgroundColor = display.getSystemColor(SWT.COLOR_GRAY);
-		Device device = Display.getCurrent ();
-		_backgroundColor = device.getSystemColor(SWT.COLOR_GRAY);
+		Device device = Display.getCurrent();
+		_backgroundColor = device.getSystemColor(SWT.COLOR_GRAY);		
 	}
 	
 	//----------------------------------------------------------------------------------------------
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.forms.editor.FormPage#createFormContent(org.eclipse.ui.forms.IManagedForm)
-	 */
-	protected void createFormContent(IManagedForm managedForm) {
-		log(this, "createFormContent(..)..." );
-		super.createFormContent(managedForm);
-		setBackgroundColor();
+	public void log(String s) {
+		if ( _logger != null ) {_logger.log(s); };
+	}
+	
+	//----------------------------------------------------------------------------------------------
+	public void log(Object o, String s) {
+		if ( _logger != null ) { _logger.log(o,s); } ;
+	}
+	//----------------------------------------------------------------------------------------------
+	public TelosysToolsLogger getLogger() {
+		return _logger ;
 	}
 
 	//----------------------------------------------------------------------------------------------
-	protected IProject getProject() {
-		return _editor.getProject();
-	}
-	//----------------------------------------------------------------------------------------------
-	protected Model getModel() {
-		return _editor.getModel();
-	}
-	//----------------------------------------------------------------------------------------------
-	protected EditorWithCodeGeneration getModelEditor() {
-		return _editor ;
-	}
-	//----------------------------------------------------------------------------------------------
-	protected void log(String s) {
-		_logger.log(s);
-	}
-	//----------------------------------------------------------------------------------------------
-	protected void log(Object o, String s) {
-		_logger.log(o,s);
-	}
-	//----------------------------------------------------------------------------------------------
-	protected TelosysToolsLogger getLogger() {
-		return _logger ;
-	}
-	//----------------------------------------------------------------------------------------------
-	protected void setDirty() {
-		_editor.setDirty();
+	public void setDirty() {
+		_standardEditor.setDirty();
 	}
 	
 	//----------------------------------------------------------------------------------------------
-	/**
-	 * Returns the current project's configuration <br>
-	 * Show a error dialog box if the configuration is not available 
-	 * @return the configuration (or null if not available )
-	 */
-//	protected ProjectConfig getProjectConfig()
-	protected TelosysToolsCfg getProjectConfig() // v 3.0.0
-	{
-//		ProjectConfig config = _repEditor.getProjectConfig();
-		TelosysToolsCfg config = _editor.getProjectConfig();
-		if ( config == null )
-		{
-			MsgBox.error("ProjectConfig is null");
-		}
-		return config ;
+	protected AbstractStandardEditor getStandardEditor() {
+		return _standardEditor;
 	}
 	//----------------------------------------------------------------------------------------------
-	protected void setBackgroundColor()
-	{
+	protected IProject getProject() {
+		return _standardEditor.getProject();
+	}
+
+	//----------------------------------------------------------------------------------------------
+	protected void setBackgroundColor() {
 		Control pageControl = this.getPartControl();
 		if ( pageControl != null ) {
 			Display display = pageControl.getDisplay();	
 			if ( display != null ) {
-				_backgroundColor = display.getSystemColor(SWT.COLOR_WIDGET_BACKGROUND);		
-				pageControl.setBackground(_backgroundColor ) ;
+//				_backgroundColor = display.getSystemColor(SWT.COLOR_WIDGET_BACKGROUND);
+//				pageControl.setBackground(_backgroundColor ) ;
+				Color color = display.getSystemColor(SWT.COLOR_WIDGET_BACKGROUND);
+				pageControl.setBackground(color) ;
 			}
 			else {
 				MsgBox.error("setBackgroundColor() : display is null");
@@ -135,6 +115,12 @@ public abstract class ModelEditorPage extends FormPage
 	//----------------------------------------------------------------------------------------------
 	protected Color getBackgroundColor() {
 		return _backgroundColor;
+	}
+	
+	public TelosysToolsCfg getProjectConfig () {
+//		PluginLogger.log(this, "getProjectConfig()..." );
+//		return ProjectConfigManager.loadProjectConfig( getProject() ); // v 3.0.0
+		return _standardEditor.getProjectConfig();
 	}
 	//----------------------------------------------------------------------------------------------
 	protected Composite initAndGetFormBody(IManagedForm managedForm, Layout layout) {
@@ -156,5 +142,4 @@ public abstract class ModelEditorPage extends FormPage
 		
 		return scrolledFormBody;
 	}
-	
 }

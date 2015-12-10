@@ -60,41 +60,34 @@ public abstract class RepositoryEditorPage extends FormPage
 //		super.setPartName(title); 
 //	}
 	//----------------------------------------------------------------------------------------------
-	protected IProject getProject()
-	{
+	protected IProject getProject() {
 		return _repEditor.getProject();
 	}
 	//----------------------------------------------------------------------------------------------
-	protected RepositoryModel getRepositoryModel()
-	{
-		return _repEditor.getDatabaseRepository();
+	protected RepositoryModel getRepositoryModel() {
+		return _repEditor.getRepositoryModel();
 	}
 	
 	//----------------------------------------------------------------------------------------------
-	protected RepositoryEditor getRepositoryEditor()
-	{
+	protected RepositoryEditor getRepositoryEditor() {
 		return _repEditor ;
 	}
 	
 	//----------------------------------------------------------------------------------------------
-	protected void log(String s)
-	{
+	protected void log(String s) {
 		_logger.log(s);
 	}
 	//----------------------------------------------------------------------------------------------
-	protected void log(Object o, String s)
-	{
+	protected void log(Object o, String s) {
 		_logger.log(o,s);
 	}
 	//----------------------------------------------------------------------------------------------
-	protected TelosysToolsLogger getLogger()
-	{
+	protected TelosysToolsLogger getLogger() {
 		return _logger ;
 	}
 	
 	//----------------------------------------------------------------------------------------------
-	protected void setDirty()
-	{
+	protected void setDirty() {
 		_repEditor.setDirty();
 	}
 	

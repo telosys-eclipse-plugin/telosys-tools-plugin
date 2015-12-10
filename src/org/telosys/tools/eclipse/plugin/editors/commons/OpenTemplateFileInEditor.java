@@ -7,20 +7,21 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
-import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.FileEditorUtil;
-import org.telosys.tools.eclipse.plugin.editors.dbrep.RepositoryEditor;
+import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.generator.target.TargetDefinition;
 
 public class OpenTemplateFileInEditor implements Listener {
 
-	private final EditorWithCodeGeneration editor ;
+//	private final EditorWithCodeGeneration editor ;
+	private final AbstractModelEditor editor ;
 	private final IProject project ;
 	private final Table    table ;
 	private final int      columnClick ;
 	
 	
-	public OpenTemplateFileInEditor(EditorWithCodeGeneration editor, IProject project, Table table, int columnClick) {
+//	public OpenTemplateFileInEditor(EditorWithCodeGeneration editor, IProject project, Table table, int columnClick) {
+	public OpenTemplateFileInEditor(AbstractModelEditor editor, IProject project, Table table, int columnClick) {
 		super();
 		this.editor = editor ;
 		this.project = project;

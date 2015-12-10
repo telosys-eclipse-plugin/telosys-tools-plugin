@@ -12,6 +12,7 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.Util;
+import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 import org.telosys.tools.generic.model.Model;
 import org.telosys.tools.repository.model.EntityInDbModel;
 
@@ -20,7 +21,8 @@ import org.telosys.tools.repository.model.EntityInDbModel;
  * First page of the editor : Model attributes mapping and foreign keys <br>
  *  
  */
-/* package */  class ModelEditorPage2 extends ModelEditorPage 
+///* package */  class ModelEditorPage2 extends ModelEditorPage 
+/* package */  class ModelEditorPageModelInfo extends AbstractModelEditorPage 
 {
 
 //	private final static int TEXT_HEIGHT = 24 ;
@@ -55,7 +57,7 @@ import org.telosys.tools.repository.model.EntityInDbModel;
 	 * @param id
 	 * @param title 
 	 */
-	public ModelEditorPage2(FormEditor editor, String id, String title ) {
+	public ModelEditorPageModelInfo(FormEditor editor, String id, String title ) {
 		super(editor, id, title);
 		log(this, "constructor(.., '"+id+"', '"+ title +"')..." );
 	}

@@ -27,20 +27,20 @@ import org.telosys.tools.repository.persistence.util.RepositoryConst;
 public class LinksList extends CompositesList 
 {
 //	private LinksManager           linksManager ;
-	private final RepositoryModel  repositoryModel ; // v 3.0.0 replaces linksManager
-	private RepositoryEditorPage2  pluginPage;
+	private final RepositoryModel        repositoryModel ; // v 3.0.0 replaces linksManager
+	private final RepositoryEditorPage2  _editorPage;
 	
 	//----------------------------------------------------------------------------------------
 //	public LinksList(Composite parent, Object layoutData, LinksManager linksManager, RepositoryEditorPage2 pluginPage) 
-	public LinksList(Composite parent, Object layoutData, RepositoryEditorPage2 pluginPage) // v 3.0.0
+	public LinksList(Composite parent, Object layoutData, RepositoryEditorPage2 editorPage) // v 3.0.0
 	{
 		super(parent, layoutData);
-		if ( pluginPage.getRepositoryModel() == null ) {
+		if ( editorPage.getRepositoryModel() == null ) {
 			MsgBox.error("Repository model is not yet set in the editor page");
 		}
 //		this.linksManager = linksManager ;
-		this.repositoryModel = pluginPage.getRepositoryModel() ; // v 3.0.0
-		this.pluginPage = pluginPage ;
+		this.repositoryModel = editorPage.getRepositoryModel() ; // v 3.0.0
+		this._editorPage = editorPage ;
 	}
 
 	protected void log(String s)
@@ -445,7 +445,7 @@ public class LinksList extends CompositesList
 //		}
 		if ( button.getSelection() != link.isSelected() ) { // v 3.0.0
 			link.setSelected( button.getSelection() );
-			pluginPage.setDirty();
+			_editorPage.setDirty();
 		}
 	}
 	//----------------------------------------------------------------------------------------
@@ -543,8 +543,8 @@ public class LinksList extends CompositesList
 				}
 				
 				// Something has changed 
-				pluginPage.applyFilterCriteria(); // To rebuild all the list of links ( = "REFRESH" )
-				pluginPage.setDirty();
+				_editorPage.applyFilterCriteria(); // To rebuild all the list of links ( = "REFRESH" )
+				_editorPage.setDirty();
 			}
 		}
 		
@@ -585,8 +585,8 @@ public class LinksList extends CompositesList
 					deleteRow(rowInvSide);
 				}
 				refresh();
-				pluginPage.setDirty();
-				pluginPage.refreshCount();
+				_editorPage.setDirty();
+				_editorPage.refreshCount();
 			}
 		}
 		else 
@@ -599,8 +599,8 @@ public class LinksList extends CompositesList
 				repositoryModel.removeLinkById( link.getId() ); // v 3.0.0
 				deleteRow(row);
 				refresh();
-				pluginPage.setDirty();
-				pluginPage.refreshCount();
+				_editorPage.setDirty();
+				_editorPage.refreshCount();
 			}
 		}
 	}

@@ -14,16 +14,22 @@ public class RefreshButton {
 	public final static int  BUTTON_WIDTH  =  90 ; // 80 ;
 	
 	private final Button           _button ;
-	private final EditorWithCodeGeneration _editor ;
-	
+//	private final EditorWithCodeGeneration _editor ;
+//	private final ModelEditor _editor ;
+	private final AbstractModelEditorPageForGeneration _page ;
+
 	/**
 	 * Creates a "Refresh" button in the given Composite with a "GridData" LayoutData
 	 * @param parent
 	 * @param editor
 	 */
-	public RefreshButton(Composite parent, EditorWithCodeGeneration editor) {
+//	public RefreshButton(Composite parent, EditorWithCodeGeneration editor) {
+	public RefreshButton(Composite parent, AbstractModelEditorPageForGeneration page) {
 		super();
-		_editor = editor ; // v 2.0.7
+		_page = page ;
+		//_editor = editor ; 
+//		_editor = page.getModelEditor();
+
 		_button = new Button(parent, SWT.NONE);
 		
 		GridData gridData = new GridData (BUTTON_WIDTH, BUTTON_HEIGHT) ;
@@ -44,10 +50,13 @@ public class RefreshButton {
 	 * @param layoutData
 	 * @param editor
 	 */
-	public RefreshButton(Composite parent, Object layoutData, EditorWithCodeGeneration editor) {
+//	public RefreshButton(Composite parent, Object layoutData, EditorWithCodeGeneration editor) {
+	public RefreshButton(Composite parent, Object layoutData, AbstractModelEditorPageForGeneration page) {
 		super();
 
-		_editor = editor ; // v 2.0.7
+		_page = page ;
+		//_editor = editor ; 
+//		_editor = page.getModelEditor();
 		
 		_button = new Button(parent, SWT.NONE);
 		
@@ -67,7 +76,8 @@ public class RefreshButton {
 	        public void widgetSelected(SelectionEvent arg0)
 	        {
 	        	//--- Reload the targets list
-	        	_editor.refreshAllTargetsTablesFromConfigFile();
+//	        	_editor.refreshAllTargetsTablesFromConfigFile();
+	        	_page.refreshAllTargetsTablesFromConfigFile();
 	        }
 	        public void widgetDefaultSelected(SelectionEvent arg0)
 	        {

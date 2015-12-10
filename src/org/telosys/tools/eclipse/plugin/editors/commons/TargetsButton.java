@@ -16,10 +16,12 @@ public class TargetsButton {
 	public final static int  BUTTON_WIDTH  =  90 ;
 	
 	private final Button           _button ;
-	private final EditorWithCodeGeneration _editor ;
+//	private final EditorWithCodeGeneration _editor ;
+	private final AbstractModelEditor  _editor ;
 	private final IProject         _project ;
 
-	public TargetsButton(Composite parent, EditorWithCodeGeneration editor, IProject project ) {
+//	public TargetsButton(Composite parent, EditorWithCodeGeneration editor, IProject project ) {
+	public TargetsButton(Composite parent, AbstractModelEditor editor, IProject project ) {
 		super();
 
 		_editor = editor ;

@@ -1,4 +1,4 @@
-package org.telosys.tools.eclipse.plugin.editors.dsl.model;
+package org.telosys.tools.eclipse.plugin.editors.commons;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -30,14 +30,6 @@ import org.telosys.tools.commons.cfg.TelosysToolsCfg;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.PluginImages;
 import org.telosys.tools.eclipse.plugin.commons.Util;
-import org.telosys.tools.eclipse.plugin.editors.commons.BundleComboBox;
-import org.telosys.tools.eclipse.plugin.editors.commons.EditorWithCodeGeneration;
-import org.telosys.tools.eclipse.plugin.editors.commons.GenerateButton;
-import org.telosys.tools.eclipse.plugin.editors.commons.GridPanel;
-import org.telosys.tools.eclipse.plugin.editors.commons.OpenTemplateFileInEditor;
-import org.telosys.tools.eclipse.plugin.editors.commons.RefreshButton;
-import org.telosys.tools.eclipse.plugin.editors.commons.SelectDeselectButtons;
-import org.telosys.tools.eclipse.plugin.editors.commons.TargetsButton;
 import org.telosys.tools.eclipse.plugin.editors.dbrep.TargetsUtil;
 import org.telosys.tools.eclipse.plugin.editors.dbrep.ToolTipListenerForEntitiesTable;
 import org.telosys.tools.eclipse.plugin.editors.dbrep.ToolTipListenerForTargetsTable;
@@ -52,10 +44,10 @@ import org.telosys.tools.generic.model.Entity;
 import org.telosys.tools.generic.model.Model;
 
 /**
- * Editor Page 3 : "Bulk Generation"
+ * Generic Model Editor Page for "Code Generation"
  * 
  */
-/* package */ class ModelEditorPage1 extends ModelEditorPage {
+public abstract class AbstractModelEditorPageForGeneration extends AbstractModelEditorPage {
 
 //	private final static int RIGHT_PART_WIDTH = 484 ;
 	private final static int TABLE_HEIGHT = 380 ;
@@ -67,9 +59,16 @@ import org.telosys.tools.generic.model.Model;
 	private BundleComboBox  _comboBundles = null ;
 	private Button          _checkboxStaticResources = null ;
 	
-	//private final List<TargetDefinition> initialTargetsList ; // v 2.0.7
-	private List<TargetDefinition> _resourcesTargets = null ; // v 2.0.7
+	private List<TargetDefinition> _resourcesTargets = null ;
 	
+	//----------------------------------------------------------------------------------------------
+	// Abstract methods
+	//----------------------------------------------------------------------------------------------
+	public abstract void createEntitiesTableColumns(Table table);
+	
+	public abstract void populateEntitiesTable(Table table, List<Entity> entities) ;
+
+	//----------------------------------------------------------------------------------------------
 	/**
 	 * Constructor
 	 * @param editor
@@ -77,14 +76,15 @@ import org.telosys.tools.generic.model.Model;
 	 * @param title
 	 */
 	//public RepositoryEditorPage2(FormEditor editor, String id, String title, List<TargetDefinition> initialTargetsList ) {
-	public ModelEditorPage1(FormEditor editor, String id, String title ) {
+	public AbstractModelEditorPageForGeneration(FormEditor editor, String id, String title ) {
 		super(editor, id, title);
 		//super(editor, id, null); // ERROR if title is null
 		
 		log(this, "constructor(.., '"+id+"', '"+ title +"')..." );
 		//this.initialTargetsList = initialTargetsList ;
 	}
-
+	
+	
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.forms.editor.FormPage#createFormContent(org.eclipse.ui.forms.IManagedForm)
 	 */
@@ -102,22 +102,8 @@ import org.telosys.tools.generic.model.Model;
 			return ;
 		}
 		
-//		if ( pageControl instanceof Composite )
-//		{
-//			PluginLogger.log(this, "- pageControl is a Composite  " );
-//			PluginLogger.log(this, "- pageControl class = " + pageControl.getClass() );
-//			
-//			Composite pageComposite = (Composite) pageControl ;
-//			Layout layout = pageComposite.getLayout();			
-//			PluginLogger.log(this, "- pageControl layout class = " + layout.getClass() );
-//		}
-//		else
-//		{
-//			PluginLogger.log(this, "- pageControl() is NOT a Composite !!! " );
-//		}
-
 		// What do we have here ?
-		// * pageControl (Composite)
+		// * pageControl (a Composite)
 		//  . class  : org.eclipse.ui.forms.widgets.ScrolledForm ( see API JavaDoc )
 		//  . layout : org.eclipse.swt.custom.ScrolledCompositeLayout
 		// * body 
@@ -143,7 +129,7 @@ import org.telosys.tools.generic.model.Model;
 		// marginWidth specifies the number of pixels of horizontal margin 
 		// that will be placed along the left and right edges of the layout. The default value is 5.
 		//bodyLayout.marginWidth = 20 ;
-		formGridLayout.marginWidth = ModelEditor.LAYOUT_MARGIN_WIDTH ;
+		formGridLayout.marginWidth = LAYOUT_MARGIN_WIDTH ;
 		formGridLayout.verticalSpacing = 0;
 		
 		scrolledFormBody.setLayout( formGridLayout );
@@ -173,8 +159,6 @@ import org.telosys.tools.generic.model.Model;
 		//---------------------------------------------------------------
 		populateEntitiesTable();
 		
-		//populateTargetsTable();
-		//populateTargetsTable(initialTargetsList); // v 2.0.7
 		_comboBundles.refresh(); 
 
 		log(this, "createFormContent(..) - END." );
@@ -227,7 +211,7 @@ import org.telosys.tools.generic.model.Model;
 		panelTopRight.setLayoutData(panelGridData);
 		
 		//--- (1) Button "Refresh"
-		new RefreshButton(panelTopRight, (EditorWithCodeGeneration)getModelEditor());  // 1 button // v 2.0.7
+		new RefreshButton(panelTopRight, this);  // 1 button // v 2.0.7
 
 		//--- (2) Filler 
 		//int fillerWidth = RIGHT_PART_WIDTH - GenerateButton.BUTTON_WIDTH - RefreshButton.BUTTON_WIDTH ;
@@ -293,18 +277,9 @@ import org.telosys.tools.generic.model.Model;
 		SelectDeselectButtons buttons = createLeftPartHeader(panel) ;
 		
 		//--- Create the standard "SWT Table" for entities
-//		_tableEntities = createEntitiesTable(panel);
-//		//_table.setLocation(20, 20);
-//		GridData gdTableEntities = new GridData();
-//		gdTableEntities.heightHint = 344 ;
-//		gdTableEntities.widthHint  = 420 ;
-//		_tableEntities.setLayoutData(gdTableEntities);
-		
 		_tableEntities = createLeftPartTable(panel);
 		
 		buttons.setTable(_tableEntities);
-		
-		//return tableEntities ;
 	}
 	//----------------------------------------------------------------------------------------------
 	private void createFormCellRow2Col2(Composite formBody) {
@@ -387,7 +362,8 @@ import org.telosys.tools.generic.model.Model;
     	
 		//--- Combobox ( bundles list )
 		log("create BundleComboBox...");
-		_comboBundles = new BundleComboBox(gridPanel.getPanel(), getModelEditor() );
+//		_comboBundles = new BundleComboBox(gridPanel.getPanel(), getModelEditor() );
+		_comboBundles = new BundleComboBox(gridPanel.getPanel(), this );
 		log("BundleComboBox created.");
 		
 		//--- First filler
@@ -429,17 +405,8 @@ import org.telosys.tools.generic.model.Model;
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 		
-		//--- Columns
-		TableColumn col = null ;
-		int iColumnIndex = 0 ;
-
-//		col = new TableColumn(table, SWT.LEFT, iColumnIndex++);
-//		col.setText("Table name");
-//		col.setWidth(220);
-//		
-		col = new TableColumn(table, SWT.LEFT, iColumnIndex++);
-		col.setText("Entity class name");
-		col.setWidth(400);
+		//--- Table columns : call the specialized method implemented in the descendant class
+		createEntitiesTableColumns(table);
 		
 		return table;
 	}
@@ -508,42 +475,42 @@ import org.telosys.tools.generic.model.Model;
 	/**
 	 * Populates the list of entities ( left side table )
 	 */
-	private void populateEntitiesTable()
-	{
+	private void populateEntitiesTable() {
 		log(this, "populateEntitiesTable()");
 		
-//		ModelEditor modelEditor = (ModelEditor) getEditor();
-//		Model model = modelEditor.getModel();
 		Model model = getModel();
 		if ( model == null ) {
 			MsgBox.error("Model is null !");
 			return ;
 		}
-		
 		List<Entity> entities = model.getEntities();
-		if ( entities != null )
-		{
-			for ( Entity entity : entities ) { 
-//				String tableName = entity.getDatabaseTable() ; // v 3.0.0
-//				if ( entity.getWarnings() != null && entity.getWarnings().size() > 0 ) {
-//					tableName = "(!) " + tableName;
-//				}
-				String entityClassName = entity.getClassName(); 
-				
-				if ( entityClassName == null ) entityClassName = "???" ;
-				
-                //--- Create the row content 
-//                String[] row = new String[] { tableName, entityClassName };
-                String[] row = new String[] { entityClassName };
-				
-                //--- Create the TableItem and set the row content 
-            	TableItem tableItem = new TableItem(_tableEntities, SWT.NONE );
-                tableItem.setChecked(false);                
-                tableItem.setText(row);                
-                tableItem.setData( entityClassName ); 
-			}
-		}
-	}
+		populateEntitiesTable(_tableEntities, entities);
+	}		
+	
+//	private void populateEntitiesTable(Table table, List<Entity> entities) {
+//		if ( entities != null )
+//		{
+//			for ( Entity entity : entities ) { 
+////				String tableName = entity.getDatabaseTable() ; // v 3.0.0
+////				if ( entity.getWarnings() != null && entity.getWarnings().size() > 0 ) {
+////					tableName = "(!) " + tableName;
+////				}
+//				String entityClassName = entity.getClassName(); 
+//				
+//				if ( entityClassName == null ) entityClassName = "???" ;
+//				
+//                //--- Create the row content 
+////                String[] row = new String[] { tableName, entityClassName };
+//                String[] row = new String[] { entityClassName };
+//				
+//                //--- Create the TableItem and set the row content 
+//            	TableItem tableItem = new TableItem(table, SWT.NONE );
+//                tableItem.setChecked(false);                
+//                tableItem.setText(row);                
+//                tableItem.setData( entityClassName ); 
+//			}
+//		}
+//	}
 
 	public void refreshAllTargetsTablesFromConfigFile()
 	{
@@ -613,27 +580,14 @@ import org.telosys.tools.generic.model.Model;
 	}
 
 	//----------------------------------------------------------------------------------------------
-	//private void populateTargetsTable()
-	private void populateTargetsTable(List<TargetDefinition> list) // v 2.0.7
+	private void populateTargetsTable(List<TargetDefinition> list)
 	{
 		log("populateTargetsTable");
-//		ProjectConfig projectConfig = getProjectConfig();
-//		if ( projectConfig == null )
-//		{
-//			return ;
-//		}
-		
-//		List<TargetDefinition> list = projectConfig.getTemplates(); // NB : the list can be null 
 		if ( list != null )
 		{
 			_tableTargets.removeAll();
-			//for ( SpecificTemplate st : list ) {
 			for ( TargetDefinition targetDef : list ) {
 				
-//		        // Build a target instance and bind it with the table item
-//		        GenericTarget target = new GenericTarget(st.getName(), st.getTargetFile(), 
-//		        		st.getTargetFolder(), st.getTemplate() );
-		        
 				log(this, " . Target : " + targetDef.getName() + " - " + targetDef.getTemplate() );
 				
                 //--- Create the TableItem and set the row content 
@@ -697,7 +651,6 @@ import org.telosys.tools.generic.model.Model;
 		}
     }
     
-    //private LinkedList<TargetDefinition> getSelectedTargets(ProjectConfig projectConfig)
     private LinkedList<TargetDefinition> getSelectedTargets()
     {
     	LinkedList<TargetDefinition> selectedTargets = new LinkedList<TargetDefinition>();
@@ -802,7 +755,7 @@ import org.telosys.tools.generic.model.Model;
     {
     	//--- Prepare the generation task environment 	
     	//ModelEditor editor = getModelEditor();
-    	EditorWithCodeGeneration editor = getModelEditor();
+    	AbstractModelEditor editor = getModelEditor();
 //		ProjectConfig projectConfig = editor.getProjectConfig();
 		TelosysToolsCfg telosysToolsCfg = getProjectConfig(); // v3.0.0
 //		GeneratorConfigManager configManager = new GeneratorConfigManager(null);

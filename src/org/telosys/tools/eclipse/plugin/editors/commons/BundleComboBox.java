@@ -23,15 +23,20 @@ public class BundleComboBox {
 	public final static int COMBO_HEIGHT =  24 ;
 	private final static int COMBO_VISIBLE_ITEMS =  16 ;
 	
-	private final EditorWithCodeGeneration _editor ;
+//	private final EditorWithCodeGeneration _editor ;
+	private final AbstractModelEditor _editor ;
 	private final Combo            _combo ;
+	private final AbstractModelEditorPageForGeneration _page ;
 	
 //	private String _selectedItem = "";
 	
-	public BundleComboBox(Composite parent, EditorWithCodeGeneration editor) {
+	//public BundleComboBox(Composite parent, EditorWithCodeGeneration editor) {
+	public BundleComboBox(Composite parent, AbstractModelEditorPageForGeneration page) {
 		super();
 
-		_editor = editor ; 
+		_page = page ;
+		//_editor = editor ; 
+		_editor = page.getModelEditor();
 		
     	_combo = new Combo(parent, SWT.BORDER | SWT.READ_ONLY);
 		//_combo.setSize(COMBO_WIDTH, COMBO_HEIGHT);
@@ -51,7 +56,8 @@ public class BundleComboBox {
 				if ( StrUtil.different( selectedBundle, _editor.getCurrentBundleName() )) {
 					// only if the bundle name has changed : to avoid refresh (visual list effect) if unchanged
 					_editor.setCurrentBundleName(selectedBundle);
-					_editor.refreshAllTargetsTablesFromConfigFile();					
+					//_editor.refreshAllTargetsTablesFromConfigFile();
+					_page.refreshAllTargetsTablesFromConfigFile();
 				}
             }
         });

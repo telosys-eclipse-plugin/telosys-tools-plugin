@@ -21,6 +21,7 @@ import org.telosys.tools.commons.TelosysToolsException;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 import org.telosys.tools.eclipse.plugin.commons.Util;
+import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 import org.telosys.tools.repository.LinksGenerator;
 import org.telosys.tools.repository.model.LinkInDbModel;
 import org.telosys.tools.repository.model.LinksCriteria;
@@ -30,7 +31,8 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 /**
  * Page 2 of the editor : Links management  <br>
  */
-/* package */ class RepositoryEditorPage2 extends RepositoryEditorPage 
+///* package */ class RepositoryEditorPage2 extends RepositoryEditorPage 
+/* package */ class RepositoryEditorPage2 extends AbstractModelEditorPage 
 {
 
 	private Button ckFilterOwningSide  ;
@@ -90,7 +92,8 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 			// marginWidth specifies the number of pixels of horizontal margin 
 			// that will be placed along the left and right edges of the layout. The default value is 5.
 			//bodyLayout.marginWidth = 20 ;
-			bodyLayout.marginWidth = RepositoryEditor.LAYOUT_MARGIN_WIDTH ;
+//			bodyLayout.marginWidth = RepositoryEditor.LAYOUT_MARGIN_WIDTH ;
+			bodyLayout.marginWidth = LAYOUT_MARGIN_WIDTH ;
 			
 			scrolledFormBody.setLayout( bodyLayout );
 			//scrolledFormBody.setSize(200,200); // Sans effet
