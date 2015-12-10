@@ -6,16 +6,16 @@ import org.eclipse.swt.widgets.Text;
 
 public class GenericModifyListener implements ModifyListener
 {
-	private RepositoryEditorPage1 _editorPage ;
+	private RepositoryEditorPageModelEntities _editorPage ;
 
 	private int _valueId ;
 	
-	public GenericModifyListener(RepositoryEditorPage1 editorPage, int id ) {
+	public GenericModifyListener(RepositoryEditorPageModelEntities editorPage, int id ) {
 		_editorPage = editorPage;
 		_valueId = id ;
 	}
 
-	protected RepositoryEditorPage1 getEditorPage()
+	protected RepositoryEditorPageModelEntities getEditorPage()
 	{
 		return _editorPage ;
 	}

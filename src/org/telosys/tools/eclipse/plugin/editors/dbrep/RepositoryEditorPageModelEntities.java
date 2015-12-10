@@ -48,7 +48,7 @@ import org.telosys.tools.repository.model.RepositoryModel;
  *  
  */
 ///* package */  class RepositoryEditorPage1 extends RepositoryEditorPage 
-/* package */  class RepositoryEditorPage1 extends AbstractModelEditorPage
+/* package */  class RepositoryEditorPageModelEntities extends AbstractModelEditorPage
 {
 
 //	private final static int GROUP_X = 12 ;
@@ -102,7 +102,7 @@ import org.telosys.tools.repository.model.RepositoryModel;
 	 * @param title 
 	 */
 	//public RepositoryEditorPage1(FormEditor editor, String id, String title, List<TargetDefinition> targetsList) {
-	public RepositoryEditorPage1(FormEditor editor, String id, String title ) {
+	public RepositoryEditorPageModelEntities(FormEditor editor, String id, String title ) {
 		super(editor, id, title);
 		//super(editor, id, null); // ERROR if title is null
 		log(this, "constructor(.., '"+id+"', '"+ title +"')..." );
@@ -163,36 +163,36 @@ import org.telosys.tools.repository.model.RepositoryModel;
 	{
 		super.createFormContent(managedForm);
 		
-		log(this, "createFormContent(..)..." );
-		Control pageControl = getPartControl();
+//		log(this, "createFormContent(..)..." );
+//		Control pageControl = getPartControl();
+//		
+//		if ( pageControl != null )
+//		{
+//			log(this, "createFormContent(..) : getPartControl() != null " );
+//		}
+//		else
+//		{
+//			log(this, "createFormContent(..) : getPartControl() is null !!! " );
+//			return ;
+//		}
 		
-		if ( pageControl != null )
-		{
-			log(this, "createFormContent(..) : getPartControl() != null " );
-		}
-		else
-		{
-			log(this, "createFormContent(..) : getPartControl() is null !!! " );
-			return ;
-		}
-		
-		if ( pageControl instanceof Composite )
-		{
-			log(this, "- pageControl is a Composite  " );
-			// Yes pageControl is a Composite
-
-			log(this, "- pageControl class = " + pageControl.getClass() );
-			// class = org.eclipse.ui.forms.widgets.ScrolledForm
-			
-			Composite pageComposite = (Composite) pageControl ;
-			Layout layout = pageComposite.getLayout();			
-			log(this, "- pageControl layout class = " + layout.getClass() );
-			// layout = org.eclipse.swt.custom.ScrolledCompositeLayout
-		}
-		else
-		{
-			log(this, "- pageControl() is NOT a Composite !!! " );
-		}
+//		if ( pageControl instanceof Composite )
+//		{
+//			log(this, "- pageControl is a Composite  " );
+//			// Yes pageControl is a Composite
+//
+//			log(this, "- pageControl class = " + pageControl.getClass() );
+//			// class = org.eclipse.ui.forms.widgets.ScrolledForm
+//			
+//			Composite pageComposite = (Composite) pageControl ;
+//			Layout layout = pageComposite.getLayout();			
+//			log(this, "- pageControl layout class = " + layout.getClass() );
+//			// layout = org.eclipse.swt.custom.ScrolledCompositeLayout
+//		}
+//		else
+//		{
+//			log(this, "- pageControl() is NOT a Composite !!! " );
+//		}
 
 		// What do we have here ?
 		// * pageControl (Composite)
@@ -277,14 +277,14 @@ import org.telosys.tools.repository.model.RepositoryModel;
 		// #LGU changed for tests
 		//composite.setSize(760, 200); 
 		
-		composite.setBackground( getBackgroundColor() );
+		//composite.setBackground( getBackgroundColor() );
 		
 
 		TabFolder tabFolder = new TabFolder(composite, SWT.NONE);
 		
 		//tabFolder.setLocation(GROUP_X, 100);
 		//tabFolder.setSize(400, 200);
-		tabFolder.setBackground( getBackgroundColor() ); // No effect : cannot change the TabFolder color 
+		//tabFolder.setBackground( getBackgroundColor() ); // No effect : cannot change the TabFolder color 
 
 		//--- Creates the 3 tabs 
 		createTabFolderMapping(tabFolder);
@@ -312,12 +312,9 @@ import org.telosys.tools.repository.model.RepositoryModel;
 	    
 	    group1.setLayoutData(gd);
 		
-		//group1.setSize(700, 60);
 		//group1.setSize(900, 120); // No effect !
 		
-		//tab.setBackground(DAOColor.color(disp));
-		//group1.setLocation(GROUP_X, 20);
-        group1.setBackground( getBackgroundColor() );
+//        group1.setBackground( getBackgroundColor() );
 
 		int width = 200;
 //		int x0 =  10;

@@ -9,6 +9,12 @@ public abstract class AbstractModelEditorPage extends AbstractStandardEditorPage
 
 	protected final static int LAYOUT_MARGIN_WIDTH = 10 ;
 
+	/**
+	 * Constructor
+	 * @param editor
+	 * @param id
+	 * @param title
+	 */
 	public AbstractModelEditorPage(FormEditor editor, String id, String title) {
 		super(editor, id, title);
 	}

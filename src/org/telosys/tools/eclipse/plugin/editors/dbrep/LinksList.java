@@ -28,11 +28,11 @@ public class LinksList extends CompositesList
 {
 //	private LinksManager           linksManager ;
 	private final RepositoryModel        repositoryModel ; // v 3.0.0 replaces linksManager
-	private final RepositoryEditorPage2  _editorPage;
+	private final RepositoryEditorPageModelLinks  _editorPage;
 	
 	//----------------------------------------------------------------------------------------
 //	public LinksList(Composite parent, Object layoutData, LinksManager linksManager, RepositoryEditorPage2 pluginPage) 
-	public LinksList(Composite parent, Object layoutData, RepositoryEditorPage2 editorPage) // v 3.0.0
+	public LinksList(Composite parent, Object layoutData, RepositoryEditorPageModelLinks editorPage) // v 3.0.0
 	{
 		super(parent, layoutData);
 		if ( editorPage.getRepositoryModel() == null ) {

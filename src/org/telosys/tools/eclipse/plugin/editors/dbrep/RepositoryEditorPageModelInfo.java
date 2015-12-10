@@ -10,7 +10,7 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.telosys.tools.commons.cfg.TelosysToolsCfg;
+import org.telosys.tools.commons.DateUtil;
 import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 import org.telosys.tools.eclipse.plugin.commons.Util;
 import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
@@ -23,7 +23,7 @@ import org.telosys.tools.repository.model.RepositoryModel;
  * 
  */
 ///* package */ class RepositoryEditorPage4 extends RepositoryEditorPage 
-/* package */ class RepositoryEditorPage4 extends AbstractModelEditorPage 
+/* package */ class RepositoryEditorPageModelInfo extends AbstractModelEditorPage 
 {
 
 	//--------------------------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ import org.telosys.tools.repository.model.RepositoryModel;
 	 * @param id
 	 * @param title
 	 */
-	public RepositoryEditorPage4(FormEditor editor, String id, String title) {
+	public RepositoryEditorPageModelInfo(FormEditor editor, String id, String title) {
 		super(editor, id, title);
 		PluginLogger.log(this, "constructor(.., '"+id+"', '"+ title +"')..." );		
 	}
@@ -57,30 +57,7 @@ import org.telosys.tools.repository.model.RepositoryModel;
 	protected void createFormContent(IManagedForm managedForm) {
 		super.createFormContent(managedForm);
 		
-		log(this, "createFormContent(..)..." );
-		
-//		ProjectConfig config = getProjectConfig();
-//		if ( config == null )
-//		{
-//			MsgBox.error("ProjectConfig is null");
-//			return;
-//		}
-		TelosysToolsCfg telosysToolsCfg = getProjectConfig(); // v 3.0.0
-		
-		// What do we have here ?
-		// * pageControl (Composite)
-		//  . class  : org.eclipse.ui.forms.widgets.ScrolledForm ( see API JavaDoc )
-		//  . layout : org.eclipse.swt.custom.ScrolledCompositeLayout
-		// * body 
-		//  . class  : org.eclipse.ui.forms.widgets.LayoutComposite ( no API doc ! )
-		//  . layout : none
-		//
-		/* Example from API doc :
-		  ScrolledForm form = toolkit.createScrolledForm(parent);
-		  form.setText("Sample form");
-		  form.getBody().setLayout(new GridLayout());
-		  toolkit.createButton(form.getBody(), "Checkbox", SWT.CHECK);
-		*/
+//		TelosysToolsCfg telosysToolsCfg = getProjectConfig(); // v 3.0.0
 		
 		ScrolledForm form = managedForm.getForm();
 		
@@ -107,31 +84,49 @@ import org.telosys.tools.repository.model.RepositoryModel;
 		//TelosysToolsCfg telosysToolsCfg = config.getTelosysToolsCfg();
 		
 		addConfigRow(body, "", "" );
-		//addConfigRow(body, "Project name :", config.getProjectName() );
-		addConfigRow(body, "Project name :", getProject().getName() ); // v 3.0.0
+//		//addConfigRow(body, "Project name :", config.getProjectName() );
+//		addConfigRow(body, "Project name :", getProject().getName() ); // v 3.0.0
 		
-		//addConfigRow(body, "Workspace folder :", config.getWorkspaceFolder() );
-		//addConfigRow(body, "Project folder :", config.getProjectFolder() );
-		addConfigRow(body, "Project folder :", telosysToolsCfg.getProjectAbsolutePath() );
-
-		addConfigRow(body, "Configuration file full path :", telosysToolsCfg.getCfgFileAbsolutePath() );
-
-		addConfigRow(body, "Templates folder :", telosysToolsCfg.getTemplatesFolder() );
-		addConfigRow(body, "Templates folder full path :", telosysToolsCfg.getTemplatesFolderAbsolutePath() );
-		addConfigRow(body, "Repositories folder :", telosysToolsCfg.getModelsFolder() );
-		
-		addConfigRow(body, "", "" );
+//		//addConfigRow(body, "Workspace folder :", config.getWorkspaceFolder() );
+//		//addConfigRow(body, "Project folder :", config.getProjectFolder() );
+//		addConfigRow(body, "Project folder :", telosysToolsCfg.getProjectAbsolutePath() );
+//
+//		addConfigRow(body, "Configuration file full path :", telosysToolsCfg.getCfgFileAbsolutePath() );
+//
+//		addConfigRow(body, "Templates folder :", telosysToolsCfg.getTemplatesFolder() );
+//		addConfigRow(body, "Templates folder full path :", telosysToolsCfg.getTemplatesFolderAbsolutePath() );
+//		addConfigRow(body, "Repositories folder :", telosysToolsCfg.getModelsFolder() );
+//		
+//		addConfigRow(body, "", "" );
 		
 		RepositoryModel repositoryModel = getRepositoryModel();
+		addConfigRow(body, "Model name :", repositoryModel.getName() );
+		addConfigRow(body, "Model version :", repositoryModel.getVersion() );
+		//repositoryModel.getDescription();
+
+		addConfigRow(body, "", "" );
+		
+		addConfigRow(body, "Model generation :",  formatDate(repositoryModel.getGenerationDate()) );
+		addConfigRow(body, "Model last update :", formatDate(repositoryModel.getLastUpdateDate()) );
+		
+		addConfigRow(body, "", "" );
+
 		addConfigRow(body, "Database used to generate the model", "" );
 		addConfigRow(body, ". database ID :", ""+repositoryModel.getDatabaseId() );
 		addConfigRow(body, ". database name :", ""+repositoryModel.getDatabaseName() );
 		addConfigRow(body, ". database product name :", ""+repositoryModel.getDatabaseProductName() );
-
-		//addConfigRow(body, "Generator version", GeneratorConst.GENERATOR_VERSION );
-		
 	}
 	
+	//----------------------------------------------------------------------------------------------
+	final static String DATE_FORMAT = "MMMM dd yyyy - HH:mm:ss";
+	private String formatDate (java.util.Date date) {
+		if ( date != null ) {
+			return DateUtil.format(date, DATE_FORMAT );
+		}
+		else {
+			return "" ;
+		}
+	}
 	//----------------------------------------------------------------------------------------------
 	private void addConfigRow(Composite c, String s1, String s2)
 	{

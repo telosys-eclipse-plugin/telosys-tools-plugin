@@ -11,7 +11,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
@@ -91,16 +90,23 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 	protected void createFormContent(IManagedForm managedForm) {
 		super.createFormContent(managedForm);
 		
-		log(this, "createFormContent(..)..." );
-		Control pageControl = getPartControl();
-		
-		if ( pageControl != null ) {
-			log(this, "createFormContent(..) : getPartControl() != null " );
-		}
-		else {
-			log(this, "createFormContent(..) : getPartControl() is null !!! " );
-			return ;
-		}
+//		log(this, "createFormContent(..)..." );
+//		Control pageControl = getPartControl();
+//		
+////		if ( pageControl != null ) {
+////			log(this, "createFormContent(..) : getPartControl() != null " );
+////		}
+////		else {
+////			log(this, "createFormContent(..) : getPartControl() is null !!! " );
+////			return ;
+////		}
+//		
+//		if ( pageControl == null ) {
+//			MsgBox.error("Page control is null ! Cannot create form content.");
+//			return;
+//		}
+//		
+//		setPageBackgroundColor(pageControl) ;
 		
 		// What do we have here ?
 		// * pageControl (a Composite)

@@ -32,7 +32,7 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
  * Page 2 of the editor : Links management  <br>
  */
 ///* package */ class RepositoryEditorPage2 extends RepositoryEditorPage 
-/* package */ class RepositoryEditorPage2 extends AbstractModelEditorPage 
+/* package */ class RepositoryEditorPageModelLinks extends AbstractModelEditorPage 
 {
 
 	private Button ckFilterOwningSide  ;
@@ -53,7 +53,7 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 	 * @param id
 	 * @param title
 	 */
-	public RepositoryEditorPage2(FormEditor editor, String id, String title) {
+	public RepositoryEditorPageModelLinks(FormEditor editor, String id, String title) {
 		super(editor, id, title);
 //		linksManager = new LinksManager( getRepositoryModel() ); // v 3.0.0
 	}

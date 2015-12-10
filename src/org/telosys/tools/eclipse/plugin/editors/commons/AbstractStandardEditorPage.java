@@ -1,12 +1,9 @@
 package org.telosys.tools.eclipse.plugin.editors.commons;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -16,6 +13,7 @@ import org.telosys.tools.commons.ConsoleLogger;
 import org.telosys.tools.commons.TelosysToolsLogger;
 import org.telosys.tools.commons.cfg.TelosysToolsCfg;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
+import org.telosys.tools.eclipse.plugin.commons.PluginColors;
 import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 
 public abstract class AbstractStandardEditorPage extends FormPage {
@@ -24,7 +22,7 @@ public abstract class AbstractStandardEditorPage extends FormPage {
 	
 	private final TelosysToolsLogger      _logger ;
 	
-	private final Color                   _backgroundColor  ;
+	private final Color                   _backgroundColor = PluginColors.widgetBackground();
 
 	//----------------------------------------------------------------------------------------------
 	/**
@@ -56,13 +54,32 @@ public abstract class AbstractStandardEditorPage extends FormPage {
 		else {
 			_logger = new ConsoleLogger();
 		}
-		log(this, "ancestor constructor(.., '"+id+"', '"+ title +"')..." );
+	}
+	
+	//----------------------------------------------------------------------------------------------
+	@Override
+	protected void createFormContent(IManagedForm managedForm) 
+	{
+		super.createFormContent(managedForm);
+		log(this, "createFormContent(..)..." );
+		Control pageControl = getPartControl();
 		
-//		//--- Init the default background color // ERROR / Eclipse !!!
-//		Display display = new Display();// ERROR / Eclipse !!!
-//		_backgroundColor = display.getSystemColor(SWT.COLOR_GRAY);
-		Device device = Display.getCurrent();
-		_backgroundColor = device.getSystemColor(SWT.COLOR_GRAY);		
+		if ( pageControl == null ) {
+			MsgBox.error("Page control is null ! Cannot create form content.");
+			return;
+		}
+		
+		setPageBackgroundColor(pageControl) ;
+		
+//		if ( pageControl instanceof Composite ) {
+//			log(this, "- pageControl is a Composite, class = " + pageControl.getClass() );
+//			Layout layout = ((Composite)pageControl).getLayout();
+//			log(this, "- pageControl layout class = " + layout.getClass() );
+//			// layout = org.eclipse.swt.custom.ScrolledCompositeLayout
+//		}
+//		else {
+//			log(this, "- pageControl() is NOT a Composite !!! " );
+//		}
 	}
 	
 	//----------------------------------------------------------------------------------------------
@@ -94,28 +111,19 @@ public abstract class AbstractStandardEditorPage extends FormPage {
 	}
 
 	//----------------------------------------------------------------------------------------------
-	protected void setBackgroundColor() {
-		Control pageControl = this.getPartControl();
+	private void setPageBackgroundColor(Control pageControl) {
+		//Control pageControl = this.getPartControl();
 		if ( pageControl != null ) {
-			Display display = pageControl.getDisplay();	
-			if ( display != null ) {
-//				_backgroundColor = display.getSystemColor(SWT.COLOR_WIDGET_BACKGROUND);
-//				pageControl.setBackground(_backgroundColor ) ;
-				Color color = display.getSystemColor(SWT.COLOR_WIDGET_BACKGROUND);
-				pageControl.setBackground(color) ;
-			}
-			else {
-				MsgBox.error("setBackgroundColor() : display is null");
-			}		
+			pageControl.setBackground(_backgroundColor) ;
 		}
 		else {
-			MsgBox.error("setBackgroundColor() : getPartControl() has returned null");
+			MsgBox.error("setPageBackgroundColor() : pageControl is null");
 		}		
 	}
 	//----------------------------------------------------------------------------------------------
-	protected Color getBackgroundColor() {
-		return _backgroundColor;
-	}
+//	protected Color getBackgroundColor() {
+//		return _backgroundColor;
+//	}
 	
 	public TelosysToolsCfg getProjectConfig () {
 //		PluginLogger.log(this, "getProjectConfig()..." );
