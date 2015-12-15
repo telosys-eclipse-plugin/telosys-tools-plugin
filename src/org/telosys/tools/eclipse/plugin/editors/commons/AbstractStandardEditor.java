@@ -16,6 +16,7 @@ import org.telosys.tools.commons.TelosysToolsLogger;
 import org.telosys.tools.commons.cfg.TelosysToolsCfg;
 import org.telosys.tools.commons.cfg.TelosysToolsCfgManager;
 import org.telosys.tools.eclipse.plugin.commons.EclipseProjUtil;
+import org.telosys.tools.eclipse.plugin.commons.EclipseWksUtil;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 
@@ -29,9 +30,9 @@ public abstract class AbstractStandardEditor extends FormEditor {
 
     private TelosysToolsLogger _logger = new ConsoleLogger() ;
 
-	private String          _fileName = "???" ;
+	//private String          _fileName = "???" ;
 	
-	private IFile           _file     = null ;
+	private IFile           _iFile     = null ; //the current file in the editor
 	
     /** The dirty flag : see isDirty() */
     private boolean         _dirty = false;
@@ -51,6 +52,9 @@ public abstract class AbstractStandardEditor extends FormEditor {
 	protected void log(String msg) {
 		_logger.log(msg) ;
 	}
+	protected void log(Object object, String msg) {
+		_logger.log(object, msg) ;
+	}
 
 	//----------------------------------------------------------------------------------------
     @Override
@@ -61,11 +65,11 @@ public abstract class AbstractStandardEditor extends FormEditor {
 		PluginLogger.log(this, "init(..,..) : input name = '" + input.getName() + "'" );
 		setPartName(input.getName());
 		
-		_fileName = input.getName() ;
+		//_fileName = input.getName() ;
 
 		if ( input instanceof IFileEditorInput ) {
 			IFileEditorInput fileInput = (IFileEditorInput) input;
-			_file = fileInput.getFile();
+			_iFile = fileInput.getFile();
 		}
 		else { // never happens
 			MsgBox.error("The editor input '" + input.getName() + "' is not a File ! ");
@@ -74,7 +78,7 @@ public abstract class AbstractStandardEditor extends FormEditor {
     
 	//----------------------------------------------------------------------------------------
 	public IProject getProject() {
-		return _file.getProject() ;
+		return _iFile.getProject() ;
 	}
 	
 	//----------------------------------------------------------------------------------------
@@ -94,18 +98,28 @@ public abstract class AbstractStandardEditor extends FormEditor {
 	}
 	
 	//----------------------------------------------------------------------------------------
-	public String getFileName() {
-		return _fileName ;
+	public String getShortFileName() {
+		return _iFile.getName();
+		//return _fileName ;
 	}
 	
 	//----------------------------------------------------------------------------------------
+	/**
+	 * Returns the filesystem absolute path of the current file in the editor
+	 * @return
+	 */
+	public String getFileAbsolutePath() {
+		return EclipseWksUtil.getAbsolutePath(_iFile);
+	}
+	//----------------------------------------------------------------------------------------
 	protected IFile getFile() {
-		return _file ;
+		return _iFile ;
 	}
 	
+	//----------------------------------------------------------------------------------------
 	protected void refreshFile(IProgressMonitor monitor) {
 		try {
-			_file.refreshLocal(IResource.DEPTH_ZERO, monitor);
+			_iFile.refreshLocal(IResource.DEPTH_ZERO, monitor);
 		} catch (CoreException e) {
 			MsgBox.error("Cannot refresh file after save", e );
 		}

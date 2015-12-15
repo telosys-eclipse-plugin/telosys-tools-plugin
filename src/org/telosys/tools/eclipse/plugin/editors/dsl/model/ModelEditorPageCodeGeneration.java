@@ -16,31 +16,26 @@ import org.telosys.tools.generic.model.Entity;
  * Editor Page 3 : "Bulk Generation"
  * 
  */
-///* package */ class ModelEditorPage1 extends ModelEditorPage {
 /* package */ class ModelEditorPageCodeGeneration extends AbstractModelEditorPageForGeneration {
 
+	//----------------------------------------------------------------------------------------------
 	/**
 	 * Constructor
 	 * @param editor
 	 * @param id
 	 * @param title
 	 */
-	//public RepositoryEditorPage2(FormEditor editor, String id, String title, List<TargetDefinition> initialTargetsList ) {
 	public ModelEditorPageCodeGeneration(FormEditor editor, String id, String title ) {
 		super(editor, id, title);
 	}
 
-	
 	//----------------------------------------------------------------------------------------------
-	
-	//----------------------------------------------------------------------------------------------
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IEditorPart#init(org.eclipse.ui.IEditorSite, org.eclipse.ui.IEditorInput)
-	 */
+	@Override
 	public void init(IEditorSite site, IEditorInput input) {
 		super.init(site, input);
 	}
 	
+	//----------------------------------------------------------------------------------------------
 	@Override
 	public void createEntitiesTableColumns(Table table) {
 		//--- Columns
@@ -53,7 +48,6 @@ import org.telosys.tools.generic.model.Entity;
 		col.setWidth(400);
 	}
 	
-	//----------------------------------------------------------------------------------------------
 	//----------------------------------------------------------------------------------------------	
 	/**
 	 * Populates the list of entities ( left side table )
@@ -95,6 +89,7 @@ import org.telosys.tools.generic.model.Entity;
 //		}
 //	}
 	
+	@Override
 	public void populateEntitiesTable(Table table, List<Entity> entities) {
 		if ( entities != null )
 		{

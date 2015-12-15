@@ -51,27 +51,27 @@ public class Const {
     public static final String GENERATE_REPO    = "repo_generate_16.png"; 
     public static final String UPDATE_REPO      = "repo_update_16.png"; 
     
-	//-------------------------------------------------------------------------------
-	//--- Templates files
-	//-------------------------------------------------------------------------------
-	public static final String TEMPLATE_VO_BEAN    = "vo_bean.vm" ;  // Entity only
-	public static final String TEMPLATE_VO_LIST    = "vo_list.vm" ;  // Entity & Wizard
-	public static final String TEMPLATE_VO_XML     = "vo_xml.vm" ;   // Entity & Wizard
-	public static final String TEMPLATE_VO_DAO     = "vo_dao.vm" ;   // Entity only
+//	//-------------------------------------------------------------------------------
+//	//--- Templates files
+//	//-------------------------------------------------------------------------------
+//	public static final String TEMPLATE_VO_BEAN    = "vo_bean.vm" ;  // Entity only
+//	public static final String TEMPLATE_VO_LIST    = "vo_list.vm" ;  // Entity & Wizard
+//	public static final String TEMPLATE_VO_XML     = "vo_xml.vm" ;   // Entity & Wizard
+//	public static final String TEMPLATE_VO_DAO     = "vo_dao.vm" ;   // Entity only
 	
-	//-------------------------------------------------------------------------------
-	//--- Templates files for WIZARDS
-	//-------------------------------------------------------------------------------
-	public static final String TEMPLATE_WIZARD_VO_BEAN          = "wizard/wizard_vo_bean.vm";
-
-	public static final String TEMPLATE_WIZARD_SERVICE_RPC      = "wizard/wizard_service_rpc.vm";
-	public static final String TEMPLATE_WIZARD_SERVICE_NAV      = "wizard/wizard_service_nav.vm";
-	public static final String TEMPLATE_WIZARD_SERVICE_SEARCH   = "wizard/wizard_service_search.vm";
-	
-	public static final String TEMPLATE_WIZARD_SCREEN_DATA       = "wizard/wizard_screen_data.vm";
-	public static final String TEMPLATE_WIZARD_SCREEN_MANAGER    = "wizard/wizard_screen_manager.vm";
-	public static final String TEMPLATE_WIZARD_SCREEN_TRIGGERS   = "wizard/wizard_screen_triggers.vm";
-	public static final String TEMPLATE_WIZARD_SCREEN_PROCEDURES = "wizard/wizard_screen_procedures.vm";
+//	//-------------------------------------------------------------------------------
+//	//--- Templates files for WIZARDS
+//	//-------------------------------------------------------------------------------
+//	public static final String TEMPLATE_WIZARD_VO_BEAN          = "wizard/wizard_vo_bean.vm";
+//
+//	public static final String TEMPLATE_WIZARD_SERVICE_RPC      = "wizard/wizard_service_rpc.vm";
+//	public static final String TEMPLATE_WIZARD_SERVICE_NAV      = "wizard/wizard_service_nav.vm";
+//	public static final String TEMPLATE_WIZARD_SERVICE_SEARCH   = "wizard/wizard_service_search.vm";
+//	
+//	public static final String TEMPLATE_WIZARD_SCREEN_DATA       = "wizard/wizard_screen_data.vm";
+//	public static final String TEMPLATE_WIZARD_SCREEN_MANAGER    = "wizard/wizard_screen_manager.vm";
+//	public static final String TEMPLATE_WIZARD_SCREEN_TRIGGERS   = "wizard/wizard_screen_triggers.vm";
+//	public static final String TEMPLATE_WIZARD_SCREEN_PROCEDURES = "wizard/wizard_screen_procedures.vm";
 
 	
 }

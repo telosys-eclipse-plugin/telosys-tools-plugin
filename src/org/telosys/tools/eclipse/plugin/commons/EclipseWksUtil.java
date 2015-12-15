@@ -61,10 +61,10 @@ public class EclipseWksUtil {
 	 * @param sPath ( 'myproject/folder/xxx' )
 	 * @return the full path if given resource exists, else null ( '/myproject/folder/xxx' )
 	 */
-	public static IPath getFullPath(String sPath) 
+	public static IPath getIPath(String sPath) 
 	{
 		log("getFullPath(String : '" + sPath + "')");	
-		IPath p = getFullPath( new Path(sPath) );
+		IPath p = getIPath( new Path(sPath) );
 		log("getFullPath(String : '" + sPath + "') : return '" + p + "'");	
 		return p ;
 	}
@@ -75,7 +75,7 @@ public class EclipseWksUtil {
 	 * @param path the resource path in the workspace ( 'myproject/folder/xxx' )
 	 * @return the full path if given resource exists, else null ( '/myproject/folder/xxx' )
 	 */
-	public static IPath getFullPath(Path path) 
+	private static IPath getIPath(Path path) 
 	{
 		IPath p = null ;
 		log("getFullPath(Path : '" + path + "')");	
@@ -286,20 +286,28 @@ public class EclipseWksUtil {
 	}
 	//----------------------------------------------------------------------------------
 	/**
-	 * Returns the Eclipse workspace "IFile" object for the given
-	 * standard "File" object
+	 * Converts the given filesystem absolute path to an Eclipse workspace "IFile" object <br>
 	 * Returns null if the given file is not under the location of the workspace
 	 * @param file
 	 * @return 
 	 */
-	public static IFile toIFile(File file)
-	{
+	public static IFile toIFile(String absoluteFilePath) {
+		return toIFile( new File(absoluteFilePath) );
+	}
+	
+	//----------------------------------------------------------------------------------
+	/**
+	 * Converts the given filesystem "File" to an Eclipse workspace "IFile" object <br>
+	 * Returns null if the given file is not under the location of the workspace
+	 * @param file
+	 * @return 
+	 */
+	public static IFile toIFile(File file) {
 		log("toIFile( File ) : file = " + file.getAbsolutePath() );
 		
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IWorkspaceRoot root = workspace.getRoot();
-		if ( root != null )
-		{
+		if ( root != null ) {
 			String sAbsolutePath = file.getAbsolutePath();
 			IPath path = new Path( sAbsolutePath );
 			/*
@@ -311,25 +319,38 @@ public class EclipseWksUtil {
 			 *  is not under the location of any existing project in the workspace.
 			 */
 			IFile iFile = root.getFileForLocation(path);
-			if ( iFile != null )
-			{
+			if ( iFile != null ) {
 				return iFile ;
 			}
-			else
-			{
-				MsgBox.error("toIFolder(file) : getContainerForLocation('" + sAbsolutePath + "') return NULL" );
+			else {
+				MsgBox.error("toIFile(file) : getFileForLocation('" + sAbsolutePath + "') return NULL" );
 				return null ;
 			}
 		}
-		else
-		{
+		else {
 			MsgBox.error("toIFile(file) : Cannot get workspace root !" );
 			return null ;
 		}
 	}
 	
-	public static File toFile(IFile iFile)
-	{
+	//----------------------------------------------------------------------------------
+	/**
+	 * Returns the filesystem absolute path for the given Eclipse "IFile" 
+	 * @param iFile
+	 * @return
+	 */
+	public static String getAbsolutePath(IFile iFile) {
+    	File file = toFile(iFile);
+    	return file.getAbsolutePath();
+	}
+	
+	//----------------------------------------------------------------------------------
+	/**
+	 * Converts the given Eclipse "IFile" to a standard filesystem "File"
+	 * @param iFile
+	 * @return
+	 */
+	public static File toFile(IFile iFile) {
 		log("toFile( IFile iFile ) : iFile.getLocationURI() = " + iFile.getLocationURI() );
     	URI uri = iFile.getLocationURI();
     	File file = new File(uri);
@@ -342,8 +363,7 @@ public class EclipseWksUtil {
 	 * Refresh the given O.S. file in the Eclipse workspace
 	 * @param file the file to be refreshed
 	 */
-	public static void refresh(File file)
-	{
+	public static void refresh(File file) {
 		log("refresh( File ) " );
 		if ( null == file ) {
 			MsgBox.error("refresh(File) : parameter is null !" );

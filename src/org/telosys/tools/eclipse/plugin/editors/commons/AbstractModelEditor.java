@@ -106,7 +106,7 @@ public abstract class AbstractModelEditor extends AbstractStandardEditor
 			Model model = genericModelLoader.loadModel(modelFile);
 			//log("loadModel() : done. Model name = " + model.getName() + " - " + model.getEntities().size() + " entities");
 			return model;
-		} catch (TelosysToolsException ex) {
+		} catch (Exception ex) {
 			MsgBox.error("Cannot load model ", ex);
 			return null ;
 		}

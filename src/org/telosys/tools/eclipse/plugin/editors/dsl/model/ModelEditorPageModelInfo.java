@@ -1,5 +1,7 @@
 package org.telosys.tools.eclipse.plugin.editors.dsl.model;
 
+import java.io.File;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -10,11 +12,12 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
+import org.telosys.tools.dsl.loader.ModelLoader;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.Util;
 import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
-import org.telosys.tools.generic.model.Model;
 import org.telosys.tools.repository.model.EntityInDbModel;
+import org.telosys.tools.dsl.parser.model.DomainModelInfo;
 
 
 /**
@@ -45,6 +48,7 @@ import org.telosys.tools.repository.model.EntityInDbModel;
 	
 	//-----------------------------------------------------------------
 	
+	private Text       _tFileName ;
 	private Text       _tName ;
 	private Text       _tVersion ;
 	private Text       _tDescription ;
@@ -202,6 +206,9 @@ import org.telosys.tools.repository.model.EntityInDbModel;
 		labelTitle.setLayoutData(gdTitle);
 		
 		addRow(scrolledFormBody, "", "") ;
+		_tFileName    = addLabelAndText(scrolledFormBody, "File : ") ;
+//		_tFileName.setEnabled(false);
+		_tFileName.setEditable(false);
 		_tName        = addLabelAndText(scrolledFormBody, "Name : ") ;
 		_tVersion     = addLabelAndText(scrolledFormBody, "Version : ") ;
 		_tDescription = addLabelAndTextMulti(scrolledFormBody, "Description : ") ;
@@ -245,14 +252,25 @@ import org.telosys.tools.repository.model.EntityInDbModel;
 	
 	private void populateFields() {
 		log(this, "populateFields()");
-		Model model = getModel();
-		if ( model != null ) {
-			_tName.setText(model.getName());
-			_tVersion.setText(model.getVersion());
-			_tDescription.setText(model.getDescription());
-		}
-		else {
-			MsgBox.error("Model is null !");
+		String modelFileAbsolutePath = this.getModelEditor().getFileAbsolutePath();
+		_tFileName.setText( modelFileAbsolutePath );
+//		Model model = getModel();
+//		if ( model != null ) {
+//			_tName.setText(model.getName());
+//			_tVersion.setText(model.getVersion());
+//			_tDescription.setText(model.getDescription());
+//		}
+//		else {
+//			MsgBox.error("Model is null !");
+//		}
+		File modelFile = new File(modelFileAbsolutePath);
+		
+		ModelLoader modelLoader = new ModelLoader();
+		DomainModelInfo modelInfo = modelLoader.loadModelInformation(modelFile);
+		if ( modelInfo != null ) {
+			_tName.setText(modelInfo.getName());
+			_tVersion.setText(modelInfo.getVersion());
+			_tDescription.setText(modelInfo.getDescription());
 		}
 	}
 	

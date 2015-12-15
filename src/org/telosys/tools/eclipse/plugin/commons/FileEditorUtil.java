@@ -19,13 +19,13 @@ import org.telosys.tools.generator.target.TargetsLoader;
 
 public class FileEditorUtil {
 
-	// Editor id defined in "plugin.xml" 
-	private final static String VELOCITY_EDITOR_ID = "org.telosys.tools.eclipse.plugin.editors.velocity.VelocityEditor";
+	// The editor id is defined in "plugin.xml" 
+	private final static String VELOCITY_EDITOR_ID  = "org.telosys.tools.eclipse.plugin.editors.velocity.VelocityEditor";
+	private final static String DSL_ENTITY_EDITOR_ID = "org.telosys.tools.eclipse.plugin.editors.dsl.entityEditor.EntityEditor";
 	//private final static String TEXT_EDITOR_ID     = "org.eclipse.ui.DefaultTextEditor" ;
 	
-	private static void log(String s) 
-	{
-		PluginLogger.log( FileEditorUtil.class.getName() + " : " + s );
+	private static void log(String s) {
+		// PluginLogger.log( FileEditorUtil.class.getName() + " : " + s );
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class FileEditorUtil {
 	}
 	
 	/**
-	 * Opens the template file of the given target in the specialized editor
+	 * Opens the template file (".vm") of the given target in the specialized editor
 	 * @param project
 	 * @param bundleName
 	 * @param target
@@ -102,22 +102,52 @@ public class FileEditorUtil {
 		}
 	}
 
+	/**
+	 * Opens the targets configuration file in the standard text editor
+	 * @param project
+	 * @param bundleName
+	 */
 	public static void openTargetsConfigFileInEditor(IProject project, String bundleName) {
 		
-		//IFile targetsConfigFile = getFileFromTemplatesFolder( project, bundleName, ProjectConfig.TEMPLATES_CFG );
 		IFile targetsConfigFile = getFileFromTemplatesFolder( project, bundleName, TargetsLoader.TEMPLATES_CFG );
 		
-		IEditorInput editorInput = new FileEditorInput(targetsConfigFile);
+//		IEditorInput editorInput = new FileEditorInput(targetsConfigFile);
+//		
+//		IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+//		IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
+//		try {
+//			// Use class TextEditor : The standard/default text editor.
+//			// This editor has id "org.eclipse.ui.DefaultTextEditor". 
+//			workbenchPage.openEditor(editorInput, "org.eclipse.ui.DefaultTextEditor" );
+//		} catch (PartInitException e) {
+//			MsgBox.error("Cannot open file in editor (PartInitException)");
+//		}
+		
+		openFileInEditor(targetsConfigFile, "org.eclipse.ui.DefaultTextEditor" );
+	}
+
+	public static void openEntityFileInEditor(IProject project, String entityAbsoluteFilePath) {
+		
+		IFile iFile = EclipseWksUtil.toIFile(entityAbsoluteFilePath);
+		
+		openFileInEditor(iFile, DSL_ENTITY_EDITOR_ID );
+	}
+
+	/**
+	 * Opens the given file in the editor associated with the given editor id
+	 * @param file
+	 * @param editorId
+	 */
+	private static void openFileInEditor(IFile file, String editorId) {
+		
+		IEditorInput editorInput = new FileEditorInput(file);
 		
 		IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 		IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
 		try {
-			// Use class TextEditor : The standard/default text editor.
-			// This editor has id "org.eclipse.ui.DefaultTextEditor". 
-			workbenchPage.openEditor(editorInput, "org.eclipse.ui.DefaultTextEditor" );
+			workbenchPage.openEditor(editorInput, editorId );
 		} catch (PartInitException e) {
 			MsgBox.error("Cannot open file in editor (PartInitException)");
 		}
 	}
-
 }
