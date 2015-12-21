@@ -63,9 +63,9 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 	//----------------------------------------------------------------------------------------------
 	// Abstract methods
 	//----------------------------------------------------------------------------------------------
-	public abstract void createEntitiesTableColumns(Table table);
+	protected abstract void createEntitiesTableColumns(Table table);
 	
-	public abstract void populateEntitiesTable(Table table, List<Entity> entities) ;
+	protected abstract void populateEntitiesTable(Table table, List<Entity> entities) ;
 
 	//----------------------------------------------------------------------------------------------
 	/**
@@ -476,7 +476,14 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 		
 		return table;
 	}
-	
+
+	//----------------------------------------------------------------------------------------------	
+	public void newModelNotification() {
+		if ( _tableEntities != null ) {
+			populateEntitiesTable();
+		}
+	}
+
 	//----------------------------------------------------------------------------------------------	
 	/**
 	 * Populates the list of entities ( left side table )
@@ -485,12 +492,13 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 		log(this, "populateEntitiesTable()");
 		
 		Model model = getModel();
-		if ( model == null ) {
-			MsgBox.error("Model is null !");
-			return ;
+		if ( model != null ) {
+			List<Entity> entities = model.getEntities();
+			populateEntitiesTable(_tableEntities, entities);
 		}
-		List<Entity> entities = model.getEntities();
-		populateEntitiesTable(_tableEntities, entities);
+		else {
+			MsgBox.error("Model is null !");
+		}
 	}		
 	
 //	private void populateEntitiesTable(Table table, List<Entity> entities) {

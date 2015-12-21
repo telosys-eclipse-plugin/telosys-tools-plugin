@@ -98,7 +98,7 @@
       <editor
             id=   "org.telosys.tools.eclipse.plugin.editors.dsl.model.ModelEditor"
             class="org.telosys.tools.eclipse.plugin.editors.dsl.model.ModelEditor"
-            icon="icons/dbrep4_16.png"
+            icon="icons/model_16pix.png"
             default="true"
             name="Telosys Tools model editor"
             extensions="model"/>
@@ -121,7 +121,7 @@
       <editor
             name="Telosys DSL Entity Editor"
             extensions="entity"
-            icon="icons/entity.png"
+            icon="icons/entity_16pix.png"
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             class="org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditor"
                id="org.telosys.tools.eclipse.plugin.editors.dsl.entityEditor.EntityEditor" 

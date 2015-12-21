@@ -35,6 +35,7 @@ public class Const {
 	public static final String FILE1 = "file1_16pix.png" ; // v 2.0.7
 	public static final String FILES = "files_16pix.png" ; // v 2.0.7
 	public static final String TELOSYS_FOLDER = "telosys_folder.png"; // v 2.0.7 (folder decorator)
+//	public static final String ENTITY_FILE    = "entity.png"; 
 
 	
     // Icones for Velocity Templates Editor ( v 2.0.5 )

@@ -47,7 +47,9 @@ public class PluginImages {
 	public static final String FILES    = "FILES" ; // v 2.0.7
 	
 	public static final String TELOSYS_FOLDER  = "TELOSYS_FOLDER" ; // v 2.0.7 (folder decorator)
+	public static final String ENTITY_FILE     = "ENTITY_FILE" ; 
 
+	public static final String ERROR     = "ERROR" ; 
 
 	// Images for Velocity Templates Editor  ( v 2.0.5 )
 	public static final String VELOCITY_BEAN_GENERATOR = "VELOCITY_BEAN_GENERATOR";
@@ -124,18 +126,20 @@ public class PluginImages {
 		
 		registerImage(TELOSYS_FOLDER, Const.TELOSYS_FOLDER ) ;
 
+		registerImage(ENTITY_FILE, "entity_16pix.png" ) ; // v 3.0.0
+		registerImage(ERROR,       "error_16pix.png" ) ; // v 3.0.0
 	}
 
-    //------------------------------------------------------------------------------------------------
-	/**
-	 * Returns the image descriptor registered with the given key
-	 * @param sImgKey
-	 * @return
-	 */
-	public static ImageDescriptor getImageDescriptor(String sImgKey) 
-	{
-		return $imageRegistry.getDescriptor(sImgKey);
-	}
+//    //------------------------------------------------------------------------------------------------
+//	/**
+//	 * Returns the image descriptor registered with the given key
+//	 * @param sImgKey
+//	 * @return
+//	 */
+//	public static ImageDescriptor getImageDescriptor(String sImgKey) 
+//	{
+//		return $imageRegistry.getDescriptor(sImgKey);
+//	}
 
     //------------------------------------------------------------------------------------------------
 	/**

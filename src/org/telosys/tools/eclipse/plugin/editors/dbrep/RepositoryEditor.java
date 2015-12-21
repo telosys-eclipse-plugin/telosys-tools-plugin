@@ -6,6 +6,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.IFormPage;
+import org.telosys.tools.api.GenericModelLoader;
 import org.telosys.tools.commons.TelosysToolsException;
 import org.telosys.tools.eclipse.plugin.commons.ModelUtil;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
@@ -41,6 +42,7 @@ public class RepositoryEditor extends AbstractModelEditor
     @Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		super.init(site, input);
+		loadModel();
 	}
 	
     //----------------------------------------------------------------------------------------
@@ -82,6 +84,21 @@ public class RepositoryEditor extends AbstractModelEditor
 		}		
 	}
 
+    //----------------------------------------------------------------------------------------
+    @Override
+    protected Model loadModel(File modelFile) {
+//		//log("loadModel(" + modelFile + ")");
+		GenericModelLoader genericModelLoader = new GenericModelLoader( getProjectConfig() ) ;
+		try {
+			Model model = genericModelLoader.loadModel(modelFile);
+			//log("loadModel() : done. Model name = " + model.getName() + " - " + model.getEntities().size() + " entities");
+			return model;
+		} catch (Exception ex) {
+			MsgBox.error("Cannot load model ", ex);
+			return null ;
+		}    	
+    }
+    
     //----------------------------------------------------------------------------------------
 	@Override
     public void saveModel( Model model, File file ) {

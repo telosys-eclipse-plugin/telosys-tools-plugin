@@ -2,13 +2,10 @@ package org.telosys.tools.eclipse.plugin.editors.commons;
 
 import java.io.File;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
-import org.telosys.tools.api.GenericModelLoader;
-import org.telosys.tools.commons.TelosysToolsException;
 import org.telosys.tools.eclipse.plugin.commons.EclipseWksUtil;
 import org.telosys.tools.eclipse.plugin.commons.ModelUtil;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
@@ -28,10 +25,14 @@ public abstract class AbstractModelEditor extends AbstractStandardEditor
 	
 	private String    _currentBundle = null ; 
 	
+	private AbstractModelEditorPageForGeneration _codeGenerationPage = null ;
+		
 	//----------------------------------------------------------------------------------------
 	// Abstract method(s)
 	//----------------------------------------------------------------------------------------
-	public abstract void saveModel( Model model, File file );
+	protected abstract Model loadModel(File modelFile) ;
+	
+	protected abstract void saveModel( Model model, File file );
 	
 	//----------------------------------------------------------------------------------------
     /**
@@ -41,6 +42,9 @@ public abstract class AbstractModelEditor extends AbstractStandardEditor
     	super();
     }
     
+    protected void setCodeGenerationPage(AbstractModelEditorPageForGeneration codeGenerationPage ) {
+    	_codeGenerationPage = codeGenerationPage ;
+    }
 	//----------------------------------------------------------------------------------------
 	/**
 	 * Returns the current model managed by the model editor
@@ -52,6 +56,20 @@ public abstract class AbstractModelEditor extends AbstractStandardEditor
 		}
 		return _model ;
 	}
+	
+	//----------------------------------------------------------------------------------------
+	private void setModel(Model model) {
+		log(this, "setModel(Model)..." );
+		_model = model ;
+		if ( _codeGenerationPage != null ) {
+			// if the page is ready
+			_codeGenerationPage.newModelNotification() ;
+		}
+		else {
+			// if page not yet constructed : not an error
+			//MsgBox.error("Code generation page is null !");
+		}
+	}	
 	
 	//----------------------------------------------------------------------------------------
 	/**
@@ -90,41 +108,52 @@ public abstract class AbstractModelEditor extends AbstractStandardEditor
     @Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException 
 	{
+		log(this, "init(..,..)..." );
 		super.init(site, input);
-		_model = loadModel( super.getFile() );
-		if ( _model == null ) {
-			MsgBox.error("Model loaded is null !");
-		}
+//		_model = loadModel( super.getFile() );
+//		if ( _model == null ) {
+//			MsgBox.error("Model loaded is null !");
+//		}
 	}
     
 	//----------------------------------------------------------------------------------------
-	private Model loadModel( IFile iFile ) {
-		File modelFile = EclipseWksUtil.toFile(iFile);
-		//log("loadModel(" + modelFile + ")");
-		GenericModelLoader genericModelLoader = new GenericModelLoader( getProjectConfig() ) ;
-		try {
-			Model model = genericModelLoader.loadModel(modelFile);
-			//log("loadModel() : done. Model name = " + model.getName() + " - " + model.getEntities().size() + " entities");
-			return model;
-		} catch (Exception ex) {
-			MsgBox.error("Cannot load model ", ex);
-			return null ;
-		}
+//	private Model loadModel( IFile iFile ) {
+//		File modelFile = EclipseWksUtil.toFile(iFile);
+//		//log("loadModel(" + modelFile + ")");
+//		GenericModelLoader genericModelLoader = new GenericModelLoader( getProjectConfig() ) ;
+//		try {
+//			Model model = genericModelLoader.loadModel(modelFile);
+//			//log("loadModel() : done. Model name = " + model.getName() + " - " + model.getEntities().size() + " entities");
+//			return model;
+//		} catch (Exception ex) {
+//			MsgBox.error("Cannot load model ", ex);
+//			return null ;
+//		}
+//	}
+
+	public File getModelFile() {
+		return EclipseWksUtil.toFile( getFile() );
 	}
 
 	//----------------------------------------------------------------------------------------
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.part.EditorPart#doSave(org.eclipse.core.runtime.IProgressMonitor)
-	 */
+    public void loadModel() {
+		log(this, "loadModel()..." );
+    	File file = getModelFile();
+		Model model = loadModel(file);
+		setModel(model);
+    }
+
+	//----------------------------------------------------------------------------------------
+	@Override
 	public void doSave(IProgressMonitor monitor) {
 		log("doSave()..." );
 
 		monitor.beginTask( "Saving the model...", IProgressMonitor.UNKNOWN );
-
-		File file = EclipseWksUtil.toFile( getFile() );
+		
+		File modelFile = getModelFile();
 		
 		// Call the specialized method implemented in descendant class
-		saveModel(getModel(), file);
+		saveModel(getModel(), modelFile);
 		
 		super.setDirty(false);
 		
@@ -134,17 +163,13 @@ public abstract class AbstractModelEditor extends AbstractStandardEditor
 	}
 
 	//----------------------------------------------------------------------------------------
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.part.EditorPart#doSaveAs()
-	 */
+	@Override
 	public void doSaveAs() {
 		MsgBox.error("'Save as' is not allowed");
 	}
 
 	//----------------------------------------------------------------------------------------
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.part.EditorPart#isSaveAsAllowed()
-	 */
+	@Override
 	public boolean isSaveAsAllowed() { // Allow the "Save as" ?
 		log("isSaveAsAllowed()..." );
 		return false ; // "Save as" not allowed

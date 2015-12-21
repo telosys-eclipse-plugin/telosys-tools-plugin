@@ -1,5 +1,7 @@
 package org.telosys.tools.eclipse.plugin.editors.commons;
 
+import java.io.File;
+
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.generic.model.Model;
@@ -34,6 +36,17 @@ public abstract class AbstractModelEditorPage extends AbstractStandardEditorPage
 		}
 	}
 	
+	protected File getModelFile() {
+		AbstractModelEditor modelEditor = getModelEditor() ;
+		if ( modelEditor != null ) {
+			return modelEditor.getModelFile();
+		}
+		else {
+			MsgBox.error("No current model file");
+			return null ;
+		}
+	}
+
 	protected Model getModel() {
 		AbstractModelEditor modelEditor = getModelEditor() ;
 		if ( modelEditor != null ) {

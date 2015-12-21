@@ -106,7 +106,7 @@ public abstract class AbstractStandardEditorPage extends FormPage {
 		return _standardEditor;
 	}
 	//----------------------------------------------------------------------------------------------
-	protected IProject getProject() {
+	public IProject getProject() {
 		return _standardEditor.getProject();
 	}
 
