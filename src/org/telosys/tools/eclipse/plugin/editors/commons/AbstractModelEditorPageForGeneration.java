@@ -393,8 +393,7 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 	}
     
 	//----------------------------------------------------------------------------------------------
-	private Table createEntitiesTable(Composite composite)
-	{
+	private Table createEntitiesTable(Composite composite) {
 		log(this, "createTable(..)..." );
 		
 		// Table style
@@ -490,44 +489,18 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 	 */
 	private void populateEntitiesTable() {
 		log(this, "populateEntitiesTable()");
-		
+		_tableEntities.removeAll();
 		Model model = getModel();
 		if ( model != null ) {
 			List<Entity> entities = model.getEntities();
 			populateEntitiesTable(_tableEntities, entities);
 		}
-		else {
-			MsgBox.error("Model is null !");
-		}
+//		else {
+//			MsgBox.error("Model is null !");
+//		}
 	}		
 	
-//	private void populateEntitiesTable(Table table, List<Entity> entities) {
-//		if ( entities != null )
-//		{
-//			for ( Entity entity : entities ) { 
-////				String tableName = entity.getDatabaseTable() ; // v 3.0.0
-////				if ( entity.getWarnings() != null && entity.getWarnings().size() > 0 ) {
-////					tableName = "(!) " + tableName;
-////				}
-//				String entityClassName = entity.getClassName(); 
-//				
-//				if ( entityClassName == null ) entityClassName = "???" ;
-//				
-//                //--- Create the row content 
-////                String[] row = new String[] { tableName, entityClassName };
-//                String[] row = new String[] { entityClassName };
-//				
-//                //--- Create the TableItem and set the row content 
-//            	TableItem tableItem = new TableItem(table, SWT.NONE );
-//                tableItem.setChecked(false);                
-//                tableItem.setText(row);                
-//                tableItem.setData( entityClassName ); 
-//			}
-//		}
-//	}
-
-	public void refreshAllTargetsTablesFromConfigFile()
-	{
+	public void refreshAllTargetsTablesFromConfigFile() {
 		String currentBundleName = getModelEditor().getCurrentBundleName() ;
 		log("refreshAllTargetsTablesFromConfigFile() : current bundle = " + currentBundleName);
 		TelosysToolsCfg telosysToolsCfg = getProjectConfig(); // v 3.0.0
@@ -554,9 +527,7 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 	/**
 	 * Refresh the targets table from the current configuration supposed to be up to date 
 	 */
-	//protected void refreshTargetsTable()
-	protected void refreshTargetsTable(List<TargetDefinition> targetslist, List<TargetDefinition> resourcesTargets )	// v 2.0.7
-	
+	protected void refreshTargetsTable(List<TargetDefinition> targetslist, List<TargetDefinition> resourcesTargets )
 	{
 		log("refreshTargetsTable : " + targetslist.size() + " targets / " 
 				+ (resourcesTargets != null ? resourcesTargets.size() + " resources" : "no resource" ));
@@ -590,12 +561,10 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 			_checkboxStaticResources.setSelection(false);
 			_checkboxStaticResources.setEnabled(false) ;
 		}
-		
 	}
 
 	//----------------------------------------------------------------------------------------------
-	private void populateTargetsTable(List<TargetDefinition> list)
-	{
+	private void populateTargetsTable(List<TargetDefinition> list) {
 		log("populateTargetsTable");
 		if ( list != null )
 		{
@@ -638,8 +607,7 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 		_tableTargets.addListener(SWT.MouseDown, listener );
 	}
 	
-    private boolean confirmBulkGeneration()
-    {
+    private boolean confirmBulkGeneration() {
 		log(this, "confirmBulkGeneration()");
     	int numberOfSelectedTargets = 0 ;
     	for ( TableItem item : _tableTargets.getItems() ) {

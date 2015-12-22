@@ -30,13 +30,13 @@ public abstract class AbstractStandardEditor extends FormEditor {
 
     private TelosysToolsLogger _logger = new ConsoleLogger() ;
 
-	//private String          _fileName = "???" ;
-	
 	private IFile           _iFile     = null ; //the current file in the editor
 	
     /** The dirty flag : see isDirty() */
     private boolean         _dirty = false;
     
+	private boolean         _bPopulateInProgress = false ;
+
 	//----------------------------------------------------------------------------------------
     /**
      * Constructor
@@ -65,8 +65,6 @@ public abstract class AbstractStandardEditor extends FormEditor {
 		PluginLogger.log(this, "init(..,..) : input name = '" + input.getName() + "'" );
 		setPartName(input.getName());
 		
-		//_fileName = input.getName() ;
-
 		if ( input instanceof IFileEditorInput ) {
 			IFileEditorInput fileInput = (IFileEditorInput) input;
 			_iFile = fileInput.getFile();
@@ -126,6 +124,16 @@ public abstract class AbstractStandardEditor extends FormEditor {
 	}
 	
 	//----------------------------------------------------------------------------------------
+	public void setPopulateInProgress(boolean value) {
+		_bPopulateInProgress = value ;
+	}
+	//----------------------------------------------------------------------------------------
+	public boolean isPopulateInProgress() {
+		return _bPopulateInProgress ;
+	}
+	
+	//----------------------------------------------------------------------------------------
+	@Override
 	public boolean isDirty() {
 		return _dirty;
 	}
@@ -137,7 +145,9 @@ public abstract class AbstractStandardEditor extends FormEditor {
 	
 	//----------------------------------------------------------------------------------------
 	protected void setDirty(boolean flag) {
-		_dirty = flag ;
-		editorDirtyStateChanged(); // Notify the editor 
+		if ( _dirty != flag ) {
+			_dirty = flag ;
+			editorDirtyStateChanged(); // Notify the editor 
+		}
 	}
 }

@@ -41,7 +41,10 @@ public class EclipseWksUtil {
 	}
 	
 	/**
-	 * @return the current workspace
+	 * Returns the Eclipse workspace (set of resources : projects, files, ...)
+     * Based on "ResourcesPlugin.getWorkspace()"
+	 * 
+	 * @return the workspace instance.
 	 */
 	public static IWorkspace getWorkspace() {
 		return ResourcesPlugin.getWorkspace();

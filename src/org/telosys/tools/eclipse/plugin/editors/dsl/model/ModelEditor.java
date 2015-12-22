@@ -9,7 +9,9 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.telosys.tools.api.GenericModelLoader;
 import org.telosys.tools.commons.TelosysToolsException;
+import org.telosys.tools.dsl.DslModelManager;
 import org.telosys.tools.dsl.DslModelUtil;
+import org.telosys.tools.dsl.parser.model.DomainModelInfo;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditor;
 import org.telosys.tools.generic.model.Model;
@@ -20,8 +22,11 @@ import org.telosys.tools.generic.model.Model;
  */
 public class ModelEditor extends AbstractModelEditor {
 	
+	private ModelEditorPageModelInfo _modelInformationPage = null ;
+	
 	private List<String>        _entitiesFileNames = null ;
 	private Map<String,String>  _entitiesErrors = null ;
+	private DomainModelInfo     _modelInfo = null ; 
 	
 	//----------------------------------------------------------------------------------------
     public ModelEditor() {
@@ -35,7 +40,9 @@ public class ModelEditor extends AbstractModelEditor {
 	public Map<String, String> getEntitiesErrors() {
 		return _entitiesErrors;
 	}
-
+	public DomainModelInfo getDomainModelInfo() {
+		return _modelInfo ;
+	}
 	//========================================================================================
 	// Editor plugin startup ( for each file to edit ) :
 	// Step 1 : init()
@@ -54,23 +61,23 @@ public class ModelEditor extends AbstractModelEditor {
 	protected void addPages() {
 		log(this, "addPages()..." );
 
-		ModelEditorPageModelEntities page1 = 
+		ModelEditorPageModelEntities modelEntitiesPage = 
 			new ModelEditorPageModelEntities(this, "ModelEditorPage1", " Model entities " );
 		
-		ModelEditorPageModelInfo page2 = 
+		_modelInformationPage = 
 			new ModelEditorPageModelInfo(this, "ModelEditorPage2", " Model information " );
 		
-		ModelEditorPageCodeGeneration page3 = 
+		ModelEditorPageCodeGeneration codeGenerationPage = 
 			new ModelEditorPageCodeGeneration(this, "ModelEditorPage3", " Code generation " );
 		
 		try {
-			addPage(page1);
-			addPage(page2);
-			addPage(page3);
+			addPage(modelEntitiesPage);
+			addPage(_modelInformationPage);
+			addPage(codeGenerationPage);
 		} catch (PartInitException e) {
 			MsgBox.error("RepositoryEditor : addPage(page) throws PartInitException ", e);
 		}		
-		setCodeGenerationPage(page3);
+		setCodeGenerationPage(codeGenerationPage);
 		
 	}
 
@@ -81,7 +88,11 @@ public class ModelEditor extends AbstractModelEditor {
     	//--- 1) Load entities absolute file names 
     	_entitiesFileNames = DslModelUtil.getEntitiesAbsoluteFileNames(modelFile);
     	
-    	//--- 2) Try to parse the model
+    	//--- 2) Load model information from ".model" file
+		DslModelManager modelManager = new DslModelManager();
+		_modelInfo = modelManager.loadModelInformation(modelFile);
+
+    	//--- 3) Try to parse the model
 		GenericModelLoader genericModelLoader = new GenericModelLoader( getProjectConfig() ) ;
 		
 		Model model;
@@ -92,29 +103,32 @@ public class ModelEditor extends AbstractModelEditor {
 			return null ;
 		}
 		
+		//--- 4) Errors reporting if any
 		if ( model != null ) {
-			//--- Model OK
-			return model;
+			//--- Model OK : no parsing error
+			_entitiesErrors = null ;
 		}
 		else {
 			//--- Invalid Model : parsing errors
-//			StringBuffer sb = new StringBuffer();
-//			String errorMsg = genericModelLoader.getErrorMessage();
 			_entitiesErrors = genericModelLoader.getParsingErrors();
-//			sb.append("Cannot load model !\n");
-//			sb.append("\n");
-//			sb.append(errorMsg + " \n");
-//			for ( Map.Entry<String,String> entry : _entitiesErrors.entrySet() ) {
-//				sb.append(" - '" + entry.getKey() + "' : " + entry.getValue() );
-//			}
-//			MsgBox.error("Cannot load model !\n" + errorMsg );
-
-			return null ;
 		}
+		return model;
     }
     //----------------------------------------------------------------------------------------
     @Override
     protected void saveModel( Model model, File modelFile ) {
-    	// TODO
+    	if ( _modelInformationPage != null ) {
+        	if  ( _modelInfo != null ) {
+            	_modelInformationPage.updateModelInformation(_modelInfo);
+        		DslModelManager modelManager = new DslModelManager();
+        		modelManager.saveModelInformation(modelFile, _modelInfo);
+        	}
+        	else {
+        		MsgBox.error("ModelInfo is null in the editor !");
+        	}
+    	}
+    	else {
+    		MsgBox.error("_modelInformationPage is null in the editor !");
+    	}
     }
 }

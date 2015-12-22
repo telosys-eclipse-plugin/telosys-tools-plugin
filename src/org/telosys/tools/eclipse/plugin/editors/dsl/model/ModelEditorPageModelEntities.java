@@ -8,10 +8,15 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -55,7 +60,7 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 		super(editor, id, title);
 	}
 	
-	protected Shell getShell() {
+	private Shell getShell() {
 		return _entitiesTable.getDisplay().getActiveShell();
 	}
 	
@@ -108,8 +113,6 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 			// rename the entity file
 			DslModelUtil.renameEntity(new File(entityAbsoluteFilePath), newEntityName);
 			// refresh the Eclipse workspace (removes the file in workspace view and close editor if any)
-			
-			// TODO
 			File modelFolder = DslModelUtil.getModelFolder(getModelFile());
 			EclipseWksUtil.refresh(modelFolder); 
 			// re-parse the model and refresh the entities in "entities table"
@@ -131,25 +134,33 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 		
 		log(this, "createFormContent(..)..." );
 
-		//--- Set a LAYOUT to the BODY
+		//--- Set a GRID LAYOUT to the BODY
 		GridLayout bodyLayout = new GridLayout();	
-		bodyLayout.numColumns = 2 ;
+		bodyLayout.numColumns = 1 ;
 		bodyLayout.makeColumnsEqualWidth = false ;
 		
 		Composite scrolledFormBody = initAndGetFormBody(managedForm, bodyLayout);
 		
 		//---------------------------------------------------------------
-		// Line 0 - Column 1 : The page title
+		// Line 1 : Page title
 		//---------------------------------------------------------------
-		//---------------------------------------------------------------
-		// Line 0 - Columns 1 & 2 (span) : The page title
-		//---------------------------------------------------------------
-		GridData gdTitle = new GridData(GridData.FILL_HORIZONTAL);
-		gdTitle.horizontalSpan = 2;		
-		Label labelTitle = Util.setPageTitle(scrolledFormBody, this.getTitle() ) ; // Title defined in the constructor
-		labelTitle.setLayoutData(gdTitle);
+		//Label labelTitle = Util.setPageTitle(scrolledFormBody, this.getTitle() ) ; // Title defined in the constructor
+
+		Composite titlePanel = createTitleAndButtons(scrolledFormBody);		
 		
+		///GridData gdTitle = new GridData(GridData.FILL_HORIZONTAL);
+		titlePanel.setLayoutData( new GridData(GridData.FILL_HORIZONTAL) );
+		
+		//---------------------------------------------------------------
+		// Line 2 : Entities table
+		//---------------------------------------------------------------
 		_entitiesTable = createEntitiesTable(scrolledFormBody);
+
+		// Fills available horizontal and vertical space, 
+		// grabs horizontal space, grabs vertical space
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+		//gd.heightHint = 360 ;
+		_entitiesTable.setLayoutData(gd);
 		
 		populateEntities() ;
 	}
@@ -168,7 +179,49 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 		return null ;
 	}
 	//----------------------------------------------------------------------------------------------
-	private Table createEntitiesTable(Composite composite) {
+	private final static int BUTTON_WIDTH = 120 ;
+	
+	private Composite createTitleAndButtons(Composite formBodyComposite) {
+		Composite panel = new Composite(formBodyComposite, SWT.NONE );
+		
+		//RowLayout rowLayout = new RowLayout();
+		panel.setLayout(new RowLayout());
+		
+		Util.setPageTitle(panel, this.getTitle() ) ; // Title defined in the constructor
+		
+		Label filler = new Label(panel, SWT.NULL);
+		filler.setText("");
+		filler.setLayoutData( new RowData(80, SWT.DEFAULT) );
+		
+		//--- [ Refresh ]
+		Button refreshButton = new Button(panel, SWT.NONE);
+		refreshButton.setText(" Refresh");
+		refreshButton.setLayoutData( new RowData(BUTTON_WIDTH, SWT.DEFAULT) );
+		refreshButton.setImage( PluginImages.getImage(PluginImages.REFRESH ) );
+		refreshButton.addSelectionListener(new SelectionAdapter() {
+		    @Override
+		    public void widgetSelected(SelectionEvent e) {
+		    	log("button click : [ Refresh ]");
+		        reloadEntities();
+		    }
+		}); 
+		
+		//--- [ New entity ]
+		Button newButton = new Button(panel, SWT.NONE);
+		newButton.setText(" New entity");
+		newButton.setLayoutData( new RowData(BUTTON_WIDTH, SWT.DEFAULT) );
+		newButton.setImage( PluginImages.getImage(PluginImages.ENTITY_FILE ) );
+		newButton.addSelectionListener(new SelectionAdapter() {
+		    @Override
+		    public void widgetSelected(SelectionEvent e) {
+		        doNewEntity();
+		    }
+		}); 
+
+		return panel;
+	}
+	//----------------------------------------------------------------------------------------------
+	private Table createEntitiesTable(Composite formBodyComposite) {
 		// Table style
 		// SWT.CHECK : check box in the first column of each row
 //		int iTableStyle = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL 
@@ -176,7 +229,7 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 		int iTableStyle = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL 
 		| SWT.FULL_SELECTION | SWT.HIDE_SELECTION ;
 		
-		final Table table = new Table(composite, iTableStyle);
+		final Table table = new Table(formBodyComposite, iTableStyle);
 		
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
@@ -196,57 +249,38 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 		col.setText("Entity parsing error");
 		col.setWidth(500);
 		
-//		Menu menu = new Menu(table);
-//		table.setMenu(menu);
-//		MenuItem menuItem = new MenuItem(menu, SWT.NONE);
-//		menuItem.setText("Open");
-		
 		createMenu(table);
 		
 		table.addMouseListener(new MouseListener() {
-			 
 			// Double-click => Open the entity file in the "Entity editor"
-            public void mouseDoubleClick(MouseEvent arg0) {
+            public void mouseDoubleClick(MouseEvent mouseEvent) {
                 if (table.getSelectionCount() > 0) {
                 	TableItem[] tableItemsSelected = table.getSelection();
                 	String entityAbsoluteFilePath = "?";
                 	if ( tableItemsSelected != null && tableItemsSelected.length == 1 ) {
-                		//IProject project = getProject();
                 		entityAbsoluteFilePath = (String) tableItemsSelected[0].getData() ;
-                		//FileEditorUtil.openEntityFileInEditor(project, entityAbsoluteFilePath);
                 		doOpenEntityInEditor(entityAbsoluteFilePath);
                 	}
-//                    MsgBox.info("mouseDoubleClick", "index : " + table.getSelectionIndex() 
-//                    		+ " \n" + entityAbsoluteFilePath );
-//                    return;
                 }
             }
- 
-            public void mouseDown(MouseEvent arg0) {
+            public void mouseDown(MouseEvent mouseEvent) {
             }
- 
-            public void mouseUp(MouseEvent arg0) {
+            public void mouseUp(MouseEvent mouseEvent) {
             }
         });
 
 		table.addListener(SWT.MenuDetect, new Listener() {
-
 			@Override
 			public void handleEvent(Event event) {
 				// Event widget is "Table"
 				//MsgBox.info( "Event widget class : " + event.widget.getClass());
                 TableItem tableItem = getTableItemClicked(table, event);
                 if ( tableItem == null ) {
-                	event.doit = false ;
+                	event.doit = false ; // Don't do it !
                 }
 			}
 		});
 		
-		GridData gdTableEntities = new GridData();
-		gdTableEntities.heightHint = 360 ;
-		gdTableEntities.widthHint  = 600 ;
-		table.setLayoutData(gdTableEntities);
-
 		return table;
 	}
 
@@ -256,12 +290,10 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 		table.setMenu(menu);
 		menu.setData(table);
 		
-		//IProject project = getProject();
-		
-		createMenuItem(menu, null, "New", 
-				new TableContextMenuListener(this, TableContextMenuListener.NEW) );
-		
-		new MenuItem(menu, SWT.SEPARATOR);
+//		createMenuItem(menu, null, "New", 
+//				new TableContextMenuListener(this, TableContextMenuListener.NEW) );
+//		
+//		new MenuItem(menu, SWT.SEPARATOR);
 		
 		createMenuItem(menu, null, "Open", 
 				new TableContextMenuListener(this, TableContextMenuListener.OPEN) );
@@ -296,7 +328,8 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 		return tableItem ;
 	}
 	//----------------------------------------------------------------------------------------------
-	public void reloadEntities() {
+	private void reloadEntities() {
+		log ( "reloadEntities()..." ) ;
 		ModelEditor modelEditor = (ModelEditor) getModelEditor();
 		modelEditor.loadModel();
 		populateEntities();

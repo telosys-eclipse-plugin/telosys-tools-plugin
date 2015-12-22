@@ -51,9 +51,9 @@ public abstract class AbstractModelEditor extends AbstractStandardEditor
 	 * @return
 	 */
 	public Model getModel() {
-		if ( _model == null ) {
-			MsgBox.error("Cannot get model, current model is null");
-		}
+//		if ( _model == null ) {
+//			MsgBox.error("Cannot get model, current model is null");
+//		}
 		return _model ;
 	}
 	

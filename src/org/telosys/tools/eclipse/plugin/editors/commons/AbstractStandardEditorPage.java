@@ -137,7 +137,7 @@ public abstract class AbstractStandardEditorPage extends FormPage {
 		log(this, "- body class = " + scrolledFormBody.getClass() );
 		// scrolledFormBody.getClass() --> org.eclipse.ui.forms.widgets.LayoutComposite
 		
-		Layout currentLayout = scrolledFormBody.getLayout();			
+		Layout currentLayout = scrolledFormBody.getLayout();
 		if ( currentLayout != null ) {
 			log(this, "- body layout class = " + currentLayout.getClass() );
 		}

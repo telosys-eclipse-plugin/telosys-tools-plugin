@@ -6,8 +6,6 @@ import java.net.URL;
 import java.util.Dictionary;
 import java.util.Enumeration;
 
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.ui.IWorkbench;
@@ -25,8 +23,8 @@ import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 public class MyPlugin
 {
     //------------------------------------------------------------------------------------------------
-	//--- Templates folder embedded in the Eclipse Plugin
-	private static final String TEMPLATES_PLUGIN_FOLDER  = "templates";
+//	//--- Templates folder embedded in the Eclipse Plugin
+//	private static final String TEMPLATES_PLUGIN_FOLDER  = "templates";
 
 	//--- Icons folder embedded in the Eclipse Plugin
 	private static final String IMAGES_PLUGIN_FOLDER     = "icons";
@@ -104,7 +102,7 @@ public class MyPlugin
 		
 		PluginLogger.log(" Plugin directory = " + getDirectory() );
 		PluginLogger.log(" Plugin icons directory     = " + getImagesDirectory() );
-		PluginLogger.log(" Plugin templates directory = " + getTemplatesDirectory() );
+//		PluginLogger.log(" Plugin templates directory = " + getTemplatesDirectory() );
 		PluginLogger.log(" Plugin resources directory = " + getResourcesDirectory() );
 		
     }
@@ -210,18 +208,18 @@ public class MyPlugin
     	return PlatformUI.getWorkbench();
     }
     
-    //------------------------------------------------------------------------------------------------
-	/**
-	 * Returns the Eclipse workspace (set of resources : projects, files, ...)
-     * Based on "ResourcesPlugin.getWorkspace()"
-	 * 
-	 * @return the workspace instance.
-	 */
-	public static IWorkspace getWorkspace() 
-	{
-		return ResourcesPlugin.getWorkspace();
-	}
-	
+//    //------------------------------------------------------------------------------------------------
+//	/**
+//	 * Returns the Eclipse workspace (set of resources : projects, files, ...)
+//     * Based on "ResourcesPlugin.getWorkspace()"
+//	 * 
+//	 * @return the workspace instance.
+//	 */
+//	public static IWorkspace getWorkspace() 
+//	{
+//		return ResourcesPlugin.getWorkspace();
+//	}
+//	
     //------------------------------------------------------------------------------------------------
     /**
      * Returns the plugin base URL ( ie "file:/c:/xxx/xxx/eclipse/plugins/myplugin" ) 
@@ -291,20 +289,20 @@ public class MyPlugin
         return null ;
     }
 
-    //------------------------------------------------------------------------------------------------
-    /**
-     * @return Ecplise plugin template directory ( ie :
-     *         "c:/xxx/xxx/eclipse/plugins/myplugin/templates" )
-     */
-    public static String getTemplatesDirectory()
-    {
-        String sPluginDir = getDirectory();
-        if ( sPluginDir != null )
-        {
-        	return sPluginDir + TEMPLATES_PLUGIN_FOLDER;
-        }
-        return null ;
-    }
+//    //------------------------------------------------------------------------------------------------
+//    /**
+//     * @return Ecplise plugin template directory ( ie :
+//     *         "c:/xxx/xxx/eclipse/plugins/myplugin/templates" )
+//     */
+//    public static String getTemplatesDirectory()
+//    {
+//        String sPluginDir = getDirectory();
+//        if ( sPluginDir != null )
+//        {
+//        	return sPluginDir + TEMPLATES_PLUGIN_FOLDER;
+//        }
+//        return null ;
+//    }
 
     //------------------------------------------------------------------------------------------------
     /**
