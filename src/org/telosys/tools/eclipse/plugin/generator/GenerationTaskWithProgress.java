@@ -71,8 +71,8 @@ public class GenerationTaskWithProgress extends AbstractGenerationTask implement
 	//--------------------------------------------------------------------------------------
 	@Override  // Implementation for AbstractGenerationTask
 	protected boolean onError(ErrorReport errorReport) {
-		boolean r = GenerationTaskMsgBox.error(errorReport.getMessageTitle(), 
-					errorReport.getMessageBody(), 
+		boolean r = GenerationTaskMsgBox.error(errorReport.getErrorType(),
+					errorReport.getMessage(), 
 					errorReport.getException() );
 //		MsgBox.info("Continue ? : " + r );
 		return r ; // continue the task or cancel

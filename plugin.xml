@@ -2,6 +2,34 @@
 <?eclipse version="3.6"?>
 <plugin>
 
+   <!-- WIZARDS ver 3.0.0  -->
+   <extension point="org.eclipse.ui.newWizards" >
+      <category
+         id="TelosysToolsWizard"
+         name="Telosys Tools">
+      </category>
+      <wizard
+         category="TelosysToolsWizard"
+         class="org.telosys.tools.eclipse.plugin.wizards.dslmodel.NewDslModelWizard"
+         id   ="org.telosys.tools.eclipse.plugin.wizards.dslmodel.NewDslModelWizard"
+         name="New DSL model" >
+         <selection
+            class="org.eclipse.core.resources.IResource">
+         </selection>
+      </wizard>
+   </extension>
+   
+   <extension  point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension  targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <newWizardShortcut  id="org.telosys.tools.eclipse.plugin.wizards.dslmodel.NewDslModelWizard" />
+      </perspectiveExtension>
+   </extension>
+   <extension  point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension  targetID="org.eclipse.ui.resourcePerspective">
+         <newWizardShortcut  id="org.telosys.tools.eclipse.plugin.wizards.dslmodel.NewDslModelWizard" />
+      </perspectiveExtension>
+   </extension>
+
    <!-- WIZARDS ( all wizards extensions removed in ver 2.1.0 ) -->
    <!--
    <extension point="org.eclipse.ui.newWizards">

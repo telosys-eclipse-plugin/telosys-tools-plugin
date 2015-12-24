@@ -6,6 +6,7 @@ import java.net.URI;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceDescription;
@@ -55,6 +56,14 @@ public class EclipseWksUtil {
 	 */
 	public static IWorkspaceRoot getWorkspaceRoot() {
 		return getWorkspace().getRoot();
+	}
+	
+	/**
+	 * @return the projects defined in the eclipse workspace
+	 */
+	public static IProject[] getWorkspaceProjects() {
+		IProject[] projects = getWorkspace().getRoot().getProjects();
+		return projects;
 	}
 	
 	//----------------------------------------------------------------------------------
