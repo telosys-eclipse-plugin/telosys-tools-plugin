@@ -66,7 +66,7 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 	
 	//----------------------------------------------------------------------------------------------
 	protected void doOpenEntityInEditor(String entityAbsoluteFilePath) {
-		FileEditorUtil.openEntityFileInEditor( getProject(), entityAbsoluteFilePath);
+		FileEditorUtil.openEntityFileInEditor( entityAbsoluteFilePath );
 	}
 	//----------------------------------------------------------------------------------------------
 	protected void doNewEntity() {

@@ -20,8 +20,9 @@ import org.telosys.tools.generator.target.TargetsLoader;
 public class FileEditorUtil {
 
 	// The editor id is defined in "plugin.xml" 
-	private final static String VELOCITY_EDITOR_ID  = "org.telosys.tools.eclipse.plugin.editors.velocity.VelocityEditor";
+	private final static String VELOCITY_EDITOR_ID   = "org.telosys.tools.eclipse.plugin.editors.velocity.VelocityEditor";
 	private final static String DSL_ENTITY_EDITOR_ID = "org.telosys.tools.eclipse.plugin.editors.dsl.entityEditor.EntityEditor";
+	private final static String DSL_MODEL_EDITOR_ID  = "org.telosys.tools.eclipse.plugin.editors.dsl.model.ModelEditor";
 	//private final static String TEXT_EDITOR_ID     = "org.eclipse.ui.DefaultTextEditor" ;
 	
 	private static void log(String s) {
@@ -111,26 +112,27 @@ public class FileEditorUtil {
 		
 		IFile targetsConfigFile = getFileFromTemplatesFolder( project, bundleName, TargetsLoader.TEMPLATES_CFG );
 		
-//		IEditorInput editorInput = new FileEditorInput(targetsConfigFile);
-//		
-//		IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-//		IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
-//		try {
-//			// Use class TextEditor : The standard/default text editor.
-//			// This editor has id "org.eclipse.ui.DefaultTextEditor". 
-//			workbenchPage.openEditor(editorInput, "org.eclipse.ui.DefaultTextEditor" );
-//		} catch (PartInitException e) {
-//			MsgBox.error("Cannot open file in editor (PartInitException)");
-//		}
-		
 		openFileInEditor(targetsConfigFile, "org.eclipse.ui.DefaultTextEditor" );
 	}
 
-	public static void openEntityFileInEditor(IProject project, String entityAbsoluteFilePath) {
+	/**
+	 * Opens the ".entity" file in the "entity editor"
+	 * @param entityAbsoluteFilePath
+	 */
+	public static void openEntityFileInEditor(String entityAbsoluteFilePath) {
 		
 		IFile iFile = EclipseWksUtil.toIFile(entityAbsoluteFilePath);
-		
 		openFileInEditor(iFile, DSL_ENTITY_EDITOR_ID );
+	}
+
+	/**
+	 * Opens the ".model" file in the "DSL model editor"
+	 * @param modelAbsoluteFilePath
+	 */
+	public static void openModelFileInEditor(String modelAbsoluteFilePath) {
+		
+		IFile iFile = EclipseWksUtil.toIFile(modelAbsoluteFilePath);
+		openFileInEditor(iFile, DSL_MODEL_EDITOR_ID );
 	}
 
 	/**

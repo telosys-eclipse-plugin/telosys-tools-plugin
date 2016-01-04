@@ -12,6 +12,7 @@ import org.telosys.tools.api.TelosysProject;
 import org.telosys.tools.commons.TelosysToolsException;
 import org.telosys.tools.dsl.DslModelUtil;
 import org.telosys.tools.eclipse.plugin.commons.EclipseWksUtil;
+import org.telosys.tools.eclipse.plugin.commons.FileEditorUtil;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 
 /**
@@ -99,12 +100,29 @@ public class NewDslModelWizard extends Wizard implements INewWizard  {
 		log("createNewModel() : " + projectAbsolutePath + " " + modelName );
 		TelosysProject telosysProject = new TelosysProject(projectAbsolutePath);
 		
-		File modelFile ;
+		File modelFile;
+		
+		try {
+			modelFile = telosysProject.getDslModelFile(modelName);
+			if ( modelFile.exists() ) {
+				MsgBox.error("Model '" + modelName + "' already exists" );
+				return;
+			}
+		} catch (TelosysToolsException e) {
+			MsgBox.error("Unexpected error", e );
+			return;
+		}
+		
 		try {
 			modelFile = telosysProject.createNewDslModel(modelName);
+			// Refresh "_model" folder
 			EclipseWksUtil.refresh(DslModelUtil.getModelFolder(modelFile));
-			EclipseWksUtil.refresh(modelFile.getParentFile());
-		} catch (TelosysToolsException e) {
+			// Refresh ".model" file 
+			//EclipseWksUtil.refresh(modelFile.getParentFile());
+			EclipseWksUtil.refresh(modelFile);
+			// Open ".model" file in the model editor
+			FileEditorUtil.openModelFileInEditor( modelFile.getAbsolutePath());
+		} catch (Exception e) {
 			MsgBox.error("Cannot create model", e);
 		}
 	}
