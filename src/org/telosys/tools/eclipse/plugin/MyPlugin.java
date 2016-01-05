@@ -8,8 +8,6 @@ import java.util.Enumeration;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.Bundle;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
@@ -197,29 +195,17 @@ public class MyPlugin
         return $bundle ;
     }
 
-    //------------------------------------------------------------------------------------------------
-    /**
-     * Returns the UI workbench (set of windows). Fails if the workbench has not been created yet.
-     * Based on "PlatformUI.getWorkbench()"
-     * @return
-     */
-    public static IWorkbench getWorkbench()
-    {
-    	return PlatformUI.getWorkbench();
-    }
-    
 //    //------------------------------------------------------------------------------------------------
-//	/**
-//	 * Returns the Eclipse workspace (set of resources : projects, files, ...)
-//     * Based on "ResourcesPlugin.getWorkspace()"
-//	 * 
-//	 * @return the workspace instance.
-//	 */
-//	public static IWorkspace getWorkspace() 
-//	{
-//		return ResourcesPlugin.getWorkspace();
-//	}
-//	
+//    /**
+//     * Returns the UI workbench (set of windows). Fails if the workbench has not been created yet.
+//     * Based on "PlatformUI.getWorkbench()"
+//     * @return
+//     */
+//    public static IWorkbench getWorkbench()
+//    {
+//    	return PlatformUI.getWorkbench();
+//    }
+    
     //------------------------------------------------------------------------------------------------
     /**
      * Returns the plugin base URL ( ie "file:/c:/xxx/xxx/eclipse/plugins/myplugin" ) 

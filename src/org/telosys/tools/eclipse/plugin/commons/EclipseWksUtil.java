@@ -391,7 +391,9 @@ public class EclipseWksUtil {
 				try {
 					iFolder.refreshLocal(IResource.DEPTH_INFINITE , null);
 				} catch (CoreException e) {
-					MsgBox.error("Cannot refresh FOLDER resource '" + iFolder + "'", e );
+					// MsgBox.error("Cannot refresh FOLDER resource '" + iFolder + "'", e );
+					// The dialog should be created in UI thread => No MsgBox.error()
+					throw new RuntimeException("Cannot refresh folder", e);
 				}
 			}
 		}
@@ -404,7 +406,9 @@ public class EclipseWksUtil {
 				try {
 					iFile.refreshLocal(IResource.DEPTH_ZERO, null);
 				} catch (CoreException e) {
-					MsgBox.error("Cannot refresh FILE resource '" + iFile + "'", e );
+					// MsgBox.error("Cannot refresh FILE resource '" + iFile + "'", e );
+					// The dialog should be created in UI thread => No MsgBox.error()
+					throw new RuntimeException("Cannot refresh file", e);
 				}
 			}
 		}
