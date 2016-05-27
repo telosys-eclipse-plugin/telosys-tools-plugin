@@ -14,6 +14,7 @@ import org.telosys.tools.dsl.DslModelUtil;
 import org.telosys.tools.dsl.parser.model.DomainModelInfo;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditor;
+import org.telosys.tools.eclipse.plugin.wkschanges.deco.FileMarker;
 import org.telosys.tools.generic.model.Model;
 
 /**
@@ -22,7 +23,8 @@ import org.telosys.tools.generic.model.Model;
  */
 public class ModelEditor extends AbstractModelEditor {
 	
-	private ModelEditorPageModelInfo _modelInformationPage = null ;
+    private ModelEditorPageModelEntities _modelEntitiesPage    = null ;
+	private ModelEditorPageModelInfo     _modelInformationPage = null ;
 	
 	private List<String>        _entitiesFileNames = null ;
 	private Map<String,String>  _entitiesErrors = null ;
@@ -43,25 +45,35 @@ public class ModelEditor extends AbstractModelEditor {
 	public DomainModelInfo getDomainModelInfo() {
 		return _modelInfo ;
 	}
+	
+    
 	//========================================================================================
 	// Editor plugin startup ( for each file to edit ) :
 	// Step 1 : init()
 	// Step 2 : addPages()
 	//========================================================================================
-
+	public void closeEditor(boolean save) {
+		getSite().getPage().closeEditor(ModelEditor.this, save);
+	}
+	
 	//----------------------------------------------------------------------------------------
     @Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		super.init(site, input);
 		loadModel();
 	}
+
+//    @Override
+//    public void dispose() {
+//        super.dispose();
+//    }
     
 	//----------------------------------------------------------------------------------------
     @Override
 	protected void addPages() {
 		log(this, "addPages()..." );
 
-		ModelEditorPageModelEntities modelEntitiesPage = 
+		_modelEntitiesPage = 
 			new ModelEditorPageModelEntities(this, "ModelEditorPage1", " Model entities " );
 		
 		_modelInformationPage = 
@@ -71,7 +83,7 @@ public class ModelEditor extends AbstractModelEditor {
 			new ModelEditorPageCodeGeneration(this, "ModelEditorPage3", " Code generation " );
 		
 		try {
-			addPage(modelEntitiesPage);
+			addPage(_modelEntitiesPage);
 			addPage(_modelInformationPage);
 			addPage(codeGenerationPage);
 		} catch (PartInitException e) {
@@ -107,11 +119,15 @@ public class ModelEditor extends AbstractModelEditor {
 		if ( model != null ) {
 			//--- Model OK : no parsing error
 			_entitiesErrors = null ;
+			FileMarker.removeErrorMarker(this.getFile());
 		}
 		else {
 			//--- Invalid Model : parsing errors
 			_entitiesErrors = genericModelLoader.getParsingErrors();
+			FileMarker.setErrorMarker(this.getFile());
 		}
+		//EclipseWksUtil.refresh(this.getFile());
+		
 		return model;
     }
     //----------------------------------------------------------------------------------------
@@ -130,5 +146,11 @@ public class ModelEditor extends AbstractModelEditor {
     	else {
     		MsgBox.error("_modelInformationPage is null in the editor !");
     	}
+    }
+    //----------------------------------------------------------------------------------------
+    public void refresh() {
+		log(this, "refresh()..." );
+		this.loadModel();
+		_modelEntitiesPage.populateEntities();    	
     }
 }

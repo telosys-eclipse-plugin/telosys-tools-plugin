@@ -1,20 +1,22 @@
-package org.telosys.tools.eclipse.plugin.wkschanges;
+package org.telosys.tools.eclipse.plugin.wkschanges.old;
 
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.runtime.CoreException;
 
-public class ResourceChangeListener implements IResourceChangeListener {
-
-	// Certain methods in the resources plug-in API directly modify resources in the workspace. 
-	// The most common examples are creating, copying, moving 
-	// and deleting files and folders, and modifying file contents.
+public class ModelChangeListener implements IResourceChangeListener {
 	
+	private final static boolean log = true ;
+	private void log(String msg) {
+		if ( log ) {
+			System.out.println("ModelChangeListener : " + msg );
+		}
+	}
+
 	@Override
 	public void resourceChanged(IResourceChangeEvent event) {
-		System.out.println("Something changed." );
-		System.out.println("   Event = " + event.getType() );
-		System.out.println("   Resource = " + event.getResource() );
+		log("resourceChanged(IResourceChangeEvent event) : event type " + event.getType() );
 		
         switch (event.getType()) {
         
@@ -31,9 +33,9 @@ public class ResourceChangeListener implements IResourceChangeListener {
 //              break;
               
            case IResourceChangeEvent.POST_CHANGE:
-              System.out.println("POST_CHANGE : Resources have changed.");
+              log("POST_CHANGE : Resources have changed.");
 //              event.getDelta().accept(new ResourceDeltaVisitor());
-              acceptVisitor(event);
+              acceptModelDeltaVisitor(event);
               break;
               
 //           case IResourceChangeEvent.PRE_BUILD:
@@ -50,12 +52,14 @@ public class ResourceChangeListener implements IResourceChangeListener {
         }		
 	}
 	
-	private void acceptVisitor(IResourceChangeEvent event) {
+	
+	private void acceptModelDeltaVisitor(IResourceChangeEvent event) {
+		IResourceDelta delta = event.getDelta();
+		log("acceptVisitor(IResourceChangeEvent event) : delta = " + delta.getFullPath() );
         try {
-			event.getDelta().accept(new ResourceDeltaVisitor());
+        	delta.accept(new ModelDeltaVisitor());
 		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException("Cannot accept visitor (CoreException)", e);
 		}
 	}
 }

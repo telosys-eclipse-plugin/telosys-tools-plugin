@@ -1,11 +1,11 @@
-package org.telosys.tools.eclipse.plugin.wkschanges;
+package org.telosys.tools.eclipse.plugin.wkschanges.old;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.runtime.CoreException;
 
-public class ResourceDeltaVisitor_BAK implements IResourceDeltaVisitor {
+public class ResourceDeltaVisitor implements IResourceDeltaVisitor {
 
 	@Override
 	public boolean visit(IResourceDelta delta) throws CoreException {
@@ -32,8 +32,10 @@ public class ResourceDeltaVisitor_BAK implements IResourceDeltaVisitor {
               // more details about changes
               int flags = delta.getFlags();
               if ((flags & IResourceDelta.CONTENT) != 0) {
-                    System.out.println("--> Content Change");
+            	  // Happens after File/Save in a text editor 
+                  System.out.println("--> Content Change");
               }
+              
               if ((flags & IResourceDelta.REPLACED) != 0) {
                     System.out.println("--> Content Replaced");
               }
@@ -41,7 +43,10 @@ public class ResourceDeltaVisitor_BAK implements IResourceDeltaVisitor {
                     System.out.println("--> Marker Change");
                     //IMarkerDelta[] markers = delta.getMarkerDeltas();
                     // if interested in markers, check these deltas
-              }              
+              }
+              //IResourceDelta.MOVED_FROM 
+              //IResourceDelta.OPEN
+              //IResourceDelta.COPIED_FROM
               break;
         }
         return true; // visit the children

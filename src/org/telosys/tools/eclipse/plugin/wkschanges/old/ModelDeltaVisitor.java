@@ -1,4 +1,4 @@
-package org.telosys.tools.eclipse.plugin.wkschanges;
+package org.telosys.tools.eclipse.plugin.wkschanges.old;
 
 import java.io.File;
 
@@ -9,6 +9,7 @@ import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.telosys.tools.dsl.DslModelUtil;
 import org.telosys.tools.eclipse.plugin.commons.EclipseWksUtil;
+import org.telosys.tools.eclipse.plugin.wkschanges.RefreshJob;
 
 public class ModelDeltaVisitor implements IResourceDeltaVisitor {
 

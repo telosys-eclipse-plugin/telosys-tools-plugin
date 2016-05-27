@@ -1,11 +1,10 @@
-package org.telosys.tools.eclipse.plugin.wkschanges;
+package org.telosys.tools.eclipse.plugin.wkschanges.old;
 
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.runtime.CoreException;
-import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 
-public class EntityChangeListener implements IResourceChangeListener {
+public class ResourceChangeListener implements IResourceChangeListener {
 
 	// Certain methods in the resources plug-in API directly modify resources in the workspace. 
 	// The most common examples are creating, copying, moving 
@@ -13,7 +12,9 @@ public class EntityChangeListener implements IResourceChangeListener {
 	
 	@Override
 	public void resourceChanged(IResourceChangeEvent event) {
-		System.out.println("EntityChangeListener : event type " + event.getType() );
+		System.out.println("Something changed." );
+		System.out.println("   Event = " + event.getType() );
+		System.out.println("   Resource = " + event.getResource() );
 		
         switch (event.getType()) {
         
@@ -30,7 +31,7 @@ public class EntityChangeListener implements IResourceChangeListener {
 //              break;
               
            case IResourceChangeEvent.POST_CHANGE:
-//              System.out.println("POST_CHANGE : Resources have changed.");
+              System.out.println("POST_CHANGE : Resources have changed.");
 //              event.getDelta().accept(new ResourceDeltaVisitor());
               acceptVisitor(event);
               break;
@@ -51,9 +52,10 @@ public class EntityChangeListener implements IResourceChangeListener {
 	
 	private void acceptVisitor(IResourceChangeEvent event) {
         try {
-			event.getDelta().accept(new EntityDeltaVisitor());
+			event.getDelta().accept(new ResourceDeltaVisitor());
 		} catch (CoreException e) {
-			MsgBox.error("Unexpected error on 'accept visitor'", e);
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }

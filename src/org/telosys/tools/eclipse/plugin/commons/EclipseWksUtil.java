@@ -399,21 +399,34 @@ public class EclipseWksUtil {
 		}
 		else {
 			//--- FILE
-			IFile iFile = toIFile(file);
-			if ( null != iFile )
-			{
-				log("refreshing IFile = " + iFile );				
-				try {
-					iFile.refreshLocal(IResource.DEPTH_ZERO, null);
-				} catch (CoreException e) {
-					// MsgBox.error("Cannot refresh FILE resource '" + iFile + "'", e );
-					// The dialog should be created in UI thread => No MsgBox.error()
-					throw new RuntimeException("Cannot refresh file", e);
-				}
+//			IFile iFile = toIFile(file);
+//			if ( null != iFile )
+//			{
+//				log("refreshing IFile = " + iFile );				
+//				try {
+//					iFile.refreshLocal(IResource.DEPTH_ZERO, null);
+//				} catch (CoreException e) {
+//					// MsgBox.error("Cannot refresh FILE resource '" + iFile + "'", e );
+//					// The dialog should be created in UI thread => No MsgBox.error()
+//					throw new RuntimeException("Cannot refresh file", e);
+//				}
+//			}
+			refresh( toIFile(file) );
+		}
+	}
+	
+	public static void refresh(IFile iFile) {
+		if ( iFile != null ) {
+			log("refreshing IFile = " + iFile );				
+			try {
+				iFile.refreshLocal(IResource.DEPTH_ZERO, null);
+			} catch (CoreException e) {
+				// MsgBox.error("Cannot refresh FILE resource '" + iFile + "'", e );
+				// The dialog should be created in UI thread => No MsgBox.error()
+				throw new RuntimeException("Cannot refresh file", e);
 			}
 		}
-		
-	}
+	}	
 	//----------------------------------------------------------------------------------
 	public static boolean setBuildAutomatically(boolean flag)
 	{

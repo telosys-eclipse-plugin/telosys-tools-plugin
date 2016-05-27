@@ -36,5 +36,14 @@ public class PluginLogger
 		logger.error(s);
 	}
 
+	//----------------------------------------------------------------------------------
+	// DEBUG
+	//----------------------------------------------------------------------------------
+	private final static boolean DEBUG = true ;
+	public static void debug(String s) {
+		if ( DEBUG ) {
+			System.out.println("[DEBUG]: " + s );
+		}
+	}
 	
 }

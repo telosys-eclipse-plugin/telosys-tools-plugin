@@ -78,7 +78,8 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 				// refresh the Eclipse workspace (add the file in workspace view)
 				EclipseWksUtil.refresh(entityFile); 
 				// re-parse the model and refresh the entities in "entities table"
-				reloadEntities();
+				// the model is automatically refreshed ( by file change listener )
+				//refresh();
 				// open the new entity in the editor
 				doOpenEntityInEditor(entityFile.getAbsolutePath());
 			} catch (Exception e) {
@@ -97,7 +98,8 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 				// refresh the Eclipse workspace (removes the file in workspace view and close editor if any)
 				EclipseWksUtil.refresh(entityFile); 
 				// re-parse the model and refresh the entities in "entities table"
-				reloadEntities();
+				// the model is automatically refreshed ( by file change listener )
+				//refresh();
 			}
 			else {
 				MsgBox.error( "Cannot delete entity '" + entityName + "' !");
@@ -116,7 +118,8 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 			File modelFolder = DslModelUtil.getModelFolder(getModelFile());
 			EclipseWksUtil.refresh(modelFolder); 
 			// re-parse the model and refresh the entities in "entities table"
-			reloadEntities();
+			
+			//refresh();
 		}
 	}
 	
@@ -202,7 +205,7 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 		    @Override
 		    public void widgetSelected(SelectionEvent e) {
 		    	log("button click : [ Refresh ]");
-		        reloadEntities();
+		        refresh();
 		    }
 		}); 
 		
@@ -328,14 +331,19 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 		return tableItem ;
 	}
 	//----------------------------------------------------------------------------------------------
-	private void reloadEntities() {
-		log ( "reloadEntities()..." ) ;
+	private void refresh() {
+		log ( "refresh()..." ) ;
 		ModelEditor modelEditor = (ModelEditor) getModelEditor();
-		modelEditor.loadModel();
-		populateEntities();
+//		modelEditor.loadModel();
+//		populateEntities();
+		modelEditor.refresh();
 	}
 	//----------------------------------------------------------------------------------------------
-	private void populateEntities() {
+	/**
+	 * Populates the list of entities <br>
+	 * 
+	 */
+	protected void populateEntities() {
 		log(this, "populateEntities(table)");
 		
 		_entitiesTable.removeAll();

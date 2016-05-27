@@ -26,7 +26,11 @@ public class WorkspaceChanges {
 //			| IResourceChangeEvent.POST_CHANGE);		
 
 //		ResourcesPlugin.getWorkspace().addResourceChangeListener(listener, IResourceChangeEvent.POST_CHANGE);
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(new EntityChangeListener(), IResourceChangeEvent.POST_CHANGE);
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(new ModelChangeListener(), IResourceChangeEvent.POST_CHANGE);
+		
+//		ResourcesPlugin.getWorkspace().addResourceChangeListener(new EntityChangeListener(), IResourceChangeEvent.POST_CHANGE);
+//		ResourcesPlugin.getWorkspace().addResourceChangeListener(new ModelChangeListener(), IResourceChangeEvent.POST_CHANGE);
+		
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(new FileChangeListener(), IResourceChangeEvent.POST_CHANGE);
+		
 	}
 }
