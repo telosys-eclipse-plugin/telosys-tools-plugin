@@ -1,10 +1,15 @@
 <project default="copy-jars">
 
-	<property name="lib_dir"    value="./lib" />
-	<!--
-	<property name="VERSION"    value="2.1.1" />
-	-->
+	<property name="maven_repo" value="D:\MAVEN\.m2\repository"/>
 	<property name="VERSION"    value="3.0.0" />
+	
+	<!-- set "-SNAPSHOT" to copy the current SNAPSHOT or "" to copy the current RELEASE -->
+	<!--
+	<property name="SNAPSHOT"   value="" />
+	-->
+	<property name="SNAPSHOT"   value="-SNAPSHOT" />
+
+	<property name="lib_dir"    value="./lib" />
 	<property environment="env"/>
 
 	<!-- ============================================================================== -->
@@ -18,7 +23,7 @@
 
 		<fail message="Environment variable &quot;USERNAME&quot; undefined" unless="env.USERNAME"/>
 		<echo message="Env &quot;USERNAME&quot; = ${env.USERNAME}" />
-		<property name="maven_repo" value="D:\MAVEN\.m2\repository"/>
+		
 		<echo message="Maven repository    : ${maven_repo}" />
 		<echo message="Libraries directory : ${lib_dir}" />
 		
@@ -28,40 +33,40 @@
 		</delete>
 
 		<echo message="Copy new JAR files " />
-		<echo message="  from ${maven_repo} " />
+		<echo message="  from ${maven_repo} ( version ${VERSION} )" />
 		<echo message="  to   ${lib_dir}" />
 
 
-		<copy file="${maven_repo}/org/telosys/tools/telosys-tools-commons/${VERSION}/telosys-tools-commons-${VERSION}.jar" 
-			  todir="${lib_dir}" 
+		<copy file="${maven_repo}/org/telosys/telosys-tools-commons/${VERSION}${SNAPSHOT}/telosys-tools-commons-${VERSION}${SNAPSHOT}.jar" 
+			  tofile="${lib_dir}/telosys-tools-commons-${VERSION}.jar" 
 			  overwrite="true" verbose="true" />
 		
-		<copy file="${maven_repo}/org/telosys/tools/telosys-tools-database/${VERSION}/telosys-tools-database-${VERSION}.jar" 
-			  todir="${lib_dir}" 
+		<copy file="${maven_repo}/org/telosys/telosys-tools-database/${VERSION}${SNAPSHOT}/telosys-tools-database-${VERSION}${SNAPSHOT}.jar" 
+			  tofile="${lib_dir}/telosys-tools-database-${VERSION}.jar" 
 			  overwrite="true" verbose="true" />
 
-		<copy file="${maven_repo}/org/telosys/tools/telosys-tools-repository/${VERSION}/telosys-tools-repository-${VERSION}.jar" 
-			  todir="${lib_dir}" 
+		<copy file="${maven_repo}/org/telosys/telosys-tools-repository/${VERSION}${SNAPSHOT}/telosys-tools-repository-${VERSION}${SNAPSHOT}.jar" 
+			  tofile="${lib_dir}/telosys-tools-repository-${VERSION}.jar" 
 			  overwrite="true" verbose="true" />
 
-		<copy file="${maven_repo}/org/telosys/tools/telosys-tools-dsl-parser/${VERSION}/telosys-tools-dsl-parser-${VERSION}.jar" 
-			  todir="${lib_dir}" 
+		<copy file="${maven_repo}/org/telosys/telosys-tools-dsl-parser/${VERSION}${SNAPSHOT}/telosys-tools-dsl-parser-${VERSION}${SNAPSHOT}.jar" 
+			  tofile="${lib_dir}/telosys-tools-dsl-parser-${VERSION}.jar" 
 			  overwrite="true" verbose="true" />
 
-		<copy file="${maven_repo}/org/telosys/tools/telosys-tools-generic-model/${VERSION}/telosys-tools-generic-model-${VERSION}.jar" 
-			  todir="${lib_dir}" 
+		<copy file="${maven_repo}/org/telosys/telosys-tools-generic-model/${VERSION}${SNAPSHOT}/telosys-tools-generic-model-${VERSION}${SNAPSHOT}.jar" 
+			  tofile="${lib_dir}/telosys-tools-generic-model-${VERSION}.jar" 
 			  overwrite="true" verbose="true" />
 
-		<copy file="${maven_repo}/org/telosys/tools/telosys-tools-generator/${VERSION}/telosys-tools-generator-${VERSION}.jar" 
-			  todir="${lib_dir}" 
+		<copy file="${maven_repo}/org/telosys/telosys-tools-generator/${VERSION}${SNAPSHOT}/telosys-tools-generator-${VERSION}${SNAPSHOT}.jar" 
+			  tofile="${lib_dir}/telosys-tools-generator-${VERSION}.jar" 
 			  overwrite="true" verbose="true" />
 
-		<copy file="${maven_repo}/org/telosys/tools/telosys-tools-generator-engine/${VERSION}/telosys-tools-generator-engine-${VERSION}.jar" 
-			  todir="${lib_dir}" 
+		<copy file="${maven_repo}/org/telosys/telosys-tools-generator-engine/${VERSION}${SNAPSHOT}/telosys-tools-generator-engine-${VERSION}${SNAPSHOT}.jar" 
+			  tofile="${lib_dir}/telosys-tools-generator-engine-${VERSION}.jar" 
 			  overwrite="true" verbose="true" />
 
-		<copy file="${maven_repo}/org/telosys/tools/telosys-tools-api/${VERSION}/telosys-tools-api-${VERSION}.jar" 
-			  todir="${lib_dir}" 
+		<copy file="${maven_repo}/org/telosys/telosys-tools-api/${VERSION}${SNAPSHOT}/telosys-tools-api-${VERSION}${SNAPSHOT}.jar" 
+			  tofile="${lib_dir}/telosys-tools-api-${VERSION}.jar" 
 			  overwrite="true" verbose="true" />
 
 		<echo message=" " />
