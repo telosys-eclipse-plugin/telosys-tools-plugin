@@ -59,31 +59,16 @@ public class EntityChangesProcessor {
                      processEntity(res);
                }
                
-               if ((flags & IResourceDelta.MARKERS) != 0) {
-            	   log("--> Marker Change");
-                     //IMarkerDelta[] markers = delta.getMarkerDeltas();
-                     // if interested in markers, check these deltas
-               }
+//               if ((flags & IResourceDelta.MARKERS) != 0) {
+//            	   log("--> Marker Change");
+//                     //IMarkerDelta[] markers = delta.getMarkerDeltas();
+//                     // if interested in markers, check these deltas
+//               }
                //IResourceDelta.MOVED_FROM 
                //IResourceDelta.OPEN
                //IResourceDelta.COPIED_FROM
         }
 	}
-    
-//    private void processEntityChange_OLD(IResource resource) throws CoreException {
-//        File entityFile = EclipseWksUtil.toFile( (IFile) resource );
-//        File modelFile = DslModelUtil.getModelFileForEntityFile(entityFile);
-//        if ( modelFile != null ) {
-//        	log("Model file : " + modelFile.getAbsolutePath() ) ;
-//            // Differed refresh based on a scheduled "Job"
-//        	NotificationJob job = new NotificationJob(modelFile);
-//        	job.schedule();
-//            log("NotificationJob().schedule() done.");
-//        }
-//        else {
-//        	log("ERROR : no model file for entity " + entityFile.getAbsolutePath());
-//        }
-//    }
     
     private static void processEntity(IResource resource) throws CoreException {
     
@@ -105,30 +90,6 @@ public class EntityChangesProcessor {
         return null; // Not a file 
 	}
 
-//    private static void notifyModelEditorIfAny(File modelFile) {
-//	    Display.getDefault().asyncExec(new Runnable() {
-//	        @Override
-//	        public void run() {
-//	            //IWorkbenchWindow iw = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-//	    		IEditorReference[] editors = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditorReferences();
-//	    		System.out.println("Editors ( count = " + editors.length + " )");
-//	    		for ( IEditorReference editor : editors ) {
-//	    			log(" editor.getId()   = " + editor.getId()   );
-//	    			log(" editor.getName() = " + editor.getName() );
-//	    			if ( isModelEditor(editor)) {
-//	    				log(" editor is a ModelEditor ");
-//	    				ModelEditor modelEditor = getModelEditor(editor);
-//	    				if ( modelEditor != null ) {
-//		    				log(" ModelEditor instance found : file name = " + modelEditor.getShortFileName() );
-//		    				log(" Calling ModelEditor refresh()..." );
-//		    				modelEditor.refresh();
-//	    				}
-//	    			}
-//	    		}
-//	        }
-//	    });
-//    }
-	
     /**
      * Ask the model editor to refresh and then to show the new entities and the errors if any
      * @param modelFile

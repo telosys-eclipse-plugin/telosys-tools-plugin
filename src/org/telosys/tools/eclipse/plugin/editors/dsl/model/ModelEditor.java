@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
@@ -13,6 +15,7 @@ import org.telosys.tools.dsl.DslModelManager;
 import org.telosys.tools.dsl.DslModelUtil;
 import org.telosys.tools.dsl.parser.model.DomainModelInfo;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
+import org.telosys.tools.eclipse.plugin.commons.PluginImages;
 import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditor;
 import org.telosys.tools.eclipse.plugin.wkschanges.deco.FileMarker;
 import org.telosys.tools.generic.model.Model;
@@ -23,6 +26,7 @@ import org.telosys.tools.generic.model.Model;
  */
 public class ModelEditor extends AbstractModelEditor {
 	
+	private Image _imageWithoutError = null ;
     private ModelEditorPageModelEntities _modelEntitiesPage    = null ;
 	private ModelEditorPageModelInfo     _modelInformationPage = null ;
 	
@@ -60,13 +64,20 @@ public class ModelEditor extends AbstractModelEditor {
     @Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		super.init(site, input);
-		loadModel();
+		log(this, "init()..." );
+		//_imageWithoutError = getTitleImage();
+		ImageDescriptor imageDescriptor = input.getImageDescriptor();
+		if ( imageDescriptor != null ) {
+			_imageWithoutError = imageDescriptor.createImage();
+		}
+		//loadModel();
 	}
 
-//    @Override
-//    public void dispose() {
-//        super.dispose();
-//    }
+    @Override
+    public void dispose() {
+        super.dispose();
+        _imageWithoutError.dispose();
+    }
     
 	//----------------------------------------------------------------------------------------
     @Override
@@ -91,6 +102,7 @@ public class ModelEditor extends AbstractModelEditor {
 		}		
 		setCodeGenerationPage(codeGenerationPage);
 		
+		log(this, "addPages() : DONE" );
 	}
 
     //----------------------------------------------------------------------------------------
@@ -148,9 +160,25 @@ public class ModelEditor extends AbstractModelEditor {
     	}
     }
     //----------------------------------------------------------------------------------------
+    /**
+     * Refresh the model status in the model editor <br>
+     * - reload the model <br>
+     * - populate the entities lists (with errors messages if any ) <br>
+     * - update the editor image according with the current status (errors or not) <br>
+     * 
+     */
     public void refresh() {
 		log(this, "refresh()..." );
 		this.loadModel();
-		_modelEntitiesPage.populateEntities();    	
+		int errorsCount = _modelEntitiesPage.populateEntities();    
+		log(this, "refresh() : errorsCount = " + errorsCount);
+		if ( errorsCount > 0 ) {
+			Image errorImage = PluginImages.getImage(PluginImages.ERROR);
+			log(this, "refresh() : setTitleImage(errorImage) " );
+			setTitleImage(errorImage);
+		}
+		else {
+			setTitleImage(_imageWithoutError);
+		}
     }
 }

@@ -52,7 +52,7 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 	protected void createFormContent(IManagedForm managedForm) {
 		super.createFormContent(managedForm);
 		
-		log(this, "createFormContent(..)..." );
+		log(this, "createFormContent(..) : Model Info Page" );
 		
 		//--- Set a LAYOUT to the BODY
 		GridLayout bodyLayout = new GridLayout();	

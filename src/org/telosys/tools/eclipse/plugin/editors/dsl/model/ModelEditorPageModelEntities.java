@@ -135,7 +135,7 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 	protected void createFormContent(IManagedForm managedForm) {
 		super.createFormContent(managedForm);
 		
-		log(this, "createFormContent(..)..." );
+		log(this, "createFormContent(..) : Entities Page" );
 
 		//--- Set a GRID LAYOUT to the BODY
 		GridLayout bodyLayout = new GridLayout();	
@@ -165,7 +165,8 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 		//gd.heightHint = 360 ;
 		_entitiesTable.setLayoutData(gd);
 		
-		populateEntities() ;
+		// populateEntities() ; 
+		refresh();
 	}
 	
 	//----------------------------------------------------------------------------------------------
@@ -343,9 +344,10 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 	 * Populates the list of entities <br>
 	 * 
 	 */
-	protected void populateEntities() {
+	protected int populateEntities() {
 		log(this, "populateEntities(table)");
 		
+		int errorsCount = 0 ;
 		_entitiesTable.removeAll();
 		
 		ModelEditor modelEditor = (ModelEditor) getModelEditor();
@@ -361,6 +363,7 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 				entityError = entitiesErrors.get(entityFileName);
 				if ( entityError != null ) {
 					imageId = PluginImages.ERROR ;
+					errorsCount++;
 				}
 			}
 			if ( entityError == null ) {
@@ -379,6 +382,7 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
             //tableItem.addListener(eventType, listener)
             //tableItem.addListener(eventType, listener)
 		}
+		return errorsCount ;
 	}
 	
 }

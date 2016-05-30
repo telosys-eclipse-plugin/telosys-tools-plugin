@@ -5,6 +5,13 @@ import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.runtime.CoreException;
 
+/**
+ * IResourceChangeListener implementation <br>
+ * Uses the FileDeltaVisitor to visit 
+ * 
+ * @author Laurent Guerin
+ *
+ */
 public class FileChangeListener implements IResourceChangeListener {
 	
 	private final static boolean log = true ;

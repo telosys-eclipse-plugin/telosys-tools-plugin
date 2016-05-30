@@ -9,34 +9,36 @@ public class FileMarker {
 
 	private final static String MARKER_ID = "com.ibm.mymarkers.mymarker" ;
 	
-	public final static IMarker setErrorMarker(IResource resource) {
+	public final static void setErrorMarker(IResource resource) {
 		
-		PluginLogger.debug("createErrorMarker " + resource.getName() );
+		PluginLogger.debug("setErrorMarker " + resource.getName() );
 		if ( findErrorMarker(resource) != null ) {
 			// The resource is already marked
-			return null ;
+			PluginLogger.debug("setErrorMarker " + resource.getName() + " already marked");
 		}
-		IMarker marker = null;
-		try {
-			//note: you use the id that is defined in your plugin.xml
-			marker = resource.createMarker(MARKER_ID);
-			
-			//res.createMarker(IMarker.SEVERITY_ERROR);
-			
-			marker.setAttribute("description", "this is one of my markers");
-			
-			//note: you can also use attributes from your supertype
-			marker.setAttribute(IMarker.MESSAGE, "Error");
-			
-			PluginLogger.debug("createErrorMarker " + resource.getName() + " marked / ERROR");
-			
-		} catch (CoreException e) {
-			// The dialog should be created in UI thread
-			// MsgBox.error("ERROR / createErrorMarker ", "File " + res.getName() + "\n" + e.getMessage());
-			marker = null;
+		else {
+			PluginLogger.debug("setErrorMarker " + resource.getName() + " not yet marked => create marker");
+			IMarker marker = null;
+			try {
+				//note: you use the id that is defined in your plugin.xml
+				marker = resource.createMarker(MARKER_ID);
+				
+				//res.createMarker(IMarker.SEVERITY_ERROR);
+				
+				marker.setAttribute("description", "this is one of my markers");
+				
+				//note: you can also use attributes from your supertype
+				marker.setAttribute(IMarker.MESSAGE, "Error");
+				
+				PluginLogger.debug("setErrorMarker " + resource.getName() + " marked / ERROR");
+				
+			} catch (CoreException e) {
+				// The dialog should be created in UI thread
+				// MsgBox.error("ERROR / createErrorMarker ", "File " + res.getName() + "\n" + e.getMessage());
+				throw new RuntimeException("ERROR : setErrorMarker CoreException", e);
+			}
+//			return marker;		
 		}
-		
-		return marker;		
 	}
 	
 	public final static void removeErrorMarker(IResource resource) {
@@ -82,10 +84,11 @@ public class FileMarker {
 			return markers[0] ;
 		}
 		else {
-			PluginLogger.debug("findErrorMarker markers length > 1 " );
+			// Not supposed to happen 
+			PluginLogger.debug("findErrorMarker markers length > 1 !!! (?)" );
 			// The dialog should be created in UI thread
 			// MsgBox.error("ERROR / findErrorMarker", markers.length + " markers found !" ) ;
-			return markers[0] ;
+			return markers[0] ; // Returns the 1rst marker found 
 		}
 	}	
 }

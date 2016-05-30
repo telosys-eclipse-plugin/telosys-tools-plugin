@@ -28,10 +28,9 @@ public class ModelChangesProcessor {
 	//-----------------------------------------------------------------------------
 	// Process model change event 
 	//-----------------------------------------------------------------------------
-    public static void processModelChange(IResourceDelta delta) { //throws CoreException {
+    public static void processModelChange(IResourceDelta delta) { 
     	
     	log("processModelChange(delta)");
-//    	IResource res = delta.getResource();
 
         switch (delta.getKind()) {
         
@@ -45,39 +44,27 @@ public class ModelChangesProcessor {
 
            case IResourceDelta.CHANGED:
         	   modelFileChanged(delta);
-//               log("MODEL CHANGED : " + res.getFullPath() );
-//               // more details about changes
-//               int flags = delta.getFlags();
-////               if ((flags & IResourceDelta.CONTENT) != 0) {
-////             	  // Happens after File/Save in a text editor 
-////            	   log("--> Content Change");
-////                   processEntityChange(res);
-////               }
-//               
-////               if ((flags & IResourceDelta.REPLACED) != 0) {
-////            	   log("--> Content Replaced");
-////                     processEntityChange(res);
-////               }
-//               
-//               if ((flags & IResourceDelta.MARKERS) != 0) {
-//            	   log("--> Marker Change");
-////                   IMarkerDelta[] markerDeltas = delta.getMarkerDeltas();
-//                   // if interested in markers, check these deltas
-////                   for ( IMarkerDelta md : markerDeltas ) {
-////                   }
-//                   scheduleRefreshJob(delta);
-//               }
-
                break;
         }
 	}
     
+    /**
+     * A new model has been created : <br>
+     * noting to do <br>
+     * @param delta
+     */
     private static void modelFileAdded(IResourceDelta delta) {
     	IResource res = delta.getResource();
-        log("MODEL ADDED : " + res.getFullPath() );
-        log("MODEL ADDED : nothing to do" );
+        log("MODEL ADDED (nothing to do) : " + res.getFullPath() );
     }
     
+    /**
+     * The model file has been removed <br>
+     * - delete the entities belonging to the model in the workspace <br>
+     * - refresh the workspace (after entities deletion) <br>
+     * - close the editor if open <br>
+     * @param delta
+     */
     private static void modelFileRemoved(IResourceDelta delta) {
     	IResource res = delta.getResource();
         log("MODEL REMOVED : " + res.getFullPath() );              
@@ -113,28 +100,33 @@ public class ModelChangesProcessor {
     	Display.getDefault().asyncExec( new TaskModelEditorClose(modelFile) );
     }
     
+    /**
+     * The model file has changed <br>
+     * - nothing to do  <br>
+     * @param delta
+     */
     private static void modelFileChanged(IResourceDelta delta) {
     	IResource res = delta.getResource();
-        log("MODEL CHANGED : " + res.getFullPath() );
-        // more details about changes
-        int flags = delta.getFlags();
-//        if ((flags & IResourceDelta.CONTENT) != 0) {
-//      	  // Happens after File/Save in a text editor 
-//     	   log("--> Content Change");
+        log("MODEL CHANGED (nothing to do) : " + res.getFullPath() );
+//        // more details about changes
+//        int flags = delta.getFlags();
+////        if ((flags & IResourceDelta.CONTENT) != 0) {
+////      	  // Happens after File/Save in a text editor 
+////     	   log("--> Content Change");
+////        }
+//        
+////        if ((flags & IResourceDelta.REPLACED) != 0) {
+////     	   log("--> Content Replaced");
+////        }
+//        
+//        if ((flags & IResourceDelta.MARKERS) != 0) {
+//     	   log("--> Marker Change");
+////            IMarkerDelta[] markerDeltas = delta.getMarkerDeltas();
+//            // if interested in markers, check these deltas
+////            for ( IMarkerDelta md : markerDeltas ) {
+////            }
+////            scheduleRefreshJob(delta);
 //        }
-        
-//        if ((flags & IResourceDelta.REPLACED) != 0) {
-//     	   log("--> Content Replaced");
-//        }
-        
-        if ((flags & IResourceDelta.MARKERS) != 0) {
-     	   log("--> Marker Change");
-//            IMarkerDelta[] markerDeltas = delta.getMarkerDeltas();
-            // if interested in markers, check these deltas
-//            for ( IMarkerDelta md : markerDeltas ) {
-//            }
-//            scheduleRefreshJob(delta);
-        }
     }
     
 //    private static void scheduleRefreshJob(IResourceDelta delta) {
