@@ -5,42 +5,6 @@ import org.eclipse.jface.text.IDocument;
 
 public class EntityEditorContentAssistTools {
 	
-	public static void main(String arg[]) {
-
-		System.out.println(" void ? " + isVoidChar(' ') );
-		System.out.println(" void ? " + isVoidChar('\t') );
-		System.out.println(" void ? " + isVoidChar(';') );
-		
-		callGetContext("");
-		callGetContext(":");
-		callGetContext(" aaa");
-		callGetContext(" : str");
-		callGetContext(" : str ");
-		callGetContext(":str");
-		callGetContext(": string  ");
-		callGetContext(": string ; ");
-		callGetContext(": string {  ");
-		callGetContext(": string { aa");
-		callGetContext(": string { aa ");
-		callGetContext(": string { @aa");
-		callGetContext(": string { @aa ");
-		callGetContext(": string { @aa,");
-		callGetContext(": string { @aa ,");
-		callGetContext(": string { @aa , ");
-		callGetContext(": string \n { \t@aa");
-		callGetContext(": string \n { \t@aa, \n @bb");
-		callGetContext(": string { @aa , @bb}");
-		callGetContext(": string { @aa , @bb;");
-		callGetContext("Foo {");
-
-	}
-	private static void callGetContext(String s) {
-		System.out.println("getContext('" + s +"')");
-		EntityEditorSuggestContext suggestContext = getSuggestContext(s);
-		System.out.println("  word    = '" + suggestContext.getWord() + "'");
-		System.out.println("  context = " + suggestContext.getContext() );
-	}
-	
 	public static String getDocumentSubPart(IDocument document, int documentOffset) {
 		StringBuffer sb = new StringBuffer() ;
 		char lastChar = 0 ;

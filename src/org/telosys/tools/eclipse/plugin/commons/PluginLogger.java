@@ -14,10 +14,21 @@ public class PluginLogger
 	private final static TelosysToolsLogger logger = new ConsoleLogger();
 
 	//----------------------------------------------------------------------------------
-	public static TelosysToolsLogger getLogger() {
-		return logger;
+	// INFO
+	//----------------------------------------------------------------------------------
+	public static void info(String s) {
+		logger.info(s);
+	}
+
+	//----------------------------------------------------------------------------------
+	// ERROR
+	//----------------------------------------------------------------------------------
+	public static void error(String s) {
+		logger.error(s);
 	}
 	
+	//----------------------------------------------------------------------------------
+	// LOG
 	//----------------------------------------------------------------------------------
 	public static void log(Object object, String s) {
 		logger.log(object, s);
@@ -25,15 +36,6 @@ public class PluginLogger
 	//----------------------------------------------------------------------------------
 	public static void log(String s) {
 		logger.log(s);
-	}
-	//----------------------------------------------------------------------------------
-	public static void info(String s) {
-		logger.info(s);
-	}
-
-	//----------------------------------------------------------------------------------
-	public static void error(String s) {
-		logger.error(s);
 	}
 
 	//----------------------------------------------------------------------------------
