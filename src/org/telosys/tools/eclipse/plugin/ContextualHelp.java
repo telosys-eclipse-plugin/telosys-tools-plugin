@@ -11,7 +11,6 @@ public class ContextualHelp {
 	/**
 	 * The OSGI bundle name of the plugin providing help
 	 */
-	//private final static String TELOSYS_TOOLS_HELP_PLUGIN_ID = "TelosysToolsPluginHelp" ;
 	private final static String TELOSYS_TOOLS_HELP_PLUGIN_ID = "org.telosys.tools.eclipse.plugin.help" ;
 
 	/**
@@ -25,10 +24,6 @@ public class ContextualHelp {
 	 * @return
 	 */
 	public final static String getVelocityEditorHelpContextId () {
-//		//Bundle bundle = text_editor.Activator.getDefault().getBundle() ;
-//		Bundle bundle = MyPlugin.getBundle() ;
-//		String pluginId = bundle.getSymbolicName();
-//		System.out.println("Plugin ID = " + pluginId );
 		return TELOSYS_TOOLS_HELP_PLUGIN_ID + "." + VELOCITY_EDITOR_HELP_CONTEXT_ID ;
 	}
 

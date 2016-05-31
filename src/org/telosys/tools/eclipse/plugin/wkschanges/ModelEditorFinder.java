@@ -8,6 +8,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.telosys.tools.dsl.DslModelUtil;
+import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 import org.telosys.tools.eclipse.plugin.editors.dsl.model.ModelEditor;
 
 /**
@@ -19,10 +20,9 @@ import org.telosys.tools.eclipse.plugin.editors.dsl.model.ModelEditor;
 public class ModelEditorFinder {
 
 	private final static boolean log = true ;
-	private final static String  CLASS_NAME = ModelEditorFinder.class.getSimpleName() ;	
 	private static void log(String msg) {
 		if ( log ) {
-			System.out.println( CLASS_NAME + " : " + msg );
+			PluginLogger.log(ModelEditorFinder.class, msg);
 		}
 	}
 	

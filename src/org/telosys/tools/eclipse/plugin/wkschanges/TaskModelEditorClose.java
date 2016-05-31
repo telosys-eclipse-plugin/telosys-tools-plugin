@@ -2,15 +2,15 @@ package org.telosys.tools.eclipse.plugin.wkschanges;
 
 import java.io.File;
 
+import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 import org.telosys.tools.eclipse.plugin.editors.dsl.model.ModelEditor;
 
 public class TaskModelEditorClose implements Runnable {
 
 	private final static boolean log = true ;
-	private final static String  CLASS_NAME = TaskModelEditorClose.class.getSimpleName() ;	
-	private void log(String msg) {
+	private static void log(String msg) {
 		if ( log ) {
-			System.out.println( CLASS_NAME + " : " + msg );
+			PluginLogger.log(TaskModelEditorClose.class, msg);
 		}
 	}
 

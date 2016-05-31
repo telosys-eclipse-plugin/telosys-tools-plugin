@@ -8,6 +8,7 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.swt.widgets.Display;
 import org.telosys.tools.dsl.DslModelUtil;
 import org.telosys.tools.eclipse.plugin.commons.EclipseWksUtil;
+import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 
 /**
  * Processor for model changes
@@ -18,10 +19,9 @@ import org.telosys.tools.eclipse.plugin.commons.EclipseWksUtil;
 public class ModelChangesProcessor {
 
 	private final static boolean log = true ;
-	private final static String  CLASS_NAME = ModelChangesProcessor.class.getSimpleName() ;	
 	private static void log(String msg) {
 		if ( log ) {
-			System.out.println( CLASS_NAME + " : " + msg );
+			PluginLogger.log(ModelChangesProcessor.class, msg);
 		}
 	}
 	

@@ -17,7 +17,6 @@ import org.telosys.tools.dsl.parser.model.DomainModelInfo;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.PluginImages;
 import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditor;
-import org.telosys.tools.eclipse.plugin.wkschanges.deco.FileMarker;
 import org.telosys.tools.generic.model.Model;
 
 /**
@@ -131,12 +130,12 @@ public class ModelEditor extends AbstractModelEditor {
 		if ( model != null ) {
 			//--- Model OK : no parsing error
 			_entitiesErrors = null ;
-			FileMarker.removeErrorMarker(this.getFile());
+			// FileMarker.removeErrorMarker(this.getFile());
 		}
 		else {
 			//--- Invalid Model : parsing errors
 			_entitiesErrors = genericModelLoader.getParsingErrors();
-			FileMarker.setErrorMarker(this.getFile());
+			// FileMarker.setErrorMarker(this.getFile());
 		}
 		//EclipseWksUtil.refresh(this.getFile());
 		

@@ -9,6 +9,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.widgets.Display;
 import org.telosys.tools.dsl.DslModelUtil;
 import org.telosys.tools.eclipse.plugin.commons.EclipseWksUtil;
+import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 
 /**
  * Processor for entity changes ( when ".entity" files has changed ) <br>
@@ -19,57 +20,84 @@ import org.telosys.tools.eclipse.plugin.commons.EclipseWksUtil;
 public class EntityChangesProcessor {
 
 	private final static boolean log = true ;
-	private final static String  CLASS_NAME = EntityChangesProcessor.class.getSimpleName() ;	
 	private static void log(String msg) {
 		if ( log ) {
-			System.out.println( CLASS_NAME + " : " + msg );
+			PluginLogger.log(EntityChangesProcessor.class, msg);
 		}
 	}
 	
     public static void processEntityChange(IResourceDelta delta) throws CoreException {
-    	
-    	log("processEntity()");
-    	IResource res = delta.getResource();
-
+    	log("processEntityChange(delta)");
         switch (delta.getKind()) {
         
            case IResourceDelta.ADDED:
-              log("ENTITY ADDED : " + res.getFullPath() );
-              processEntity(res);
+              entityFileAdded(delta);
               break;
               
            case IResourceDelta.REMOVED:
-              log("ENTITY REMOVED : " + res.getFullPath() );
-              processEntity(res);
+              entityFileRemoved(delta);
               break;
               
            case IResourceDelta.CHANGED:
-               log("ENTITY CHANGED : " + res.getFullPath() );
-               
-               // more details about changes
-               int flags = delta.getFlags();
-               if ((flags & IResourceDelta.CONTENT) != 0) {
-             	  // Happens after File/Save in a text editor 
-            	   log("--> Content Change");
-                   processEntity(res);
-               }
-               
-               if ((flags & IResourceDelta.REPLACED) != 0) {
-            	   log("--> Content Replaced");
-                     processEntity(res);
-               }
-               
-//               if ((flags & IResourceDelta.MARKERS) != 0) {
-//            	   log("--> Marker Change");
-//                     //IMarkerDelta[] markers = delta.getMarkerDeltas();
-//                     // if interested in markers, check these deltas
-//               }
-               //IResourceDelta.MOVED_FROM 
-               //IResourceDelta.OPEN
-               //IResourceDelta.COPIED_FROM
+        	   entityFileChanged(delta);
         }
+        
+        // RENAME = ADDED + REMOVED
 	}
     
+    /**
+     * A new entity file has been created : <br>
+     * - reload (parse) the model  <br>
+     * @param delta
+     */
+    private static void entityFileAdded(IResourceDelta delta) throws CoreException {
+    	IResource res = delta.getResource();
+        log("ENTITY ADDED : " + res.getFullPath() );
+        processEntity(res);
+    }
+
+    /**
+     * An entity file has been removed : <br>
+     * - reload (parse) the model  <br>
+     * @param delta
+     */
+    private static void entityFileRemoved(IResourceDelta delta) throws CoreException {
+    	IResource res = delta.getResource();
+        log("ENTITY REMOVED : " + res.getFullPath() );
+        processEntity(res);
+    }
+
+    /**
+     * An entity file has changed : <br>
+     * - reload (parse) the model  <br>
+     * @param delta
+     */
+    private static void entityFileChanged(IResourceDelta delta) throws CoreException {
+    	IResource res = delta.getResource();
+        log("ENTITY CHANGED : " + res.getFullPath() );
+        // more details about changes
+        int flags = delta.getFlags();
+        if ((flags & IResourceDelta.CONTENT) != 0) {
+      	  // Happens after File/Save in a text editor 
+     	   log("--> Content Change");
+            processEntity(res);
+        }
+        
+        if ((flags & IResourceDelta.REPLACED) != 0) {
+     	   log("--> Content Replaced");
+              processEntity(res);
+        }
+        
+//        if ((flags & IResourceDelta.MARKERS) != 0) {
+//     	   log("--> Marker Change");
+//              //IMarkerDelta[] markers = delta.getMarkerDeltas();
+//              // if interested in markers, check these deltas
+//        }
+        //IResourceDelta.MOVED_FROM 
+        //IResourceDelta.OPEN
+        //IResourceDelta.COPIED_FROM
+    }
+
     private static void processEntity(IResource resource) throws CoreException {
     
     	// Just notify the model editor (if open) that an entity has changed

@@ -9,8 +9,16 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.PlatformUI;
+import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 
 public class NotificationJob extends WorkspaceJob  {
+
+	private final static boolean log = true ;
+	private static void log(String msg) {
+		if ( log ) {
+			PluginLogger.log(NotificationJob.class, msg);
+		}
+	}
 
 	private final File modelFile ;
 	
@@ -21,7 +29,7 @@ public class NotificationJob extends WorkspaceJob  {
 
 	@Override
 	public IStatus runInWorkspace(IProgressMonitor progressMonitor) throws CoreException {
-		System.out.println("NotificationJob : runInWorkspace() : model updated " + modelFile.getName());
+		log("NotificationJob : runInWorkspace() : model updated " + modelFile.getName());
 
 		if ( PlatformUI.getWorkbench() != null ) {
 			if ( PlatformUI.getWorkbench().getActiveWorkbenchWindow() != null ) {
@@ -29,23 +37,23 @@ public class NotificationJob extends WorkspaceJob  {
 					
 				}
 				else {
-					System.out.println("getActivePage : null !!!! ");
+					log("getActivePage : null !!!! ");
 				}
 			}			
 			else {
-				System.out.println("getActiveWorkbenchWindow : null !!!! ");
+				log("getActiveWorkbenchWindow : null !!!! ");
 			}
 		}
 		else {
-			System.out.println("getWorkbench : null !!!! ");
+			log("getWorkbench : null !!!! ");
 		}
 		IEditorReference[] editors = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditorReferences();
-		System.out.println("Editors ( count = " + editors.length + " )");
+		log("Editors ( count = " + editors.length + " )");
 		for ( IEditorReference editor : editors ) {
-			System.out.println(" . id    = " + editor.getId()  );
-			System.out.println(" . name  = " + editor.getName() );
-			System.out.println(" . class = " + editor.getClass() );
-			System.out.println(" ----- " );
+			log(" . id    = " + editor.getId()  );
+			log(" . name  = " + editor.getName() );
+			log(" . class = " + editor.getClass() );
+			log(" ----- " );
 		}
 		
 		return Status.OK_STATUS;

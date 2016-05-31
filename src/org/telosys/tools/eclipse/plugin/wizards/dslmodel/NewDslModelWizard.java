@@ -14,6 +14,7 @@ import org.telosys.tools.dsl.DslModelUtil;
 import org.telosys.tools.eclipse.plugin.commons.EclipseWksUtil;
 import org.telosys.tools.eclipse.plugin.commons.FileEditorUtil;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
+import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 
 /**
  * New DSL model Wizard 
@@ -27,7 +28,7 @@ public class NewDslModelWizard extends Wizard implements INewWizard  {
 	private NewDslModelWizardPage page1 ;
 	
 	private void log(String msg) {
-		System.out.println("LOG : " + msg);
+		PluginLogger.log(this, msg);
 	}
 	
 	/*

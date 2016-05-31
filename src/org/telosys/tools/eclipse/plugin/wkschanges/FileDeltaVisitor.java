@@ -9,14 +9,14 @@ import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.telosys.tools.dsl.DslModelUtil;
 import org.telosys.tools.eclipse.plugin.commons.EclipseWksUtil;
+import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 
 public class FileDeltaVisitor implements IResourceDeltaVisitor {
 
 	private final static boolean log = true ;
-	private final static String  CLASS_NAME = FileDeltaVisitor.class.getSimpleName() ;	
-	private void log(String msg) {
+	private static void log(String msg) {
 		if ( log ) {
-			System.out.println( CLASS_NAME + " : " + msg );
+			PluginLogger.log(FileDeltaVisitor.class, msg);
 		}
 	}
 	
@@ -60,12 +60,17 @@ public class FileDeltaVisitor implements IResourceDeltaVisitor {
 
 	private File getFile(IResourceDelta delta) {
 		IResource resource = delta.getResource() ;
-        if ( resource.exists() ) { // doesn't exist when "Delete project"
-	        if ( resource instanceof IFile ) {
-	    		IFile iFile = (IFile) resource ;
+        if ( resource instanceof IFile ) {
+    		IFile iFile = (IFile) resource ;
+    		if ( iFile.getLocationURI() != null ) {
+    			// NB : "null pointer" if getLocationURI() is null 
 	    		return EclipseWksUtil.toFile(iFile);
-	        }	
-        }
+    		}
+    		else {
+    			// No location URI for this resource occurs when a project is deleted ( "Delete project" )
+    			return null ;
+    		}
+        }	
         return null; // Not a file 
 	}
 //	private File getFile(IResource resource) {

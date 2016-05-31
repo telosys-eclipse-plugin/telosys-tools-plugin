@@ -48,7 +48,6 @@ public class EntityEditorContentAssistTools {
 		for ( int i = s.length() -1 ; i >= 0 ; i-- ) {
 			char c = s.charAt(i);
 			lastChar = c ;
-//			System.out.println(c);
 			if ( isVoidChar(c) ) {
 				endOfWord = true ;
 			}
@@ -83,7 +82,6 @@ public class EntityEditorContentAssistTools {
 			// no suggestion if not after ':'
 			return new EntityEditorSuggestContext(word, EntityEditorContext.DEFAULT ) ;
 		}
-//		System.out.println("  word = '" + word + "'");
 //		else if ( firstLeftSeparator == '{' ) {
 		else if ( firstLeftChar == '{' ) {
 			return new EntityEditorSuggestContext(word, EntityEditorContext.ANNOTATION ) ;

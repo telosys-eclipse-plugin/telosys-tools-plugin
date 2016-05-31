@@ -4,6 +4,7 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.runtime.CoreException;
+import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 
 /**
  * IResourceChangeListener implementation <br>
@@ -15,10 +16,9 @@ import org.eclipse.core.runtime.CoreException;
 public class FileChangeListener implements IResourceChangeListener {
 	
 	private final static boolean log = true ;
-	private final static String  CLASS_NAME = FileChangeListener.class.getSimpleName() ;	
-	private void log(String msg) {
+	private static void log(String msg) {
 		if ( log ) {
-			System.out.println( CLASS_NAME + " : " + msg );
+			PluginLogger.log(FileChangeListener.class, msg);
 		}
 	}
 

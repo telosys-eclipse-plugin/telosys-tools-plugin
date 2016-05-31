@@ -1,4 +1,4 @@
-package org.telosys.tools.eclipse.plugin.wkschanges;
+package test.editors.dsl;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
