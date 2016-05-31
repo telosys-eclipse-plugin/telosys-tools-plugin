@@ -15,7 +15,6 @@ public class FolderSelectionDialogBox {
 		DirectoryDialog dialog = new DirectoryDialog(shell);
 		
 		// Initial filter path
-		//dialog.setFilterPath("c:\\"); 
 		dialog.setFilterPath(filterPath); 
 		
 		// Change the title bar text
@@ -30,20 +29,4 @@ public class FolderSelectionDialogBox {
 		return selectedFolder ;
 	}
 	
-//	public static void main(String[] args) {
-//		Display display = new Display();
-//		Shell shell = new Shell(display);
-//		shell.open();
-//		
-//		String folder = chooseFolder(shell, "My dialog box", "D:\\") ;
-//		
-//		//System.out.println("Selected folder = " + folder);
-//		
-//		while (!shell.isDisposed()) {
-//			if (!display.readAndDispatch()) {
-//				display.sleep();
-//			}
-//		}
-//		display.dispose();
-//	}
 }
