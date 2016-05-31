@@ -60,10 +60,12 @@ public class FileDeltaVisitor implements IResourceDeltaVisitor {
 
 	private File getFile(IResourceDelta delta) {
 		IResource resource = delta.getResource() ;
-        if ( resource instanceof IFile ) {
-    		IFile iFile = (IFile) resource ;
-    		return EclipseWksUtil.toFile(iFile);
-        }		
+        if ( resource.exists() ) { // doesn't exist when "Delete project"
+	        if ( resource instanceof IFile ) {
+	    		IFile iFile = (IFile) resource ;
+	    		return EclipseWksUtil.toFile(iFile);
+	        }	
+        }
         return null; // Not a file 
 	}
 //	private File getFile(IResource resource) {
