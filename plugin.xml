@@ -103,12 +103,27 @@
          name="Telosys Tools properties"
          point="org.eclipse.ui.propertyPages">
       <page
-            adaptable="true"
-            objectClass="org.eclipse.core.resources.IProject"
             class="org.telosys.tools.eclipse.plugin.config.view.PropertiesPage"
             name="Telosys Tools"
-            id="org.telosys.tools.eclipse.plugin.config.view.PropertiesPage"/>
+            icon="icons/telosys_folder.png"
+            id="org.telosys.tools.eclipse.plugin.config.view.PropertiesPage"
+            adaptable="true"
+            objectClass="org.eclipse.core.resources.IProject"
+            />
    </extension>
+<!--
+      <page
+            adaptable="true"
+            objectClass="org.eclipse.core.resources.IProject"
+            />
+		<enabledWhen>
+            <instanceof value="org.eclipse.core.resources.IProject"/>
+            <instanceof value="org.eclipse.core.resources.IFolder"/>
+         </enabledWhen>            
+		<enabledWhen>
+            <instanceof value="org.eclipse.core.resources.IProject"/>
+         </enabledWhen>            
+-->
 
   <!-- EDITORS -->
   <!-- Removed to fix file icon bug 
