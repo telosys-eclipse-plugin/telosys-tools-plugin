@@ -29,7 +29,13 @@ public class RefreshJob extends WorkspaceJob  {
 	@Override
 	public IStatus runInWorkspace(IProgressMonitor progressMonitor) throws CoreException {
 		log("RefreshJob : runInWorkspace() : refresh " + modelsFolder.getName());
-		EclipseWksUtil.refresh(modelsFolder); // refresh the deleted folder "xxx_model" 
+		if ( modelsFolder.exists() ) {
+			log("RefreshJob : runInWorkspace() : the folder exists => launch refresh" );
+			EclipseWksUtil.refresh(modelsFolder); // refresh the models folder ( = "TelosysTools" folder ) 
+		}
+		else {
+			log("RefreshJob : runInWorkspace() : the folder doesn't exist => nothing to do" );			
+		}
 		return Status.OK_STATUS;
 	}
 

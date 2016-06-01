@@ -15,6 +15,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.telosys.tools.commons.FileUtil;
 
 
 /**
@@ -36,9 +37,9 @@ public class EclipseWksUtil {
 	private EclipseWksUtil() {
 	}
 	
-	private static void log(String s) 
-	{
-		PluginLogger.log( EclipseWksUtil.class.getName() + " : " + s );
+	private static void log(String s) {
+//		PluginLogger.log( EclipseWksUtil.class.getName() + " : " + s );
+		PluginLogger.log( EclipseWksUtil.class, s );
 	}
 	
 	/**
@@ -64,6 +65,23 @@ public class EclipseWksUtil {
 	public static IProject[] getWorkspaceProjects() {
 		IProject[] projects = getWorkspace().getRoot().getProjects();
 		return projects;
+	}
+	
+	/**
+	 * Return the workspace location in the OS ( filesystem absolute path ) <br>
+	 * 
+	 * @return
+	 */
+	public static String getWorkspaceLocation() {
+		IWorkspace wks = getWorkspace();
+		IWorkspaceRoot wksRoot = wks.getRoot();
+		IPath wksLocation = wksRoot.getLocation();
+		if ( wksLocation != null ) {
+			return wksLocation.toOSString() ;
+		}
+		else {			
+			throw new IllegalStateException("Cannot get workspace location");
+		}
 	}
 	
 	//----------------------------------------------------------------------------------
@@ -335,12 +353,12 @@ public class EclipseWksUtil {
 				return iFile ;
 			}
 			else {
-				MsgBox.error("toIFile(file) : getFileForLocation('" + sAbsolutePath + "') return NULL" );
+				//MsgBox.error("toIFile(file) : getFileForLocation('" + sAbsolutePath + "') return NULL" );
 				return null ;
 			}
 		}
 		else {
-			MsgBox.error("toIFile(file) : Cannot get workspace root !" );
+			//MsgBox.error("toIFile(file) : Cannot get workspace root !" );
 			return null ;
 		}
 	}
@@ -358,16 +376,38 @@ public class EclipseWksUtil {
 	
 	//----------------------------------------------------------------------------------
 	/**
-	 * Converts the given Eclipse "IFile" to a standard filesystem "File"
+	 * Converts the given Eclipse "IFile" to a standard filesystem "File" <br>
+	 * If the 
 	 * @param iFile
 	 * @return
 	 */
 	public static File toFile(IFile iFile) {
 		log("toFile( IFile iFile ) : iFile.getLocationURI() = " + iFile.getLocationURI() );
-    	URI uri = iFile.getLocationURI();
-    	File file = new File(uri);
-		log("toFile( IFile iFile ) : return : file.getAbsolutePath() = " + file.getAbsolutePath() );
-    	return file ;
+		
+		IWorkspace wks = getWorkspace();
+		IPath wksPath = wks.getRoot().getLocation();
+		
+//    	URI uri = iFile.getLocationURI(); // NB : can be null if iFile has been deleted 
+//    	File file = new File(uri); // Throws "NullPointerException" if uri is null
+    	
+		// ver 3.0.0
+		log("toFile( IFile iFile ) : IFile getLocation = " + iFile.getLocation() ); // NB : can be null if iFile has been deleted 
+		log("toFile( IFile iFile ) : IFile getFullPath = " + iFile.getFullPath() ); // Full path in workspace never null
+		
+//    	IPath iPath = iFile.getFullPath() ; 
+//		log("toFile( IFile iFile ) : IFile getFullPath toOSString = " + iPath.toOSString() );
+//    	//File file = iPath.toFile() ; // returns 'D:\project\TelosysTools\zzz_model' !!!
+//    	File file = new File(iPath.toOSString());
+//		log("toFile( IFile iFile ) : return : file.getAbsolutePath() = " + file.getAbsolutePath() );
+
+//    	IPath iPath = iFile.getLocation() ; // Absolute filesystem path : 'D:/aaa/wks/project/TelosysTools/zzz_model'
+//    	File file = iPath.toFile() ; // returns 'D:\project\TelosysTools\zzz_model' !!!
+
+		String workspaceLocation = getWorkspaceLocation();
+		String fileFullPathInworkspace = iFile.getFullPath().toOSString();
+		String fileAbsolutePath = FileUtil.buildFilePath(workspaceLocation, fileFullPathInworkspace);
+		log("file absolute path = '" + fileAbsolutePath + "'");
+		return new File(fileAbsolutePath) ;
 	}
 	
 	//----------------------------------------------------------------------------------

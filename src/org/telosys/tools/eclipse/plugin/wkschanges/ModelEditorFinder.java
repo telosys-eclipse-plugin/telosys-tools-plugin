@@ -2,11 +2,14 @@ package org.telosys.tools.eclipse.plugin.wkschanges;
 
 import java.io.File;
 
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.FileEditorInput;
 import org.telosys.tools.dsl.DslModelUtil;
 import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 import org.telosys.tools.eclipse.plugin.editors.dsl.model.ModelEditor;
@@ -58,11 +61,22 @@ public class ModelEditorFinder {
         				ModelEditor modelEditor = getModelEditor(editor);
         				if ( modelEditor != null ) {
             				log(" ModelEditor instance found : file name = " + modelEditor.getShortFileName() );
+            				// modelEditor.getShortFileName() : eg "foo.model"
             				// Check if the file in the editor is the given model file
             				File modelEditorFile = modelEditor.getModelFile() ;
+//            				IEditorInput editorInput = modelEditor.getEditorInput(); // eg "foo.model"     
+//            				if ( editorInput instanceof FileEditorInput ) {
+//            					log("instance of FileEditorInput");
+//            					FileEditorInput fileEditorInput = (FileEditorInput) editorInput ;
+//            					IPath iPath =fileEditorInput.getPath();
+//            					log("IPath toFile       = " + iPath.toFile() );
+//            					log("IPath toOSString() = " + iPath.toOSString());
+//            				}
+//            				log(" ModelEditor input = " + editorInput.getName() );
+//            				//editorInput.getName();
             				log(" ModelEditor instance found : model file = " + modelEditorFile.getName() );
             				if ( modelFile.getAbsolutePath().equals(modelEditorFile.getAbsolutePath() ) ) {
-                				log(" Return ModelEditor ..." );
+                				log(" Same file => return ModelEditor ..." );
                 				return modelEditor ;
             				}
         				}

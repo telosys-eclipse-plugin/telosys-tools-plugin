@@ -1,10 +1,12 @@
 package org.telosys.tools.eclipse.plugin.wkschanges;
 
 import java.io.File;
+import java.net.URI;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.swt.widgets.Display;
 import org.telosys.tools.dsl.DslModelUtil;
 import org.telosys.tools.eclipse.plugin.commons.EclipseWksUtil;
@@ -83,20 +85,51 @@ public class ModelChangesProcessor {
          * 
          */
         
-        // Remove the model file "xxx.model" and the folder "xxx_model"
-        File modelFile = EclipseWksUtil.toFile( (IFile) delta.getResource() );
-        DslModelUtil.deleteModel(modelFile);
+//        // Remove the model file "xxx.model" and the folder "xxx_model"
+//        //File modelFile = EclipseWksUtil.toFile( (IFile) delta.getResource() );
+////        if ( delta.getResource() != null ) {
+//    	IFile iFile = (IFile) delta.getResource();
+//		log("delta.getResource().getLocationURI() : " + delta.getResource().getFullPath() );
+//		IPath iPath = iFile.getFullPath();
+//		
+//    	URI uri = iFile.getLocationURI();
+//    	if ( uri != null ) {
+//        	File modelFile = new File(uri);
+//    		log("modelFile.getAbsolutePath() = " + modelFile.getAbsolutePath() );
+//
+//    		// Delete all the model files and model folder
+//    		DslModelUtil.deleteModel(modelFile);
+//            log("Model file and folder deleted.");
+//
+//            // Differed REFRESH job ( based on a scheduled "Job" )
+//            RefreshJob refreshJob = new RefreshJob(modelFile.getParentFile());
+//            refreshJob.schedule();
+//            log("refreshJob.schedule() done.");
+//
+//            closeModelEditor(modelFile);
+//    	}
+//        else {
+//    		log("delta.getResource().getLocationURI() returns NULL " );
+//        }
+
+    	
+    	File modelFile = EclipseWksUtil.toFile( (IFile) delta.getResource() );    	
+		log("modelFile.getAbsolutePath() = " + modelFile.getAbsolutePath() );
+
+		// Delete all the model files and model folder (if any)
+		DslModelUtil.deleteModel(modelFile);
         log("Model file and folder deleted.");
-        
-        // Differed refresh job ( based on a scheduled "Job" )
+
+        // Differed REFRESH job ( based on a scheduled "Job" )        
         RefreshJob refreshJob = new RefreshJob(modelFile.getParentFile());
         refreshJob.schedule();
         log("refreshJob.schedule() done.");
-        
+
         closeModelEditor(modelFile);
     }
     
     private static void closeModelEditor(File modelFile) {
+        log("closeModelEditor()");
     	Display.getDefault().asyncExec( new TaskModelEditorClose(modelFile) );
     }
     
