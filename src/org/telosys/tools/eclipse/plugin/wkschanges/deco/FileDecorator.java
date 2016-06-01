@@ -1,9 +1,7 @@
 package org.telosys.tools.eclipse.plugin.wkschanges.deco;
 
-import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
