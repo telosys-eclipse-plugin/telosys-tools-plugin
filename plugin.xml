@@ -12,6 +12,7 @@
          category="TelosysToolsWizard"
          class="org.telosys.tools.eclipse.plugin.wizards.dslmodel.NewDslModelWizard"
          id   ="org.telosys.tools.eclipse.plugin.wizards.dslmodel.NewDslModelWizard"
+         icon ="./icons/model_16pix.png"
          name="New DSL model" >
          <selection
             class="org.eclipse.core.resources.IResource">
