@@ -2,14 +2,11 @@ package org.telosys.tools.eclipse.plugin.wkschanges;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.FileEditorInput;
 import org.telosys.tools.dsl.DslModelUtil;
 import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 import org.telosys.tools.eclipse.plugin.editors.dsl.model.ModelEditor;

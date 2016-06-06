@@ -1,12 +1,10 @@
 package org.telosys.tools.eclipse.plugin.wkschanges;
 
 import java.io.File;
-import java.net.URI;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.swt.widgets.Display;
 import org.telosys.tools.dsl.DslModelUtil;
 import org.telosys.tools.eclipse.plugin.commons.EclipseWksUtil;
