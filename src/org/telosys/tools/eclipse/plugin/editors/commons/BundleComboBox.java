@@ -57,7 +57,8 @@ public class BundleComboBox {
 					// only if the bundle name has changed : to avoid refresh (visual list effect) if unchanged
 					_editor.setCurrentBundleName(selectedBundle);
 					//_editor.refreshAllTargetsTablesFromConfigFile();
-					_page.refreshAllTargetsTablesFromConfigFile();
+					//_page.refreshAllTargetsTablesFromConfigFile();
+					_page.refreshBundlesAndTargets();
 				}
             }
         });

@@ -55,7 +55,7 @@ public abstract class DbConfigEditorPage extends FormPage
 	
 	protected void logException(Throwable e)
 	{
-		_logger.exception(e);
+		_logger.logStackTrace(e);
 	}
 	protected void logError(String s)
 	{

@@ -75,9 +75,10 @@ public class RefreshButton {
 		{
 	        public void widgetSelected(SelectionEvent arg0)
 	        {
-	        	//--- Reload the targets list
+	        	//--- Reload the bundles and targets list
 //	        	_editor.refreshAllTargetsTablesFromConfigFile();
-	        	_page.refreshAllTargetsTablesFromConfigFile();
+//	        	_page.refreshAllTargetsTablesFromConfigFile();
+	        	_page.refreshBundlesAndTargets();
 	        }
 	        public void widgetDefaultSelected(SelectionEvent arg0)
 	        {

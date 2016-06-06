@@ -500,8 +500,22 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 //		}
 	}		
 	
-	public void refreshAllTargetsTablesFromConfigFile() {
+	/**
+	 * Refreshes the bundles list in the combo-box <br>
+	 * and refresh the targets for the selected bundle if any
+	 */
+	public void refreshBundlesAndTargets() {
+		//--- Refresh the bundles list in the combobox (always)
+		_comboBundles.refresh();
+		
 		String currentBundleName = getModelEditor().getCurrentBundleName() ;
+		if ( currentBundleName != null ) {
+			refreshAllTargetsTablesFromConfigFile(currentBundleName);
+		}
+	}
+	
+	private void refreshAllTargetsTablesFromConfigFile(String currentBundleName) {
+
 		log("refreshAllTargetsTablesFromConfigFile() : current bundle = " + currentBundleName);
 		TelosysToolsCfg telosysToolsCfg = getProjectConfig(); // v 3.0.0
 		if ( telosysToolsCfg != null ) {
@@ -527,7 +541,7 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 	/**
 	 * Refresh the targets table from the current configuration supposed to be up to date 
 	 */
-	protected void refreshTargetsTable(List<TargetDefinition> targetslist, List<TargetDefinition> resourcesTargets )
+	private void refreshTargetsTable(List<TargetDefinition> targetslist, List<TargetDefinition> resourcesTargets )
 	{
 		log("refreshTargetsTable : " + targetslist.size() + " targets / " 
 				+ (resourcesTargets != null ? resourcesTargets.size() + " resources" : "no resource" ));
@@ -535,8 +549,9 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 		//--- Keep the list of bundle static resource for copy during generation
 		_resourcesTargets = resourcesTargets ;
 		
-		//--- Refresh the bundles list in the combobox
-		_comboBundles.refresh();
+// Moved up
+//		//--- Refresh the bundles list in the combobox
+//		_comboBundles.refresh();
 		
 		//--- Re-populate the SWT table
 		populateTargetsTable(targetslist);
