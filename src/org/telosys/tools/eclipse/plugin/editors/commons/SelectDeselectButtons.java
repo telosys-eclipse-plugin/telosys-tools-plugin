@@ -3,8 +3,6 @@ package org.telosys.tools.eclipse.plugin.editors.commons;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
@@ -14,15 +12,15 @@ import org.telosys.tools.eclipse.plugin.commons.PluginImages;
 
 public class SelectDeselectButtons {
 	
-	private final static int  BUTTON_HEIGHT =  26 ; // 24
-	private final static int  BUTTON_WIDTH  =  26 ; // 80 ; // 74
+//	private final static int  BUTTON_HEIGHT =  26 ; // 24
+//	private final static int  BUTTON_WIDTH  =  26 ; // 80 ; // 74
 
-	public final static boolean CREATE_PANEL = true ;
-	public final static boolean DO_NOT_CREATE_PANEL = false ;
+//	public final static boolean CREATE_PANEL = true ;
+//	public final static boolean DO_NOT_CREATE_PANEL = false ;
 	
 	//--- Buttons size
-	private GridData  gridData = new GridData(BUTTON_WIDTH, BUTTON_HEIGHT); // to define Button width and height
-	private Composite buttonsPanel ;
+//	private GridData  gridData = new GridData(BUTTON_WIDTH, BUTTON_HEIGHT); // to define Button width and height
+//	private Composite buttonsPanel ;
 	private Button    selectAll ;
 	private Button    deselectAll ;
 	
@@ -46,6 +44,7 @@ public class SelectDeselectButtons {
 		createButtonDeselectAll(parentDeselectAll);
 	}
 	
+/***
 	public SelectDeselectButtons(Composite parent, boolean createPanel) {
 		
 		//--- Panel for buttons
@@ -108,14 +107,15 @@ public class SelectDeselectButtons {
 //		});
 		createButtonDeselectAll(buttonsPanel);
 	}
-
+***/
+	
 	private void createButtonSelectAll(Composite panel) {
 		selectAll = new Button(panel, SWT.PUSH);
 		//selectAll.setText("Select All"); // No text for this button (image only)
 		selectAll.setImage( PluginImages.getImage(PluginImages.CHECKED_ON ) );
 		selectAll.setToolTipText("Select All");
 
-		selectAll.setLayoutData(gridData);
+//		selectAll.setLayoutData(gridData);
 		
 		selectAll.addSelectionListener(new SelectionAdapter() 
 		{
@@ -132,7 +132,7 @@ public class SelectDeselectButtons {
 		deselectAll.setImage( PluginImages.getImage(PluginImages.CHECKED_OFF ) );
 		deselectAll.setToolTipText("Deselect All");
 
-		deselectAll.setLayoutData(gridData);
+//		deselectAll.setLayoutData(gridData);
 		
 		deselectAll.addSelectionListener(new SelectionAdapter() 
 		{
