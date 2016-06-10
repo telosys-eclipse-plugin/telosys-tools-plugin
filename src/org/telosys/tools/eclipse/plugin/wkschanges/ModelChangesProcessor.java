@@ -18,9 +18,8 @@ import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
  */
 public class ModelChangesProcessor {
 
-	private final static boolean log = true ;
 	private static void log(String msg) {
-		if ( log ) {
+		if ( _PackageLoggerConfig.LOG ) {
 			PluginLogger.log(ModelChangesProcessor.class, msg);
 		}
 	}

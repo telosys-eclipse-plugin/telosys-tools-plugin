@@ -19,9 +19,8 @@ import org.telosys.tools.eclipse.plugin.editors.dsl.model.ModelEditor;
  */
 public class ModelEditorFinder {
 
-	private final static boolean log = true ;
 	private static void log(String msg) {
-		if ( log ) {
+		if ( _PackageLoggerConfig.LOG ) {
 			PluginLogger.log(ModelEditorFinder.class, msg);
 		}
 	}

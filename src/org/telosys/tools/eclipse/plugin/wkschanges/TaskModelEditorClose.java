@@ -7,9 +7,8 @@ import org.telosys.tools.eclipse.plugin.editors.dsl.model.ModelEditor;
 
 public class TaskModelEditorClose implements Runnable {
 
-	private final static boolean log = true ;
 	private static void log(String msg) {
-		if ( log ) {
+		if ( _PackageLoggerConfig.LOG ) {
 			PluginLogger.log(TaskModelEditorClose.class, msg);
 		}
 	}

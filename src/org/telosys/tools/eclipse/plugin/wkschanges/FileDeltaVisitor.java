@@ -7,9 +7,8 @@ import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 
 public class FileDeltaVisitor implements IResourceDeltaVisitor {
 
-	private final static boolean log = true ;
 	private static void log(String msg) {
-		if ( log ) {
+		if ( _PackageLoggerConfig.LOG ) {
 			PluginLogger.log(FileDeltaVisitor.class, msg);
 		}
 	}

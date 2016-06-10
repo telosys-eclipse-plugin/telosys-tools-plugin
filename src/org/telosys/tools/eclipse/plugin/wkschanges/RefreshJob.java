@@ -12,9 +12,8 @@ import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 
 public class RefreshJob extends WorkspaceJob  {
 
-	private final static boolean log = true ;
 	private static void log(String msg) {
-		if ( log ) {
+		if ( _PackageLoggerConfig.LOG ) {
 			PluginLogger.log(RefreshJob.class, msg);
 		}
 	}
