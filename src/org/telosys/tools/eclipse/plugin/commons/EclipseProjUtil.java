@@ -40,7 +40,7 @@ public class EclipseProjUtil {
 	
 	private static void log(String s) 
 	{
-		PluginLogger.log( EclipseProjUtil.class.getName() + " : " + s );
+		//PluginLogger.log( EclipseProjUtil.class, s );
 	}
 	
 	//----------------------------------------------------------------------------------

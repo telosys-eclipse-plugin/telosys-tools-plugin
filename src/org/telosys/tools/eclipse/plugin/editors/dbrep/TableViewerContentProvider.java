@@ -17,6 +17,12 @@ import org.telosys.tools.repository.model.EntityInDbModel;
  */
 class TableViewerContentProvider implements IStructuredContentProvider 
 {
+	private static void log(String msg) {
+		if ( _PackageLoggerConfig.LOG ) {
+			PluginLogger.log(TableViewerContentProvider.class, msg);
+		}
+	}
+
 	//private Entity _currentTableViewerEntity = null ;
 	private EntityInDbModel _currentTableViewerEntity = null ;
 	
@@ -32,7 +38,7 @@ class TableViewerContentProvider implements IStructuredContentProvider
 		// . verify the type of the input ( old and new )
 		// . keep a reference on the input
 		
-		PluginLogger.log(this, "inputChanged("
+		log("inputChanged("
 				+ "viewer : " + ( viewer != null ? viewer.getClass().getName() : "null" )
 				+ ", oldInput : " + ( oldInput != null ? oldInput.getClass().getName() : "null" )
 				+ ", newInput : " + ( newInput != null ? newInput.getClass().getName() : "null" )
@@ -46,7 +52,7 @@ class TableViewerContentProvider implements IStructuredContentProvider
 			TableViewer tableViewer = (TableViewer) viewer;
 			Table table = tableViewer.getTable(); 
 			
-			PluginLogger.log(this, "inputChanged(..,..,..) table.getItemCount() : " + table.getItemCount() );
+			log("inputChanged(..,..,..) table.getItemCount() : " + table.getItemCount() );
 			// At this moment the table contains the OLD rows ( new input not yet set )
 		} 
 		else 
@@ -59,7 +65,7 @@ class TableViewerContentProvider implements IStructuredContentProvider
 			//if (oldInput instanceof Entity != true) {
 			if (oldInput instanceof EntityInDbModel != true) { // v 3.0.0
 				String msg = "inputChanged(..,..,..) : oldInput is not an instance of Entity" ;
-				PluginLogger.log(this,msg);
+				log(msg);
 				MsgBox.error(msg);
 				return;
 			}
@@ -69,7 +75,7 @@ class TableViewerContentProvider implements IStructuredContentProvider
 			//if (newInput instanceof Entity != true) {
 			if (newInput instanceof EntityInDbModel != true) { // v 3.0.0
 				String msg = "inputChanged(..,..,..) : newInput is not an instance of Entity" ;
-				PluginLogger.log(this,msg);
+				log(msg);
 				MsgBox.error(msg);
 				return;
 			}
@@ -84,7 +90,7 @@ class TableViewerContentProvider implements IStructuredContentProvider
 	 * @see org.eclipse.jface.viewers.IContentProvider#dispose()
 	 */
 	public void dispose() {
-		PluginLogger.log(this, "dispose(..,..,..)...");
+		log("dispose(..,..,..)...");
 		_currentTableViewerEntity = null ;
 	}
 
@@ -100,7 +106,7 @@ class TableViewerContentProvider implements IStructuredContentProvider
 	 */
 	public Object[] getElements(Object parent) 
 	{
-		PluginLogger.log(this, "getElements(..)...");
+		log("getElements(..)...");
 		if ( _currentTableViewerEntity != null )
 		{
 			//return _currentTableViewerEntity.getColumns();

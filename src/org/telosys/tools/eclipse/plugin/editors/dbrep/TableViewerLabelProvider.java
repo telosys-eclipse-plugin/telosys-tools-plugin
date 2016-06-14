@@ -50,6 +50,12 @@ class TableViewerLabelProvider 	extends LabelProvider implements ITableLabelProv
 //		String key = isSelected ? CHECKED_IMAGE : UNCHECKED_IMAGE;
 //		return  imageRegistry.get(key);
 //	}
+	
+	private static void log(String msg) {
+		if ( _PackageLoggerConfig.LOG ) {
+			PluginLogger.log(TableViewerLabelProvider.class, msg);
+		}
+	}
 
 	/**
 	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object, int)
@@ -65,7 +71,7 @@ class TableViewerLabelProvider 	extends LabelProvider implements ITableLabelProv
 	 */
 	public String getColumnText(Object element, int columnIndex) 
 	{
-		PluginLogger.log(this, "getColumnText(element, " + columnIndex + ")..." );
+		log("getColumnText(element, " + columnIndex + ")..." );
 //		if ( element instanceof Column != true )
 //		{
 //			MsgBox.error ( "getColumnText() : element is not an instance of AttributeInDbModel !" );
@@ -128,7 +134,7 @@ class TableViewerLabelProvider 	extends LabelProvider implements ITableLabelProv
 	 * 
 	 */
 	public Image getColumnImage(Object element, int columnIndex) {
-		PluginLogger.log(this, "getColumnImage(element, " + columnIndex + ")..." );
+		log("getColumnImage(element, " + columnIndex + ")..." );
 //		if ( element instanceof Column != true )
 //		{
 //			MsgBox.error ( "getColumnImage() : element is not a TableRow !" );

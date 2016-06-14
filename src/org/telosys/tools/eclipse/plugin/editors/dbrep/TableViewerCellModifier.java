@@ -18,6 +18,16 @@ import org.telosys.tools.repository.model.AttributeInDbModel;
  */
 class TableViewerCellModifier implements ICellModifier 
 {
+//	private void log(Object o, String s)
+//	{
+//		//PluginLogger.log(o,s);
+//	}
+	private static void log(String msg) {
+		if ( _PackageLoggerConfig.LOG ) {
+			PluginLogger.log(TableViewerCellModifier.class, msg);
+		}
+	}
+
 	RepositoryEditor _editor = null ;
 	
 	/**
@@ -31,11 +41,6 @@ class TableViewerCellModifier implements ICellModifier
 	private void setDirty()
 	{
 		_editor.setDirty();
-	}
-
-	private void log(Object o, String s)
-	{
-		PluginLogger.log(o,s);
 	}
 
 	//private Column getTableRow( Object element )
@@ -60,7 +65,7 @@ class TableViewerCellModifier implements ICellModifier
 	 * @see org.eclipse.jface.viewers.ICellModifier#canModify(java.lang.Object, java.lang.String)
 	 */
 	public boolean canModify(Object element, String property) {
-		log(this, "canModify(..," + property + ")..." );
+		log("canModify(..," + property + ")..." );
 		if ( ColumnNames.JAVA_NAME.equals(property) ) return true;
 		if ( ColumnNames.JAVA_TYPE.equals(property) ) return true;
 		if ( ColumnNames.SPECIAL.equals(property) ) {
@@ -78,7 +83,7 @@ class TableViewerCellModifier implements ICellModifier
 	 */
 	public Object getValue(Object element, String property) 
 	{
-		log(this, "getValue(element,'" + property + "')..." );
+		log("getValue(element,'" + property + "')..." );
 		
 		//Column column = getTableRow( element );
 		AttributeInDbModel column = getTableRow( element ); // v 3.0.0
@@ -118,19 +123,19 @@ class TableViewerCellModifier implements ICellModifier
 			if ( ColumnNames.SPECIAL.equals(property) ) {
 				//--- There's 4 cases of types with special further informations
 				if ( column.isJavaTypeString() ) {
-					log(this, "getValue(..," + property + ") : return SpecialValueForString" );
+					log("getValue(..," + property + ") : return SpecialValueForString" );
 					return new SpecialValueForString(column);
 				}
 				else if ( column.isJavaTypeDateOrTime() ) {
-					log(this, "getValue(..," + property + ") : return SpecialValueForDate" );
+					log("getValue(..," + property + ") : return SpecialValueForDate" );
 					return new SpecialValueForDate(column);
 				}
 				else if ( column.isJavaTypeBoolean() ) {
-					log(this, "getValue(..," + property + ") : return SpecialValueForBoolean" );
+					log("getValue(..," + property + ") : return SpecialValueForBoolean" );
 					return new SpecialValueForBoolean(column);					
 				}
 				else if ( column.isJavaTypeNumber() ) {
-					log(this, "getValue(..," + property + ") : return SpecialValueForNumber" );
+					log("getValue(..," + property + ") : return SpecialValueForNumber" );
 					return new SpecialValueForNumber(column);					
 				}
 				PluginLogger.log(this, "getValue(..," + property + ") : return 'NULL'" );
@@ -144,7 +149,7 @@ class TableViewerCellModifier implements ICellModifier
 	 * @see org.eclipse.jface.viewers.ICellModifier#modify(java.lang.Object, java.lang.String, java.lang.Object)
 	 */
 	public void modify(Object element, String property, Object value) {
-		log(this, "modify(element, '" + property + "', value)..." );
+		log("modify(element, '" + property + "', value)..." );
 
 		if ( element instanceof TableItem != true ) {
 			MsgBox.error("modify(element, property, val) : the element is not an instance of TableItem !");
@@ -158,7 +163,7 @@ class TableViewerCellModifier implements ICellModifier
 		//--- "Java Name" column
 		if ( ColumnNames.JAVA_NAME.equals(property) ) 
 		{
-			log(this, "modify(..," + property + ", " + value + ") : 'Java Name' column " );
+			log("modify(..," + property + ", " + value + ") : 'Java Name' column " );
 			String sNewValue = getString( value );
 			
 			//--- Has it realy change ?
@@ -178,7 +183,7 @@ class TableViewerCellModifier implements ICellModifier
 		
 		//--- "Java Type" column
 		if ( ColumnNames.JAVA_TYPE.equals(property) ) {
-			log(this, "modify(..," + property + ", " + value 
+			log("modify(..," + property + ", " + value 
 					+ ") : 'Java Type' column ( original value = '" 
 					+ modelColumn.getFullType() + "' )");
 			String sNewInput = "???";
@@ -190,17 +195,17 @@ class TableViewerCellModifier implements ICellModifier
 			sNewInput = types.getText(iChoice);
 			// The full Java type 
 			String sNewFullType = types.getType(iChoice);
-			log(this, "modify(..," + property + ", " + value + ") : Full type = " + sNewFullType );
+			log("modify(..," + property + ", " + value + ") : Full type = " + sNewFullType );
 			
 			//--- Has it realy change ?
 			//String sOldFullType = modelColumn.getJavaType() ;
 			String sOldFullType = modelColumn.getFullType() ; // v 3.0.0
 			if ( sNewFullType.equals( sOldFullType ) ) {
-				log(this, "modify(..," + property + ", " + value + ") : New value = Original value (no change) ");
+				log("modify(..," + property + ", " + value + ") : New value = Original value (no change) ");
 				return ;
 			}
 			else {
-				log(this, "modify(..," + property + ", " + value + ") : has changed '" + sOldFullType 
+				log("modify(..," + property + ", " + value + ") : has changed '" + sOldFullType 
 						+ "' -> '" + sNewFullType + "' ");
 			}
 
@@ -218,7 +223,7 @@ class TableViewerCellModifier implements ICellModifier
 		//--- "Special" property --> String ( Text field value )
 		if ( ColumnNames.SPECIAL.equals(property) ) 
 		{
-			log(this, "modify(..," + property + ", " + value + ") : 'Special' column " );
+			log("modify(..," + property + ", " + value + ") : 'Special' column " );
 			if ( value != null )
 			{
 				if ( value instanceof SpecialValue )
@@ -241,7 +246,7 @@ class TableViewerCellModifier implements ICellModifier
 			}
 			else
 			{
-				log(this, "modify(..," + property + ", " + value + ") : 'Special' column : value is NULL => no change" );
+				log("modify(..," + property + ", " + value + ") : 'Special' column : value is NULL => no change" );
 				//--- Set the same text
 				String s = tableItem.getText(ColumnNames.SPECIAL_INDEX ); 
 				tableItem.setText(ColumnNames.SPECIAL_INDEX, s ); 
@@ -276,12 +281,12 @@ class TableViewerCellModifier implements ICellModifier
 
 	private int getInt( Object oValue )
 	{
-		log(this, "getInt(" + oValue + ")");
+		log( "getInt(" + oValue + ")");
 		if ( oValue instanceof Integer )
 		{
 			Integer integer = (Integer) oValue ;
 			int v = integer.intValue();
-			log(this, "getInt(" + oValue + ") : " + v );
+			log("getInt(" + oValue + ") : " + v );
 			return v ;
 		}
 		else

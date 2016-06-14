@@ -37,8 +37,7 @@ public class EclipseWksUtil {
 	}
 	
 	private static void log(String s) {
-//		PluginLogger.log( EclipseWksUtil.class.getName() + " : " + s );
-		PluginLogger.log( EclipseWksUtil.class, s );
+		//PluginLogger.log( EclipseWksUtil.class, s );
 	}
 	
 	/**
@@ -383,13 +382,14 @@ public class EclipseWksUtil {
 	 */
 	public static File toFile(IFile iFile) {
 		
-		log("toFile( IFile iFile ) : iFile.getLocationURI() = " + iFile.getLocationURI() ); // NB : can be null if iFile has been deleted 
-		log("toFile( IFile iFile ) : iFile.getLocation() = " + iFile.getLocation() ); // NB : can be null if iFile has been deleted 
-		log("toFile( IFile iFile ) : iFile.getFullPath() = " + iFile.getFullPath() ); // Full path in workspace never null
+//		log("toFile( IFile iFile ) : iFile.getLocationURI() = " + iFile.getLocationURI() ); // NB : can be null if iFile has been deleted 
+//		log("toFile( IFile iFile ) : iFile.getLocation() = " + iFile.getLocation() ); // NB : can be null if iFile has been deleted 
+//		log("toFile( IFile iFile ) : iFile.getFullPath() = " + iFile.getFullPath() ); // Full path in workspace never null
 		
+/***
 		IWorkspace wks = getWorkspace();
-		log("toFile( IFile iFile ) : workspace root getLocation() = " + wks.getRoot().getLocation() ); // 
-		log("toFile( IFile iFile ) : workspace root getFullPath() = " + wks.getRoot().getFullPath() ); // 
+//		log("toFile( IFile iFile ) : workspace root getLocation() = " + wks.getRoot().getLocation() ); // 
+//		log("toFile( IFile iFile ) : workspace root getFullPath() = " + wks.getRoot().getFullPath() ); // 
 		
 //    	URI uri = iFile.getLocationURI(); // NB : can be null if iFile has been deleted 
 //    	File file = new File(uri); // Throws "NullPointerException" if uri is null
@@ -404,16 +404,17 @@ public class EclipseWksUtil {
 
 //    	IPath iPath = iFile.getLocation() ; // Absolute filesystem path : 'D:/aaa/wks/project/TelosysTools/zzz_model'
 //    	File file = iPath.toFile() ; // returns 'D:\project\TelosysTools\zzz_model' !!!
-
+***/
+		
 		String workspaceLocation = getWorkspaceLocation();
-		log(" workspace location = '" + workspaceLocation + "'");
+//		log(" workspace location = '" + workspaceLocation + "'");
 		
 		//String fileFullPathInworkspace = iFile.getFullPath().toOSString();
 		String fileFullPathInworkspace = iFile.getFullPath().toString();
-		log(" file path in workspace = '" + fileFullPathInworkspace + "'");
+//		log(" file path in workspace = '" + fileFullPathInworkspace + "'");
 		
 		String fileAbsolutePath = FileUtil.buildFilePath(workspaceLocation, fileFullPathInworkspace);
-		log("file absolute path = '" + fileAbsolutePath + "'");
+//		log("file absolute path = '" + fileAbsolutePath + "'");
 		
 		return new File(fileAbsolutePath) ;
 	}
