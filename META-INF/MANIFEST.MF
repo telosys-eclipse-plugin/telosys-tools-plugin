@@ -24,8 +24,7 @@ Bundle-ClassPath: .,
  lib/telosys-tools-generator-engine-3.0.0.jar,
  lib/telosys-tools-dsl-parser-3.0.0.jar,
  lib/velocity-1.7-dep.jar,
- lib/json-simple-1.1.1.jar,
- lib/slf4j-api-1.7.7.jar
+ lib/json-simple-1.1.1.jar
 Bundle-Vendor: Telosys Project
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
