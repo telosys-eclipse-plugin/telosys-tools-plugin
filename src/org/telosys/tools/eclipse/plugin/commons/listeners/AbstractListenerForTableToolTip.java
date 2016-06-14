@@ -12,7 +12,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
-import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 
 public abstract class AbstractListenerForTableToolTip implements Listener { 
 
@@ -34,7 +33,7 @@ public abstract class AbstractListenerForTableToolTip implements Listener {
 
 	//---------------------------------------------------------------------------------------------
 	private void log(String msg) {
-		PluginLogger.log(this, msg);
+		//PluginLogger.log(this, msg);
 	}
 
 	//---------------------------------------------------------------------------------------------
