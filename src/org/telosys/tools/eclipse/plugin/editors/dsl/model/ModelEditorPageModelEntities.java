@@ -382,6 +382,13 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
             //tableItem.addListener(eventType, listener)
             //tableItem.addListener(eventType, listener)
 		}
+		
+		if ( entitiesErrors != null ) {
+			String globalError =  entitiesErrors.get("");
+			if ( globalError != null ) {
+				MsgBox.error(globalError);
+			}
+		}
 		return errorsCount ;
 	}
 	

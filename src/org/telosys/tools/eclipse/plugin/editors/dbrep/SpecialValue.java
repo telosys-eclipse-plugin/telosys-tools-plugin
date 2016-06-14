@@ -1,9 +1,10 @@
 package org.telosys.tools.eclipse.plugin.editors.dbrep;
 
+import java.math.BigDecimal;
+
 import org.telosys.tools.commons.StrUtil;
 import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
-import org.telosys.tools.repository.model.AttributeInDbModel; // V 3.0.0
-//import org.telosys.tools.repository.model.Column; // V 3.0.0
+import org.telosys.tools.repository.model.AttributeInDbModel;
 
 
 /**
@@ -159,6 +160,10 @@ public abstract class SpecialValue
 		return s != null ? s : "" ;
 	}
 	protected String emptyIfNull(Integer value)
+	{
+		return value != null ? value.toString() : "" ;
+	}
+	protected String emptyIfNull(BigDecimal value)
 	{
 		return value != null ? value.toString() : "" ;
 	}

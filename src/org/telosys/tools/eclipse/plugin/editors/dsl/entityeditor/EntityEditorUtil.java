@@ -19,26 +19,13 @@ import org.telosys.tools.dsl.KeyWords;
 public class EntityEditorUtil {
 
 	//--------------------------------------------------------------------------------
-	// PRIVATE FIELDS AND METHODS
+	// TYPES 
 	//--------------------------------------------------------------------------------
-
-	//--- TYPES MANAGEMENT
-//	private final static String[] TYPES = {
-//		"binary", // BLOB
-//		"boolean",
-//		"date",
-//		"decimal",
-//		"integer",
-//		"longtext", // CLOB
-//		"string",
-//		"time",
-//		"timestamp",
-//	} ;
-//	private final static int NUMBER_OF_TYPES = KeyWords.getNeutralTypes().size() ;
-	private final static String[] TYPES ;  //= new String[NUMBER_OF_TYPES] ;
+	private final static String[] TYPES ; 
+	
 	// TYPES INITIALIZATION 
 	static {
-		List<String> types = KeyWords.getNeutralTypes();		
+		List<String> types = KeyWords.getNeutralTypes(); // From DSL parser
 		TYPES = new String[types.size()] ;
 		Collections.sort(types);
 		int i = 0 ;
@@ -47,37 +34,15 @@ public class EntityEditorUtil {
 		}
 	}
 	
-	//--- ANNOTATIONS MANAGEMENT
-//	private final static int NUMBER_OF_ANNOTATIONS = KeyWords.getAnnotations().size() ;
-	
-//	private final static String[] ANNOTATIONS = {
-//		"@Future",
-//		"@Id",
-//		"@Max",
-//		"@Min",
-//		"@NotNull",
-//		"@Past",
-//		"@SizeMax",
-//		"@SizeMin",
-//	} ;
-//
-//	private final static String[] ANNOTATIONS_WITH_PARENTHESIS = {
-//		"@Future",
-//		"@Id",
-//		"@Max()",
-//		"@Min()",
-//		"@NotNull",
-//		"@Past",
-//		"@SizeMax()",
-//		"@SizeMin()",
-//	} ;
-	
-	private final static String[] ANNOTATIONS ; // = new String[NUMBER_OF_ANNOTATIONS] ;
-	private final static String[] ANNOTATIONS_WITH_PARENTHESIS ; //= new String[NUMBER_OF_ANNOTATIONS] ;
+	//--------------------------------------------------------------------------------
+	// ANNOTATIONS 
+	//--------------------------------------------------------------------------------
+	private final static String[] ANNOTATIONS ; 
+	private final static String[] ANNOTATIONS_WITH_PARENTHESIS ; 
 	
 	// ANNOTATIONS INITIALIZATION 
 	static {
-		List<String> annotations = KeyWords.getAnnotations();
+		List<String> annotations = KeyWords.getAnnotations(); // From DSL parser
 		int numberOfAnnotations = annotations.size();
 		Collections.sort(annotations);
 		ANNOTATIONS = new String[numberOfAnnotations] ;
@@ -101,8 +66,12 @@ public class EntityEditorUtil {
 	 */
 	private final static String transformAnnotation(String s, boolean parenthesis ) {
 		String s2 = "@" + s ;
-		if ( s.endsWith("#") ) {
+		char lastChar = s.charAt(s.length()-1);
+		// Is there a special char at the end ?
+		if ( lastChar == '#' || lastChar == '%' || lastChar == '$' ) {
+			// remove the last char
 			s2 = "@" + s.substring(0, s.length()-1 ) ;
+			// add parenthesis ?
 			if ( parenthesis ) {
 				s2 = s2 + "()" ;
 			}

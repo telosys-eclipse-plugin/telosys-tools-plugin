@@ -1,5 +1,7 @@
 package org.telosys.tools.eclipse.plugin.editors.dbrep;
 
+import java.math.BigDecimal;
+
 import org.telosys.tools.commons.StrUtil;
 import org.telosys.tools.repository.model.AttributeInDbModel;
 
@@ -14,8 +16,8 @@ public class SpecialValueForNumber extends SpecialValue
 {
 //	private String  _initialMinValue ;
 //	private String  _initialMaxValue ;
-	private Integer  _initialMinValue ; // v 3.0.0
-	private Integer  _initialMaxValue ; // v 3.0.0
+	private BigDecimal  _initialMinValue ; // v 3.0.0
+	private BigDecimal  _initialMaxValue ; // v 3.0.0
 	
 	private String  _initialFormat  ;
 	
@@ -40,7 +42,8 @@ public class SpecialValueForNumber extends SpecialValue
 	{
 		log("setMin(" + s +")");
 		//_modelColumn.setMinValue(s);
-		_modelColumn.setMinValue(StrUtil.getIntegerObject(s)); // v 3.0.0
+		//_modelColumn.setMinValue(StrUtil.getIntegerObject(s)); // v 3.0.0
+		_modelColumn.setMinValue(StrUtil.getBigDecimalObject(s)); // v 3.0.0
 	}
 	
 	//---------------------------------------------------------------------
@@ -52,7 +55,8 @@ public class SpecialValueForNumber extends SpecialValue
 	{
 		log("setMax(" + s +")");
 		//_modelColumn.setMaxValue(s);
-		_modelColumn.setMaxValue(StrUtil.getIntegerObject(s)); // v 3.0.0
+		//_modelColumn.setMaxValue(StrUtil.getIntegerObject(s)); // v 3.0.0
+		_modelColumn.setMaxValue(StrUtil.getBigDecimalObject(s)); // v 3.0.0
 	}
 	
 	//---------------------------------------------------------------------
