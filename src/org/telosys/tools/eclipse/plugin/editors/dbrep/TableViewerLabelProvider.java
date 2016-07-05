@@ -102,7 +102,8 @@ class TableViewerLabelProvider 	extends LabelProvider implements ITableLabelProv
 				
 			case ColumnNames.JAVA_TYPE_INDEX :
 				//String sType = modelColumn.getJavaType(); // Java Type stored in the model 
-				String sType = modelColumn.getFullType(); // Java Type stored in the model  // v 3.0.0
+				//String sType = modelColumn.getFullType(); // Java Type stored in the model  // v 3.0.0
+				String sType = modelColumn.getModelFullType(); // Java Type stored in the model  // v 3.0.0
 				JavaTypes types = JavaTypesManager.getJavaTypes();
 				String sText = types.getTextForType(sType);
 				if ( sText != null ) {

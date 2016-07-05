@@ -98,7 +98,8 @@ class TableViewerCellModifier implements ICellModifier
 			//--- "Java Type" property --> Integer ( ComboBox index ) 
 			if ( ColumnNames.JAVA_TYPE.equals(property) ) {
 				//String sJavaType = column.getJavaType();
-				String sJavaType = column.getFullType();  // v 3.0.0
+				//String sJavaType = column.getFullType();  // v 3.0.0
+				String sJavaType = column.getModelFullType();  // v 3.0.0
 				if ( sJavaType != null ) {
 					JavaTypes types = JavaTypesManager.getJavaTypes();
 					int index = types.getTypeIndex( sJavaType );
@@ -185,7 +186,8 @@ class TableViewerCellModifier implements ICellModifier
 		if ( ColumnNames.JAVA_TYPE.equals(property) ) {
 			log("modify(..," + property + ", " + value 
 					+ ") : 'Java Type' column ( original value = '" 
-					+ modelColumn.getFullType() + "' )");
+//					+ modelColumn.getFullType() + "' )");
+					+ modelColumn.getModelFullType() + "' )");
 			String sNewInput = "???";
 			int iChoice = getInt( value );
 
@@ -199,7 +201,8 @@ class TableViewerCellModifier implements ICellModifier
 			
 			//--- Has it realy change ?
 			//String sOldFullType = modelColumn.getJavaType() ;
-			String sOldFullType = modelColumn.getFullType() ; // v 3.0.0
+			//String sOldFullType = modelColumn.getFullType() ; // v 3.0.0
+			String sOldFullType = modelColumn.getModelFullType() ; // v 3.0.0
 			if ( sNewFullType.equals( sOldFullType ) ) {
 				log("modify(..," + property + ", " + value + ") : New value = Original value (no change) ");
 				return ;
@@ -309,11 +312,13 @@ class TableViewerCellModifier implements ICellModifier
 	{
 		//--- Set the original value in the "model"  
 		//String sOldFullType = modelColumn.getJavaType() ;
-		String sOldFullType = modelColumn.getFullType() ;  // v 3.0.0
+		//String sOldFullType = modelColumn.getFullType() ;  // v 3.0.0
+		String sOldFullType = modelColumn.getModelFullType() ;  // v 3.0.0
 
 		//--- Set the new value in the "model"  
 		//modelColumn.setJavaType(sNewFullType);
-		modelColumn.setFullType(sNewFullType);  // v 3.0.0
+		//modelColumn.setFullType(sNewFullType);  // v 3.0.0
+		modelColumn.setModelFullType(sNewFullType);  // v 3.0.0
 		
 		if ( JavaTypeUtil.getCategory(sOldFullType) != JavaTypeUtil.getCategory(sNewFullType) ) 
 		{
@@ -334,7 +339,8 @@ class TableViewerCellModifier implements ICellModifier
 		modelColumn.clearSpecialTypeInfo();
 
 		//String sFullJavaType = modelColumn.getJavaType() ;
-		String sFullJavaType = modelColumn.getFullType() ;
+		//String sFullJavaType = modelColumn.getFullType() ;
+		String sFullJavaType = modelColumn.getModelFullType() ;
 		int jdbcCode = modelColumn.getJdbcTypeCode();
 		
 		//--- Init with the default values depending on the Java Type and the JDBC Code

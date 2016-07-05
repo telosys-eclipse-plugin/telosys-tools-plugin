@@ -64,7 +64,8 @@ public abstract class SpecialValue
 	public String getJavaType() 
 	{
 		//return _modelColumn.getJavaType() ;
-		return _modelColumn.getFullType() ; // v 3.0.0
+		//return _modelColumn.getFullType() ; // v 3.0.0
+		return _modelColumn.getModelFullType() ; // v 3.0.0
 	}
 	
 	//---------------------------------------------------------------------
