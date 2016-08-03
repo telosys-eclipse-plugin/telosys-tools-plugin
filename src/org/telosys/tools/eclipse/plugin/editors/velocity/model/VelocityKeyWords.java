@@ -49,6 +49,9 @@ public class VelocityKeyWords {
 		keyWords.add(new VelocityKeyWord("#assertTrue",  "#assertTrue()", docHTML(ContentAssistConfiguration.DIRECTIVE_ASSERTTRUE_DOC),PluginImages.VELOCITY_DIRECTIVE));
 
 		keyWords.add(new VelocityKeyWord("#break",  "#break",    docHTML(ContentAssistConfiguration.DIRECTIVE_BREAK_DOC),PluginImages.VELOCITY_DIRECTIVE));
+		
+		keyWords.add(new VelocityKeyWord("#checkId", "#checkId()", docHTML(ContentAssistConfiguration.DIRECTIVE_CHECKID_DOC),PluginImages.VELOCITY_DIRECTIVE));
+		
 		keyWords.add(new VelocityKeyWord("#define", "#define()", docHTML(ContentAssistConfiguration.DIRECTIVE_DEFINE_DOC),PluginImages.VELOCITY_DIRECTIVE));
 		keyWords.add(new VelocityKeyWord("#else",   "#else",     null,PluginImages.VELOCITY_DIRECTIVE));
 		keyWords.add(new VelocityKeyWord("#elseif", "#elseif()", null,PluginImages.VELOCITY_DIRECTIVE));

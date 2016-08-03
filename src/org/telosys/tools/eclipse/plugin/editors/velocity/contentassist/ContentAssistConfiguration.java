@@ -26,6 +26,9 @@ public class ContentAssistConfiguration {
     public static final String DIRECTIVE_ASSERTTRUE_DOC  = "directive.asserttrue.doc";
     public static final String DIRECTIVE_ERROR_DOC       = "directive.error.doc";
     public static final String DIRECTIVE_USING_DOC       = "directive.using.doc";
+
+    // Specific Telosys directives (added in ver 3.0.0)
+    public static final String DIRECTIVE_CHECKID_DOC = "directive.checkid.doc";
     
     // Customizable bean variable name (ex : $entityFound must have the same completion than $entity)
     public static final String  CONF_BEAN_VARIABLES_CUSTOMIZABLE = "velocity.editor.beanVariableSuffixable";
