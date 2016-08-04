@@ -795,4 +795,19 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 //			return new GenerationTaskResult();
 //		}
     }
+    
+    /**
+     * Returns the customized entity name to be shown in the view <br>
+     * The entity name + "(!)" if the entity has warnings <br>
+     * @param entity
+     * @return
+     */
+    protected String getCustomizedEntityName(Entity entity) {
+		String entityClassName = entity.getClassName();
+		String customizedName = entityClassName;
+		if ( entity.getWarnings() != null && entity.getWarnings().size() > 0 ) {
+			customizedName = "(!) " + entityClassName ;
+		}
+		return customizedName ;
+    }
 }
