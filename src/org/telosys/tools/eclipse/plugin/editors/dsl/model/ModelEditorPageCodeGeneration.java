@@ -62,12 +62,20 @@ import org.telosys.tools.generic.model.Entity;
 //				if ( entityClassName == null ) entityClassName = "???" ;
 				
 	            //--- Create the row content : a single column for "entity class name"
-	            String[] row = new String[] { getCustomizedEntityName(entity) };
+	            //String[] row = new String[] { getCustomizedEntityName(entity) };
+	            String[] row = new String[] { entityClassName };
 				
 	            //--- Create the TableItem and set the row content 
 	        	TableItem tableItem = new TableItem(table, SWT.NONE );
 	            tableItem.setChecked(false);                
-	            tableItem.setText(row);                
+	            tableItem.setText(row);      
+	            
+	            // ROW HEIGHT TESTS 
+	            // tableItem.setImage( PluginImages.getImage(PluginImages.FILE1 ) ); // JUST FOR TESTS
+	            // The row height is fixed from the image height ( here 16 px ) !
+	            
+	            tableItem.setImage( getEntityWarningImage(entity) ) ;
+	            		
 	            tableItem.setData( entityClassName ); 
 			}
 		}

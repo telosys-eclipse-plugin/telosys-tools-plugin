@@ -50,6 +50,7 @@ public class PluginImages {
 	public static final String ENTITY_FILE     = "ENTITY_FILE" ; 
 
 	public static final String ERROR     = "ERROR" ; 
+	public static final String WARNING   = "WARNING" ; // v 3.0.0 (warning in entities list)
 
 	// Images for Velocity Templates Editor  ( v 2.0.5 )
 	public static final String VELOCITY_BEAN_GENERATOR = "VELOCITY_BEAN_GENERATOR";
@@ -128,6 +129,7 @@ public class PluginImages {
 
 		registerImage(ENTITY_FILE, "entity_16pix.png" ) ; // v 3.0.0
 		registerImage(ERROR,       "error_16pix.png" ) ; // v 3.0.0
+		registerImage(WARNING,     "warning_16pix.png" ) ; // v 3.0.0
 	}
 
 //    //------------------------------------------------------------------------------------------------

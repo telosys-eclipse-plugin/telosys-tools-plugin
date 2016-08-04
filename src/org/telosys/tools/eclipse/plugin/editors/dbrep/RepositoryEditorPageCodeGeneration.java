@@ -109,15 +109,18 @@ import org.telosys.tools.generic.model.Entity;
 //				if ( entity.getWarnings() != null && entity.getWarnings().size() > 0 ) {
 //					entityClassNameView = "(!) " + entityClassName ;
 //				}
-				String entityClassNameView = getCustomizedEntityName(entity); // v 3.0.0
+//				String entityClassNameView = getCustomizedEntityName(entity); // v 3.0.0
 				
                 //--- Create the row content 
-                String[] row = new String[] { entityClassNameView, tableName };
+                String[] row = new String[] { entityClassName, tableName };
 				
                 //--- Create the TableItem and set the row content 
             	TableItem tableItem = new TableItem(table, SWT.NONE );
                 tableItem.setChecked(false);
                 tableItem.setText(row);
+                
+	            tableItem.setImage( getEntityWarningImage(entity) ) ; // v 3.0.0
+
                 //tableItem.setData( sTableName );
                 tableItem.setData( entityClassName ); // v 3.0.0
 			}

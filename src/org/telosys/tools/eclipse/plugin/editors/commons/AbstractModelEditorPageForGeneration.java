@@ -795,19 +795,37 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 //			return new GenerationTaskResult();
 //		}
     }
+
+    private boolean hasWarnings(Entity entity) {
+		if ( entity.getWarnings() != null && entity.getWarnings().size() > 0 ) {
+			return true ;
+		}
+		return false ;
+    }
     
+//    /**
+//     * Returns the customized entity name to be shown in the view <br>
+//     * The entity name + "(!)" if the entity has warnings <br>
+//     * @param entity
+//     * @return
+//     */
+//    protected String getCustomizedEntityName(Entity entity) {
+//		String entityClassName = entity.getClassName();
+//		if ( hasWarnings(entity) ) {
+//			return "(!) " + entityClassName ;
+//		}
+//		return entityClassName ;
+//    }
+
     /**
-     * Returns the customized entity name to be shown in the view <br>
-     * The entity name + "(!)" if the entity has warnings <br>
+     * Returns a "warning image" if the entity has warnings, or null if none
      * @param entity
      * @return
      */
-    protected String getCustomizedEntityName(Entity entity) {
-		String entityClassName = entity.getClassName();
-		String customizedName = entityClassName;
-		if ( entity.getWarnings() != null && entity.getWarnings().size() > 0 ) {
-			customizedName = "(!) " + entityClassName ;
+    protected Image getEntityWarningImage(Entity entity) {
+		if ( hasWarnings(entity) ) {
+			return PluginImages.getImage(PluginImages.WARNING ) ; 
 		}
-		return customizedName ;
+		return null ;
     }
 }
