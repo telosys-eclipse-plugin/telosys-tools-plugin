@@ -34,15 +34,15 @@ public class SelectDeselectButtons {
 		createButtonDeselectAll(parent);
 	}
 
-	/**
-	 * Create the 2 buttons in 2 separated composites 
-	 * @param parentSelectAll
-	 * @param parentDeselectAll
-	 */
-	public SelectDeselectButtons(Composite parentSelectAll, Composite parentDeselectAll) {
-		createButtonSelectAll(parentSelectAll);
-		createButtonDeselectAll(parentDeselectAll);
-	}
+//	/**
+//	 * Create the 2 buttons in 2 separated composites 
+//	 * @param parentSelectAll
+//	 * @param parentDeselectAll
+//	 */
+//	public SelectDeselectButtons(Composite parentSelectAll, Composite parentDeselectAll) {
+//		createButtonSelectAll(parentSelectAll);
+//		createButtonDeselectAll(parentDeselectAll);
+//	}
 	
 /***
 	public SelectDeselectButtons(Composite parent, boolean createPanel) {

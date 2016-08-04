@@ -9,8 +9,8 @@ import org.telosys.tools.eclipse.plugin.commons.PluginImages;
 
 public class GenerateButton {
 
-	public final static int  BUTTON_HEIGHT =  26 ; // 28
-	public final static int  BUTTON_WIDTH  = 120 ;
+	private final static int  BUTTON_HEIGHT =  30 ; // 26 
+	private final static int  BUTTON_WIDTH  = 114 ;
 	
 	private final Button _buttonGenerate ;
 	
@@ -25,9 +25,9 @@ public class GenerateButton {
 		_buttonGenerate.setLayoutData ( new GridData (BUTTON_WIDTH, BUTTON_HEIGHT) );
 	}
 	
-	public Button getButton() {
-		return _buttonGenerate ;
-	}
+//	public Button getButton() {
+//		return _buttonGenerate ;
+//	}
 	
 	public void setEnabled(boolean enabled) {
 		_buttonGenerate.setEnabled(enabled);

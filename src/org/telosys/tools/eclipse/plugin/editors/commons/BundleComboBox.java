@@ -19,8 +19,8 @@ import org.telosys.tools.eclipse.plugin.config.ProjectConfigManager;
 
 public class BundleComboBox {
 
-	public final static int COMBO_WIDTH  = 260 ;
-	public final static int COMBO_HEIGHT =  24 ;
+	public final static int COMBO_WIDTH  = 300 ; // 260 ;
+	public final static int COMBO_HEIGHT =  28 ; // 24 ;
 	private final static int COMBO_VISIBLE_ITEMS =  16 ;
 	
 //	private final EditorWithCodeGeneration _editor ;

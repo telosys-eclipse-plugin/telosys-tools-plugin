@@ -4,7 +4,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.telosys.tools.eclipse.plugin.commons.FileEditorUtil;
@@ -33,8 +32,8 @@ public class TargetsButton {
 
 		_button.setImage( PluginImages.getImage(PluginImages.TARGETS ) );
 		
-		//_button.setLayoutData ( new GridData (BUTTON_WIDTH, BUTTON_HEIGHT) );
-		_button.setLayoutData ( new GridData (26, 26) );
+		// ver 3.0.0 : no layout data ( no GridData )
+		// _button.setLayoutData ( new GridData (26, 26) );
 		
 		_button.addSelectionListener( new SelectionListener() 
 	    	{

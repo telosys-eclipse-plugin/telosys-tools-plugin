@@ -221,7 +221,7 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 
 		//--- (2) Filler 
 		//int fillerWidth = RIGHT_PART_WIDTH - GenerateButton.BUTTON_WIDTH - RefreshButton.BUTTON_WIDTH ;
-		int fillerWidth = 70 ;
+		int fillerWidth = 50 ;
 		createFillerInGridLayout(panelTopRight, fillerWidth);
 
 		//--- (3) Check box  
@@ -319,7 +319,8 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 		//--- Create the line with all buttons 
 		GridPanel gridPanel = new GridPanel(panel, 2); // 2 columns
 
-		SelectDeselectButtons buttons = new SelectDeselectButtons( gridPanel.getPanel(), gridPanel.getPanel() ) ; // 2 buttons
+		//SelectDeselectButtons buttons = new SelectDeselectButtons( gridPanel.getPanel(), gridPanel.getPanel() ) ; // 2 buttons
+		SelectDeselectButtons buttons = new SelectDeselectButtons( gridPanel.getPanel() ) ; // 2 buttons
 				
 		return buttons ;
 	}
@@ -358,7 +359,7 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 				
 		//--- First filler
 		//gridPanel.addFiller(14);
-		gridPanel.addFiller(78); // After reducing the Edit templates.cfg button
+		gridPanel.addFiller(30); // After reducing the Edit templates.cfg button
 		
 //    	//--- Label
 //		Label label = new Label(gridPanel.getPanel(), SWT.NULL);

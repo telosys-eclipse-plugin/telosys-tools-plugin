@@ -10,8 +10,8 @@ import org.telosys.tools.eclipse.plugin.commons.PluginImages;
 
 public class RefreshButton {
 
-	public final static int  BUTTON_HEIGHT =  26 ;
-	public final static int  BUTTON_WIDTH  =  90 ; // 80 ;
+	private final static int  BUTTON_HEIGHT =  30 ; // 26 ;
+	private final static int  BUTTON_WIDTH  = 114 ; // 90 ; 
 	
 	private final Button           _button ;
 //	private final EditorWithCodeGeneration _editor ;
@@ -27,10 +27,12 @@ public class RefreshButton {
 	public RefreshButton(Composite parent, AbstractModelEditorPageForGeneration page) {
 		super();
 		_page = page ;
-		//_editor = editor ; 
-//		_editor = page.getModelEditor();
 
 		_button = new Button(parent, SWT.NONE);
+		_button.setText("Refresh");
+		_button.setImage( PluginImages.getImage(PluginImages.REFRESH ) );
+		_button.setToolTipText("Reload bundles and templates from the filesystem");
+
 		
 		GridData gridData = new GridData (BUTTON_WIDTH, BUTTON_HEIGHT) ;
 		// no effect
@@ -44,30 +46,26 @@ public class RefreshButton {
 		init(gridData);
 	}
 	
-	/**
-	 * Creates a "Refresh" button in the given Composite with a specific LayoutData
-	 * @param parent
-	 * @param layoutData
-	 * @param editor
-	 */
-//	public RefreshButton(Composite parent, Object layoutData, EditorWithCodeGeneration editor) {
-	public RefreshButton(Composite parent, Object layoutData, AbstractModelEditorPageForGeneration page) {
-		super();
-
-		_page = page ;
-		//_editor = editor ; 
-//		_editor = page.getModelEditor();
-		
-		_button = new Button(parent, SWT.NONE);
-		
-		init(layoutData);
-	}
+//	/**
+//	 * Creates a "Refresh" button in the given Composite with a specific LayoutData
+//	 * @param parent
+//	 * @param layoutData
+//	 * @param editor
+//	 */
+////	public RefreshButton(Composite parent, Object layoutData, EditorWithCodeGeneration editor) {
+//	public RefreshButton(Composite parent, Object layoutData, AbstractModelEditorPageForGeneration page) {
+//		super();
+//
+//		_page = page ;
+//		//_editor = editor ; 
+////		_editor = page.getModelEditor();
+//		
+//		_button = new Button(parent, SWT.NONE);
+//		
+//		init(layoutData);
+//	}
 	
 	private void init(Object layoutData) {
-		_button.setText("Refresh");
-		_button.setToolTipText("Reload bundles and templates from the filesystem");
-
-		_button.setImage( PluginImages.getImage(PluginImages.REFRESH ) );
 		
 		_button.setLayoutData ( layoutData );
 		
@@ -87,9 +85,9 @@ public class RefreshButton {
 		
 	}
 	
-	public Button getButton() {
-		return _button ;
-	}
+//	public Button getButton() {
+//		return _button ;
+//	}
 	
 	public void setEnabled(boolean enabled) {
 		_button.setEnabled(enabled);
