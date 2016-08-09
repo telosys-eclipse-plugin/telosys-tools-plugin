@@ -9,6 +9,7 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
@@ -44,6 +45,7 @@ import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 import org.telosys.tools.eclipse.plugin.commons.TelosysPluginException;
 import org.telosys.tools.eclipse.plugin.commons.Util;
+import org.telosys.tools.eclipse.plugin.commons.dialogbox.FolderSelectionDialogBox;
 import org.telosys.tools.eclipse.plugin.config.ProjectConfigManager;
 import org.telosys.tools.eclipse.plugin.settings.SettingsManager;
 import org.telosys.tools.generator.GeneratorVersion;
@@ -89,20 +91,31 @@ public class PropertiesPage extends PropertyPage {
 	private Text _tProjectName = null ;
 	private Text _tProjectLocation = null;
 	private Text _tWorkspaceLocation = null ;
+	private Text _tPluginConfigFile = null ;
 	
-	private Text _tTemplatesFolder = null ;
 	private Text _tModelsFolder = null ;
 	private Text _tDownloadsFolder = null ;
 	private Text _tLibrariesFolder = null ;
-	private Text _tPluginConfigFile = null ;
+	private Text _tTemplatesFolder = null ;
+	private Text _tDestinationFolder = null ;
 	
 	//--- Tab "Variables"
 	private VariablesTable _variablesTable = null ;
 	
 	//--- Tab "Advanced"
+	//private Link _linkSpecificTemplatesFolder ;
+	private Button _rbTemplatesFolderStandard ;
+	private Button _rbTemplatesFolderWorkspace ;
+	private Button _rbTemplatesFolderFilesystem ;
+	private Link   _linkTemplatesFolderBrowse ;
+	private Text   _tSpecificTemplatesFolder ;
+	
+	private Text _tSpecificDestinationFolder ;
+	
+	//--- Tab "Advanced" (OLD)
 	private Label checkClassDirLabel;
 	private Text checkClassDirText;
-	private Label checkClassLabel;
+	//private Label checkClassLabel;
 	private Text checkClassText;
 	private Group checkGroup;
 	private Button classDirPickerButton;
@@ -111,113 +124,8 @@ public class PropertiesPage extends PropertyPage {
 	private Button specificCheck;
 	private Button testClassButton;
 
-/**
-	private SelectionListener selistener = new SelectionListener() {
-
-		public void widgetDefaultSelected(SelectionEvent e) {
-		}
-
-		public void widgetSelected(SelectionEvent e) {
-//			if (e.getSource().equals(checkTemplate)) {
-//				if (checkTemplate.getSelection()) {
-//					_tTemplatesDirText.setEnabled(true);
-//					_tTemplatesDirText.setText("");
-//					openTemplate.setEnabled(true);
-//
-//				} else {
-//					_tTemplatesDirText.setText("Default");
-//					_tTemplatesDirText.setEnabled(false);
-//					openTemplate.setEnabled(false);
-//				}
-//			} else if (e.getSource().equals(classDirPickerButton)) {
-			if (e.getSource().equals(classDirPickerButton)) {
-				DirectoryDialog directoryDialog = new DirectoryDialog(shell);
-				directoryDialog.setText("Check class directory picker");
-				directoryDialog.setFilterPath("");
-				String nomFichier = directoryDialog.open();
-				if ((nomFichier != null) && (nomFichier.length() != 0)) {
-					checkClassDirText.setText(nomFichier);
-				}
-//			} else if (e.getSource().equals(openDbConfig)) {
-//				FileDialog dialog = new FileDialog(shell, SWT.OPEN);
-//				dialog.setFilterExtensions(new String[] { "*.xml" });
-//				String nomFichier = dialog.open();
-//				if ((nomFichier != null) && (nomFichier.length() != 0)) {
-//					dbConfigText.setText(nomFichier);
-//				}
-//			} else if (e.getSource().equals(openTemplate)) {
-//				String nomFichier;
-//				DirectoryDialog directoryDialog = new DirectoryDialog(shell);
-//				directoryDialog.setText("Template directory picker");
-//				directoryDialog.setFilterPath("");
-//				nomFichier = directoryDialog.open();
-//				if ((nomFichier != null) && (nomFichier.length() != 0)) {
-//					_tTemplatesDirText.setText(nomFichier);
-//				}
-			} else if (e.getSource().equals(defaultCheck)) {
-				if (defaultCheck.getSelection()) {
-					setSpecificInitCheckClass(false);
-				}
-			} else if (e.getSource().equals(specificCheck)) {
-				if (specificCheck.getSelection()) {
-					setSpecificInitCheckClass(true);
-				}
-			} else if (e.getSource().equals(testClassButton)) {
-				String sClassToLoad = checkClassText.getText();
-				String[] paths = new String[1];
-				paths[0] = checkClassDirText.getText();
-
-				//--- Provider creation for specific class with specific path
-//				InitializerCheckerProvider provider;
-//				try {
-//					provider = new InitializerCheckerProvider(sClassToLoad,
-//							paths);
-//				} catch (Exception ex) {
-//					MessageDialog.openError(null, null,
-//							"ERROR : cannot create provider  \n"
-//									+ "exception = " + ex.getMessage() + " - "
-//									+ e.toString() + " \n");
-//					provider = null;
-//				} catch (Throwable t) {
-//					MessageDialog.openError(null, null,
-//							"ERROR : cannot create provider  \n" + "throwable"
-//									+ t.getMessage() + " - " + t.toString()
-//									+ " \n");
-//					provider = null;
-//				}
-//				if (provider != null) {
-//					InitializerChecker tool = null;
-//					try {
-//						tool = provider.getInitializerChecker();
-//					} catch (Throwable t) {
-//						tool = null;
-//					}
-//					if (tool == null) {
-//						MessageDialog.openError(null, null,
-//								"ERROR : Cannot load the specific class ! \n"
-//										+ "Error Code : "
-//										+ provider.getErrorCode() + " \n"
-//										+ "Error Message : "
-//										+ provider.getErrorMsg() + " \n");
-//						resultTest.setText("Load class : ERROR");
-//					} else {
-//						String sMsg = "OK : Specific class '" + sClassToLoad
-//								+ "' loaded. \n";
-//						sMsg += "Plugin class : " + tool.getClass().getName()
-//								+ "\n";
-//						sMsg += "About this specific class : \n";
-//						sMsg += tool.about();
-//						MessageDialog.openInformation(null, null, sMsg);
-//						resultTest.setText("Load class : OK");
-//					}
-//				}
-			}
-		}
-	};
-**/
-
 	/**
-	 *  
+	 * Constructor
 	 */
 	public PropertiesPage() {
 		super();
@@ -234,6 +142,86 @@ public class PropertiesPage extends PropertyPage {
 		classDirPickerButton.setText("...");
 	}
 
+	private void createTemplatesFolderGroup(Composite composite) {
+		Group group = new Group(composite, SWT.NONE);
+		group.setLayoutData(getColSpan(5));
+		group.setText("Templates folder location");
+		group.setLayout(new GridLayout(2, false));
+
+		_rbTemplatesFolderStandard = new Button(group, SWT.RADIO);
+		_rbTemplatesFolderStandard.setText("Standard location : '" + TelosysToolsEnv.getInstance().getTemplatesFolder() + "' in current project ");
+		_rbTemplatesFolderStandard.setLayoutData(getColSpan(2));
+		
+		_rbTemplatesFolderWorkspace = new Button(group, SWT.RADIO);
+		_rbTemplatesFolderWorkspace.setText("Specific location : this current workspace (each bundle is a project)");
+		_rbTemplatesFolderWorkspace.setLayoutData(getColSpan(2));
+		
+		_rbTemplatesFolderFilesystem = new Button(group, SWT.RADIO);
+		_rbTemplatesFolderFilesystem.setText("Specific location : a folder somewhere in the filesystem (select a folder)");
+		_rbTemplatesFolderFilesystem.setData("");
+
+		_linkTemplatesFolderBrowse = new Link(group, SWT.NONE);
+		_linkTemplatesFolderBrowse.setText("<A>Browse...</A>");
+		_linkTemplatesFolderBrowse.setEnabled(false);
+		
+		_tSpecificTemplatesFolder = new Text(group, SWT.BORDER);
+		_tSpecificTemplatesFolder.setLayoutData(getColSpan(2));
+		_tSpecificTemplatesFolder.setEditable(false);
+
+//		browseLink.addSelectionListener( 
+//				new FolderChooserSelectionListener(this.getShell(), "Select templates folder", _tSpecificTemplatesFolder) );
+		_linkTemplatesFolderBrowse.addSelectionListener( new SelectionAdapter () {
+			public void widgetSelected(SelectionEvent event) {
+				String folder = FolderSelectionDialogBox.chooseFolder(_linkTemplatesFolderBrowse.getShell(), "Select templates folder") ;
+				// Folder can be null if "Escape/Cancel" (no folder selected)
+				if ( folder != null ) {
+					_tSpecificTemplatesFolder.setText(folder);
+					_rbTemplatesFolderFilesystem.setData(folder);
+				}
+			}
+		} );
+		
+		_rbTemplatesFolderStandard.addSelectionListener(new SelectionAdapter () {
+			public void widgetSelected(SelectionEvent event) {
+				_linkTemplatesFolderBrowse.setEnabled(false);
+				_tSpecificTemplatesFolder.setText("");
+			}
+		} );
+		_rbTemplatesFolderWorkspace.addSelectionListener(new SelectionAdapter () {
+			public void widgetSelected(SelectionEvent event) {
+				_linkTemplatesFolderBrowse.setEnabled(false);
+				_tSpecificTemplatesFolder.setText(getCurrentWorkspaceAbsolutePath());
+			}
+		} );
+		_rbTemplatesFolderFilesystem.addSelectionListener(new SelectionAdapter () {
+			public void widgetSelected(SelectionEvent event) {
+				_tSpecificTemplatesFolder.setText((String)_rbTemplatesFolderFilesystem.getData());
+				_linkTemplatesFolderBrowse.setEnabled(true);
+			}
+		} );
+	}
+	
+	private void createDestinationFolderGroup(Composite composite) {
+		Group group = new Group(composite, SWT.NONE);
+		group.setLayoutData(getColSpan(5));
+		group.setText("Destination folder location for code generation");
+		group.setLayout(new GridLayout(2, false));
+
+		Button b1 = new Button(group, SWT.RADIO);
+		b1.setText("Standard location : the current project ");
+		b1.setLayoutData(getColSpan(2));
+		
+		Button b3 = new Button(group, SWT.RADIO);
+		b3.setText("Specific location : folder somewhere in the filesystem");
+		Link link = new Link(group, SWT.NONE);
+		link.setText("<A>Browse...</A>");
+		//link.addSelectionListener( new LinkSelectionListener(tabFolder, tabIndex) );
+		
+		Text textField = new Text(group, SWT.BORDER);
+		textField.setLayoutData(getColSpan(2));
+		textField.setEditable(false);
+	}
+	
 	private void createCheckGroup(Composite composite) {
 		checkGroup = new Group(composite, SWT.NONE);
 		checkGroup.setLayoutData(getColSpan(5));
@@ -246,10 +234,12 @@ public class PropertiesPage extends PropertyPage {
 		specificCheck = new Button(checkGroup, SWT.RADIO);
 		specificCheck.setText("Specific");
 		specificCheck.setLayoutData(getColSpan(3));
-		checkClassLabel = new Label(checkGroup, SWT.NONE);
+		
+		Label checkClassLabel = new Label(checkGroup, SWT.NONE);
 		checkClassLabel.setText("Check class");
 		checkClassText = new Text(checkGroup, SWT.BORDER);
 		checkClassText.setLayoutData(getColSpan(2));
+		
 		checkClassDirLabel = new Label(checkGroup, SWT.NONE);
 		checkClassDirLabel.setText("Directory");
 		checkClassDirText = new Text(checkGroup, SWT.BORDER);
@@ -428,15 +418,20 @@ public class PropertiesPage extends PropertyPage {
 		_tModelsFolder = createTextField(tabContent, "Models folder :") ;
 		_tModelsFolder.setEditable(false);	
 
-		_tTemplatesFolder = createTextField(tabContent, "Templates folder :") ;
-		_tTemplatesFolder.setEditable(false);	
-
 		_tDownloadsFolder = createTextField(tabContent, "Downloads folder :") ;
 		_tDownloadsFolder.setEditable(false);	
 
 		_tLibrariesFolder = createTextField(tabContent, "Libraries folder :") ;
 		_tLibrariesFolder.setEditable(false);	
 
+		_tTemplatesFolder = createTextField(tabContent, "Templates folder :") ;
+		_tTemplatesFolder.setEditable(false);	
+		_tTemplatesFolder.setToolTipText("Templates bundles folder");
+
+		_tDestinationFolder = createTextField(tabContent, "Destination folder :") ;
+		_tDestinationFolder.setEditable(false);	
+		_tDestinationFolder.setToolTipText("Destination folder for code generation");
+		
 		//-------------------------------------------------------------------------------
 		
 		// Removed in v 3.0.0
@@ -1066,7 +1061,9 @@ public class PropertiesPage extends PropertyPage {
 		tabContent.setLayout(new GridLayout(5, false));
 		tabItem.setControl(tabContent);
 
-		createCheckGroup(tabContent);
+		createTemplatesFolderGroup(tabContent);
+		createDestinationFolderGroup(tabContent);
+		//createCheckGroup(tabContent);
 	}
 	
 	//------------------------------------------------------------------------------------------
@@ -1391,6 +1388,9 @@ public class PropertiesPage extends PropertyPage {
 		}		
 		return (IProject)adaptable;		
 	}
+	private String getCurrentWorkspaceAbsolutePath() {
+		return EclipseProjUtil.getWorkspaceLocation(getCurrentProject()) ;
+	}
 	//------------------------------------------------------------------------------------------
 	private EnvironmentManager getEnvironmentManager() 	{
 		IProject currentProject = getCurrentProject();
@@ -1490,17 +1490,41 @@ public class PropertiesPage extends PropertyPage {
 		_tProjectLocation.setText( telosysToolsCfg.getProjectAbsolutePath() ); // v 3.0.0
 		
 //		_tWorkspaceLocation.setText(projectConfig.getWorkspaceFolder() );
-		_tWorkspaceLocation.setText(EclipseProjUtil.getWorkspaceLocation(project) ); // v 3.0.0
+		String workspaceFolderFullPath = getCurrentWorkspaceAbsolutePath() ;
+		_tWorkspaceLocation.setText( workspaceFolderFullPath ); // v 3.0.0
 		
-		TelosysToolsEnv telosysToolsEnv = TelosysToolsEnv.getInstance();
+//		TelosysToolsEnv telosysToolsEnv = TelosysToolsEnv.getInstance();
 
 		_tPluginConfigFile.setText( telosysToolsCfg.getCfgFileAbsolutePath() );
 
 		// v 3.0.0 : "telosysToolsCfg" replaced by "telosysToolsEnv"
-		_tModelsFolder.setText( telosysToolsEnv.getModelsFolder() ) ; // telosysToolsCfg.getRepositoriesFolder() );
-		_tTemplatesFolder.setText( telosysToolsEnv.getTemplatesFolder() );  // telosysToolsCfg.getTemplatesFolder() );
-		_tDownloadsFolder.setText( telosysToolsEnv.getDownloadsFolder() );  // telosysToolsCfg.getDownloadsFolder() );
-		_tLibrariesFolder.setText( telosysToolsEnv.getLibrariesFolder() ) ; // telosysToolsCfg.getLibrariesFolder() );
+//		_tModelsFolder.setText( telosysToolsEnv.getModelsFolder() ) ; // telosysToolsCfg.getRepositoriesFolder() );
+		_tModelsFolder.setText( telosysToolsCfg.getModelsFolderAbsolutePath() ) ;
+//		_tTemplatesFolder.setText( telosysToolsEnv.getTemplatesFolder() );  // telosysToolsCfg.getTemplatesFolder() );
+		_tTemplatesFolder.setText( telosysToolsCfg.getTemplatesFolderAbsolutePath() );
+//		_tDownloadsFolder.setText( telosysToolsEnv.getDownloadsFolder() );  // telosysToolsCfg.getDownloadsFolder() );
+		_tDownloadsFolder.setText( telosysToolsCfg.getDownloadsFolderAbsolutePath() ); 
+//		_tLibrariesFolder.setText( telosysToolsEnv.getLibrariesFolder() ) ; // telosysToolsCfg.getLibrariesFolder() );
+		_tLibrariesFolder.setText( telosysToolsCfg.getLibrariesFolderAbsolutePath() ) ;
+
+		_tDestinationFolder.setText( telosysToolsCfg.getDestinationFolderAbsolutePath() ) ; 
+		
+		//--- Tab "Advanced" ( v 3.0.0 )
+		if ( telosysToolsCfg.hasSpecificTemplatesFolders() ) {
+			_tSpecificTemplatesFolder.setText(telosysToolsCfg.getSpecificTemplatesFolderAbsolutePath());
+			if ( workspaceFolderFullPath.equals( telosysToolsCfg.getSpecificTemplatesFolderAbsolutePath() ) ) {
+				_rbTemplatesFolderWorkspace.setSelection(true);
+			}
+			else {
+				_rbTemplatesFolderFilesystem.setData(telosysToolsCfg.getSpecificTemplatesFolderAbsolutePath());
+				_rbTemplatesFolderFilesystem.setSelection(true);
+				_linkTemplatesFolderBrowse.setEnabled(true);
+			}
+		}
+		else {
+			_rbTemplatesFolderStandard.setSelection(true);
+			_tSpecificTemplatesFolder.setText("");
+		}
 	}
 	
 	//------------------------------------------------------------------------------------------
@@ -1535,11 +1559,17 @@ public class PropertiesPage extends PropertyPage {
 			log("fieldsToConfig : " + variables.size() + " variable(s) set in TelosysToolsCfg");
 		}
 
+		//--- Tab "Advanced" ( v 3.0.0 )
+		if ( _rbTemplatesFolderStandard.getSelection() == true ) {
+			// "Standard location" selected => no specific location
+			telosysToolsCfg.setSpecificTemplatesFolderAbsolutePath("");
+		}
+		else {
+			// Workspace or specific folder in filesystem selected => keep specific loacation
+			telosysToolsCfg.setSpecificTemplatesFolderAbsolutePath( _tSpecificTemplatesFolder.getText() );
+		}
+		
 		//--- Tab "General" & "About" : nothing to do
-//		telosysToolsCfg.setRepositoriesFolder ( _tRepositoriesFolder.getText() ) ;
-//		telosysToolsCfg.setTemplatesFolder    ( _tTemplatesFolder.getText() ) ;
-//		telosysToolsCfg.setDownloadsFolder    ( _tDownloadsFolder.getText() ) ;
-//		telosysToolsCfg.setLibrariesFolder    ( _tLibrariesFolder.getText() ) ;
 
 		log("fieldsToConfig : END");
 	}
