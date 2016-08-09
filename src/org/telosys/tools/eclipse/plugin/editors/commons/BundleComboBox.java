@@ -1,6 +1,5 @@
 package org.telosys.tools.eclipse.plugin.editors.commons;
 
-import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,10 +11,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.telosys.tools.commons.StrUtil;
+import org.telosys.tools.commons.TelosysToolsException;
 import org.telosys.tools.commons.cfg.TelosysToolsCfg;
-import org.telosys.tools.eclipse.plugin.commons.EclipseProjUtil;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.config.ProjectConfigManager;
+import org.telosys.tools.generator.target.TargetsLoader;
 
 public class BundleComboBox {
 
@@ -117,32 +117,15 @@ public class BundleComboBox {
 	}
 	
 	private List<String> getBundlesFromTemplatesFolder( IProject eclipseProject ) {
-		List<String> bundles = new LinkedList<String>();
 		
-		TelosysToolsCfg telosysToolsCfg = ProjectConfigManager.loadProjectConfig( eclipseProject ); // v 3.0.0		
-		if ( telosysToolsCfg != null ) { // v 3.0.0	
-			String templatesFolder = telosysToolsCfg.getTemplatesFolder(); // v 3.0.0
-//			log( "  templates folder = " + templatesFolder );
-			File dir = EclipseProjUtil.getResourceAsFile( eclipseProject, templatesFolder);			
-			if ( dir != null) {
-				if ( dir.isDirectory() ) {
-					File[] entries = dir.listFiles();
-					for ( File f : entries ) {
-						if ( f.isDirectory() ) {
-							bundles.add(f.getName());
-						}
-					}
-					return bundles ;
-				}
-				else {
-					MsgBox.error("Templates folder '" + templatesFolder + "' is not a folder !");
-				}
-			}
-			else {
-				MsgBox.error("Templates folder '" + templatesFolder + "' not found !");
-			}
-		}
-		return null ;
+		TelosysToolsCfg telosysToolsCfg = ProjectConfigManager.loadProjectConfig( eclipseProject ); // v 3.0.0	
+		TargetsLoader targetsLoader = new TargetsLoader(telosysToolsCfg);
+		try {
+			return targetsLoader.loadBundlesList();
+		} catch (TelosysToolsException e) {
+			MsgBox.error(e.getMessage());
+			return new LinkedList<String>();
+		} 
 	}
 	
 }

@@ -84,21 +84,7 @@ import org.telosys.tools.repository.model.RepositoryModel;
 		//TelosysToolsCfg telosysToolsCfg = config.getTelosysToolsCfg();
 		
 		addConfigRow(body, "", "" );
-//		//addConfigRow(body, "Project name :", config.getProjectName() );
-//		addConfigRow(body, "Project name :", getProject().getName() ); // v 3.0.0
-		
-//		//addConfigRow(body, "Workspace folder :", config.getWorkspaceFolder() );
-//		//addConfigRow(body, "Project folder :", config.getProjectFolder() );
-//		addConfigRow(body, "Project folder :", telosysToolsCfg.getProjectAbsolutePath() );
-//
-//		addConfigRow(body, "Configuration file full path :", telosysToolsCfg.getCfgFileAbsolutePath() );
-//
-//		addConfigRow(body, "Templates folder :", telosysToolsCfg.getTemplatesFolder() );
-//		addConfigRow(body, "Templates folder full path :", telosysToolsCfg.getTemplatesFolderAbsolutePath() );
-//		addConfigRow(body, "Repositories folder :", telosysToolsCfg.getModelsFolder() );
-//		
-//		addConfigRow(body, "", "" );
-		
+			
 		RepositoryModel repositoryModel = getRepositoryModel();
 		addConfigRow(body, "Model name :", repositoryModel.getName() );
 		addConfigRow(body, "Model version :", repositoryModel.getVersion() );

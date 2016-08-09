@@ -34,7 +34,6 @@ import org.telosys.tools.eclipse.plugin.editors.dbrep.ToolTipListenerForEntities
 import org.telosys.tools.eclipse.plugin.editors.dbrep.ToolTipListenerForTargetsTable;
 import org.telosys.tools.eclipse.plugin.generator.GenerationTaskWithProgress;
 import org.telosys.tools.eclipse.plugin.settings.SettingsManager;
-import org.telosys.tools.generator.GeneratorException;
 import org.telosys.tools.generator.target.TargetDefinition;
 import org.telosys.tools.generator.target.TargetsDefinitions;
 import org.telosys.tools.generator.target.TargetsLoader;
@@ -522,22 +521,52 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 		if ( telosysToolsCfg != null ) {
 
 			// v 3.0.0 -----------------------------------
-	    	String sTemplatesFolder = telosysToolsCfg.getTemplatesFolderAbsolutePath(); // v 3.0.0
-			TargetsLoader targetsLoader = new TargetsLoader(sTemplatesFolder);
-			TargetsDefinitions targetsDefinitions;
-			try {
-				targetsDefinitions = targetsLoader.loadTargetsDefinitions(currentBundleName);
-				//return targetsDefinitions ;
-			} catch (GeneratorException e) {
-				MsgBox.error("Cannot load targets definitions", e);
-				// if error : void lists for templates and resources 
-				targetsDefinitions = new TargetsDefinitions(new LinkedList<TargetDefinition>(), new LinkedList<TargetDefinition>());
-			} 
+	    	//String sTemplatesFolder = telosysToolsCfg.getTemplatesFolderAbsolutePath(); // v 3.0.0
+			
+//			TargetsLoader targetsLoader = new TargetsLoader(sTemplatesFolder);
+//			TargetsDefinitions targetsDefinitions;
+//			try {
+//				targetsDefinitions = targetsLoader.loadTargetsDefinitions(currentBundleName);
+//				//return targetsDefinitions ;
+//			} catch (GeneratorException e) {
+//				MsgBox.error("Cannot load targets definitions", e);
+//				// if error : void lists for templates and resources 
+//				targetsDefinitions = new TargetsDefinitions(new LinkedList<TargetDefinition>(), new LinkedList<TargetDefinition>());
+//			} 
+
+	    	//TargetsDefinitions targetsDefinitions = loadTagetsDefinitions(sTemplatesFolder, currentBundleName);
+			TargetsDefinitions targetsDefinitions = loadTagetsDefinitions(currentBundleName);
 
 			refreshTargetsTable(targetsDefinitions.getTemplatesTargets(), targetsDefinitions.getResourcesTargets());
 		}
 	}
-	
+	//----------------------------------------------------------------------------------------------
+	private TargetsDefinitions loadTagetsDefinitions(String bundleName) {
+		TargetsLoader targetsLoader = new TargetsLoader(getProjectConfig());
+		try {
+			return targetsLoader.loadTargetsDefinitions(bundleName);
+			//return targetsDefinitions ;
+		} catch (TelosysToolsException e) {
+			MsgBox.error("Cannot load targets definitions", e);
+			// if error : void lists for templates and resources 
+			//return new TargetsDefinitions(new LinkedList<TargetDefinition>(), new LinkedList<TargetDefinition>());
+			return new TargetsDefinitions();
+		} 
+	}
+	//----------------------------------------------------------------------------------------------
+//	private TargetsDefinitions loadTagetsDefinitions(String sTemplatesFolder, String bundleName) {
+//		TargetsLoader targetsLoader = new TargetsLoader(sTemplatesFolder);
+//		TargetsDefinitions targetsDefinitions;
+//		try {
+//			targetsDefinitions = targetsLoader.loadTargetsDefinitions(bundleName);
+//			//return targetsDefinitions ;
+//		} catch (GeneratorException e) {
+//			MsgBox.error("Cannot load targets definitions", e);
+//			// if error : void lists for templates and resources 
+//			targetsDefinitions = new TargetsDefinitions(new LinkedList<TargetDefinition>(), new LinkedList<TargetDefinition>());
+//		} 
+//		return targetsDefinitions ;
+//	}
 	//----------------------------------------------------------------------------------------------
 	/**
 	 * Refresh the targets table from the current configuration supposed to be up to date 

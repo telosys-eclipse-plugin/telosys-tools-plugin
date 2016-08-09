@@ -1,5 +1,6 @@
 package org.telosys.tools.eclipse.plugin.config.view;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 
@@ -29,6 +30,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.PropertyPage;
 import org.eclipse.ui.help.IWorkbenchHelpSystem;
 import org.telosys.tools.commons.StrUtil;
+import org.telosys.tools.commons.TelosysToolsException;
 import org.telosys.tools.commons.cfg.TelosysToolsCfg;
 import org.telosys.tools.commons.env.EnvironmentManager;
 import org.telosys.tools.commons.env.TelosysToolsEnv;
@@ -37,6 +39,7 @@ import org.telosys.tools.commons.http.HttpUtil;
 import org.telosys.tools.commons.variables.Variable;
 import org.telosys.tools.eclipse.plugin.MyPlugin;
 import org.telosys.tools.eclipse.plugin.PluginBuildInfo;
+import org.telosys.tools.eclipse.plugin.commons.DirUtilBis;
 import org.telosys.tools.eclipse.plugin.commons.EclipseProjUtil;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
@@ -336,7 +339,7 @@ public class PropertiesPage extends PropertyPage {
 		createTabTemplates(tabFolder);
 		
 		createTabGeneral(tabFolder);
-		//createTabAdvanced(tabFolder);
+		createTabAdvanced(tabFolder);
 		createTabAboutPlugin(tabFolder);
 		
 		//--- This tab is for DEBUG only 
@@ -903,7 +906,7 @@ public class PropertiesPage extends PropertyPage {
 
 		//--- Label  ( SPAN 2 )
 		label = new Label(tabContent, SWT.NONE);
-		label.setText("If you experience download problems, check Eclipse proxy setting");
+		label.setText("If you experience download problems, check Eclipse proxy settings.");
 		label.setLayoutData(getColSpan(2));
 //		label = new Label(tabContent, SWT.NONE);
 //		label.setText("");
@@ -949,10 +952,10 @@ public class PropertiesPage extends PropertyPage {
 	//------------------------------------------------------------------------------------------
 	private long downloadSelectedFiles(String[] repoNames, boolean bUnzip) {
 
-		String sDownloadFolder = getDownloadFolder();
-		if ( null == sDownloadFolder ) {
-			return 0 ;
-		}
+//		String sDownloadFolder = getDownloadFolder();
+//		if ( null == sDownloadFolder ) {
+//			return 0 ;
+//		}
 //		String sGitHubUrlPattern = getGitHubUrlPattern() ;
 //		if ( null == sGitHubUrlPattern ) {
 //			return 0 ;
@@ -961,16 +964,33 @@ public class PropertiesPage extends PropertyPage {
 			MsgBox.error("Selection is null !");
 			return 0 ;
 		}
-		String sTemplatesFolder = getTemplatesFolder();
-		if ( null == sTemplatesFolder ) {
+		
+		TelosysToolsCfg telosysToolsCfg = getTelosysToolsCfgFromFields();
+		
+		if ( telosysToolsCfg.hasSpecificTemplatesFolders() ) {
+			MsgBox.warning("A specific templates folder is currently defined. Donwload is not allowed");
 			return 0 ;
 		}
-	
+		
+		try {
+			DirUtilBis.checkDirIsValid(telosysToolsCfg.getTemplatesFolderAbsolutePath());
+		} catch (TelosysToolsException e) {
+			MsgBox.warning("Templates folder" + e.getMessage());
+			return 0 ;
+		}
+		
+		try {
+			DirUtilBis.checkDirIsValid(telosysToolsCfg.getDownloadsFolderAbsolutePath());
+		} catch (TelosysToolsException e) {
+			MsgBox.warning("Download folder" + e.getMessage());
+			return 0 ;
+		}
+		
 		//--- Run the generation task via the progress monitor 
 		DownloadTaskWithProgress task = null ;
 		try {
 			task = new DownloadTaskWithProgress(//this.getCurrentProject(), 
-					getTelosysToolsCfgFromFields(),
+					telosysToolsCfg,
 					getGitHubUserName(), 
 					repoNames, 
 //					sDownloadFolder, 
@@ -995,35 +1015,35 @@ public class PropertiesPage extends PropertyPage {
 		return task.getResult();
 	}
 	
-	private String getDownloadFolder() {
-		String sFolder = _tDownloadsFolder.getText().trim();
-		if ( sFolder.length() == 0  ) {
-			MsgBox.warning("Download folder is not defined");
-			return null ;
-		}
-		if ( EclipseProjUtil.folderExists(getCurrentProject(), sFolder) ) {
-			return sFolder ;
-		}
-		else {
-			MsgBox.warning("Download folder '" + sFolder + "' does not exist !");
-			return null ;
-		}
-	}
+//	private String getDownloadFolder() {
+//		String sFolder = _tDownloadsFolder.getText().trim();
+//		if ( sFolder.length() == 0  ) {
+//			MsgBox.warning("Download folder is not defined");
+//			return null ;
+//		}
+//		if ( EclipseProjUtil.folderExists(getCurrentProject(), sFolder) ) {
+//			return sFolder ;
+//		}
+//		else {
+//			MsgBox.warning("Download folder '" + sFolder + "' does not exist !");
+//			return null ;
+//		}
+//	}
 	
-	private String getTemplatesFolder() {
-		String sFolder = _tTemplatesFolder.getText().trim();
-		if ( sFolder.length() == 0  ) {
-			MsgBox.warning("Templates folder is not defined");
-			return null ;
-		}
-		if ( EclipseProjUtil.folderExists(getCurrentProject(), sFolder) ) {
-			return sFolder ;
-		}
-		else {
-			MsgBox.warning("Templates folder '" + sFolder + "' does not exist !");
-			return null ;
-		}
-	}
+//	private String getTemplatesFolder() {
+//		String sFolder = _tTemplatesFolder.getText().trim();
+//		if ( sFolder.length() == 0  ) {
+//			MsgBox.warning("Templates folder is not defined");
+//			return null ;
+//		}
+//		if ( EclipseProjUtil.folderExists(getCurrentProject(), sFolder) ) {
+//			return sFolder ;
+//		}
+//		else {
+//			MsgBox.warning("Templates folder '" + sFolder + "' does not exist !");
+//			return null ;
+//		}
+//	}
 	
 	private String getGitHubUserName() {
 		String user = _tGitHubUserName.getText().trim();
