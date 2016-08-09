@@ -1,6 +1,5 @@
 package org.telosys.tools.eclipse.plugin.config.view;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 
@@ -29,6 +28,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.PropertyPage;
 import org.eclipse.ui.help.IWorkbenchHelpSystem;
+import org.telosys.tools.commons.DirUtil;
 import org.telosys.tools.commons.StrUtil;
 import org.telosys.tools.commons.TelosysToolsException;
 import org.telosys.tools.commons.cfg.TelosysToolsCfg;
@@ -39,7 +39,6 @@ import org.telosys.tools.commons.http.HttpUtil;
 import org.telosys.tools.commons.variables.Variable;
 import org.telosys.tools.eclipse.plugin.MyPlugin;
 import org.telosys.tools.eclipse.plugin.PluginBuildInfo;
-import org.telosys.tools.eclipse.plugin.commons.DirUtilBis;
 import org.telosys.tools.eclipse.plugin.commons.EclipseProjUtil;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
@@ -973,14 +972,14 @@ public class PropertiesPage extends PropertyPage {
 		}
 		
 		try {
-			DirUtilBis.checkDirIsValid(telosysToolsCfg.getTemplatesFolderAbsolutePath());
+			DirUtil.checkIsValidDirectory(telosysToolsCfg.getTemplatesFolderAbsolutePath());
 		} catch (TelosysToolsException e) {
 			MsgBox.warning("Templates folder" + e.getMessage());
 			return 0 ;
 		}
 		
 		try {
-			DirUtilBis.checkDirIsValid(telosysToolsCfg.getDownloadsFolderAbsolutePath());
+			DirUtil.checkIsValidDirectory(telosysToolsCfg.getDownloadsFolderAbsolutePath());
 		} catch (TelosysToolsException e) {
 			MsgBox.warning("Download folder" + e.getMessage());
 			return 0 ;
