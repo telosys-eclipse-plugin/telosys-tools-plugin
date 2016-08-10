@@ -298,6 +298,11 @@ public class PropertiesPage extends PropertyPage {
 	 */
 	@Override
 	protected Control createContents(Composite parent) {
+		
+		IProject project = getCurrentProject();
+		String projectName = project != null ? project.getName() : "?" ;
+		this.setTitle("Telosys Tools configuration - Project \"" + projectName + "\"");
+
 		try {
 			_pageComposite = new Composite(parent, SWT.NONE);
 			_pageComposite.setLayout(new FillLayout());
