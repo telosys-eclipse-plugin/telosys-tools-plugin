@@ -2,6 +2,38 @@
 <?eclipse version="3.6"?>
 <plugin>
 
+   <!-- MAIN TOOLBAR ACTION  -->
+   <!-- see 
+        http://www.eclipse.org/articles/article.php?file=Article-action-contribution/index.html 
+        Example 7: Adding an action set
+	-->
+	<extension point="org.eclipse.ui.actionSets" >
+		<actionSet
+			id="org.eclipse.ui.articles.action.contribution.set"
+			label="Action 1"
+			visible="true">
+			<action
+				id="org.eclipse.ui.articles.action.contribution.set.action1" 
+				label="Action 1" 
+				icon="icons/telosys_folder.png"
+				tooltip="Tooltip for Set Action 1"
+				toolbarPath="Normal/additions"
+				class="org.telosys.tools.eclipse.plugin.toolbar.ActionOpenProperties"> 
+			</action> 
+			<!--
+			<action
+				id="org.eclipse.ui.articles.action.contribution.set.action2" 
+				label="Set Action 2" 
+				icon="icons/key1.gif"
+				tooltip="Tooltip for Set Action 2"
+				toolbarPath="Normal/additions"
+				style="pulldown"
+				class="org.eclipse.ui.articles.action.contribution.SetAction2Delegate">
+			</action> 
+			-->
+		</actionSet>    
+	</extension>
+
    <!-- WIZARDS ver 3.0.0  -->
    <extension point="org.eclipse.ui.newWizards" >
       <category

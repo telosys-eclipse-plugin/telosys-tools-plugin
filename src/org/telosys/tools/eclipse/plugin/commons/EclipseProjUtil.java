@@ -20,6 +20,10 @@ import org.eclipse.jdt.core.IJavaModel;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jface.preference.PreferenceDialog;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.telosys.tools.commons.StrUtil;
 
 
@@ -489,4 +493,27 @@ public class EclipseProjUtil {
             return true ;
         }
     }
+    
+	// The VIEW ID in "plugin.xml"
+	final static String PROPERTIES_PAGE_ID = "org.telosys.tools.eclipse.plugin.config.view.PropertiesPage" ; 
+
+	/**
+	 * Opens the Telosys project properties page programmatically 
+	 * @param project
+	 */
+	public static void openTelosysPropertiesView(IProject project) {
+		if ( project != null ) {
+			Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+			PreferenceDialog dialog = PreferencesUtil.createPropertyDialogOn(shell, 
+					project, 
+					PROPERTIES_PAGE_ID, 
+					new String[] { PROPERTIES_PAGE_ID }, 
+					null);
+			dialog.open();
+		}
+		else {
+			MsgBox.error("Cannot open properties view : the given project is null ");
+		}
+	}
+
 }
