@@ -110,4 +110,13 @@ public class Util {
 		return label ;
     }
     
+    /**
+     * Launch the external browser on the given URL
+     * @param url
+     */
+    public static void launchExternalBrowser(String url) {
+    	org.eclipse.swt.program.Program.launch(url);
+    	// or 
+    	// PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(url);
+    }
 }

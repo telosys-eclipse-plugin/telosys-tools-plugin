@@ -28,9 +28,7 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.PropertyPage;
-import org.eclipse.ui.help.IWorkbenchHelpSystem;
 import org.telosys.tools.commons.DirUtil;
 import org.telosys.tools.commons.StrUtil;
 import org.telosys.tools.commons.TelosysToolsException;
@@ -549,33 +547,43 @@ public class PropertiesPage extends PropertyPage {
 	}
 	//------------------------------------------------------------------------------------------
 	private void createTabInfoHelpLink(Composite composite, int colSpan ){
+		createSingleLabel(composite, "For more information about Telosys : ", colSpan); // void line
 		Link link = new Link(composite, SWT.NONE);
-		link.setText("For more information see the <A>Telosys Tools documentation</A> ...");
+		link.setText(" - Telosys web site : <A>www.telosys.org</A>");
 		link.setLayoutData(getColSpan(colSpan));
 		link.addSelectionListener(
 			new SelectionListener() {
-	            public void widgetSelected(SelectionEvent arg0)
-	            {
-	            	final String helpResource = 
-	            		// "/org.telosys.tools.eclipse.plugin.help" ; // OK : global help root 
-	            		"/org.telosys.tools.eclipse.plugin.help/html/getting-started.html"; // OK : specific topic 
-	            		// PB : no topic for TOC
-	            		// "/org.telosys.tools.eclipse.plugin.help/html/toc.html"; // Topic not found
-	            		// "/org.telosys.tools.eclipse.plugin.help/html";  // Topic not found
-	            	
-	            	// TODO : 
-	            	// "/org.telosys.tools.eclipse.plugin.help/html/toc.html"
-	            	// in PluginHelp : 
-	            	//   create file html/toc.html 
-	            	//   change TelosysToolsHelpTOC.xml : <toc ... topic="html/toc.html" >
-	            	
-	            	IWorkbenchHelpSystem helpSystem = PlatformUI.getWorkbench().getHelpSystem() ;
-	            	//helpSystem.displayHelp(); // programmatically open the Help window
-	            	helpSystem.displayHelpResource(helpResource);
+	            public void widgetSelected(SelectionEvent arg0) {
+//	            	final String helpResource = 
+//	            		// "/org.telosys.tools.eclipse.plugin.help" ; // OK : global help root 
+//	            		"/org.telosys.tools.eclipse.plugin.help/html/getting-started.html"; // OK : specific topic 
+//	            		// PB : no topic for TOC
+//	            		// "/org.telosys.tools.eclipse.plugin.help/html/toc.html"; // Topic not found
+//	            		// "/org.telosys.tools.eclipse.plugin.help/html";  // Topic not found
+//	            	
+//	            	// TODO : 
+//	            	// "/org.telosys.tools.eclipse.plugin.help/html/toc.html"
+//	            	// in PluginHelp : 
+//	            	//   create file html/toc.html 
+//	            	//   change TelosysToolsHelpTOC.xml : <toc ... topic="html/toc.html" >
+//	            	
+//	            	IWorkbenchHelpSystem helpSystem = PlatformUI.getWorkbench().getHelpSystem() ;
+//	            	//helpSystem.displayHelp(); // programmatically open the Help window
+//	            	helpSystem.displayHelpResource(helpResource);
+	            	Util.launchExternalBrowser("http://www.telosys.org/");
 	            }
-	            public void widgetDefaultSelected(SelectionEvent arg0)
-	            {
+	            public void widgetDefaultSelected(SelectionEvent arg0) { }
+        	});
+		
+		link = new Link(composite, SWT.NONE);
+		link.setText(" - Telosys on Twitter : <A>@telosys</A>");
+		link.setLayoutData(getColSpan(colSpan));
+		link.addSelectionListener(
+			new SelectionListener() {
+	            public void widgetSelected(SelectionEvent arg0) {
+	            	Util.launchExternalBrowser("https://twitter.com/telosys");
 	            }
+	            public void widgetDefaultSelected(SelectionEvent arg0) { }
         	});
 	}
 	
