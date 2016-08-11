@@ -61,8 +61,9 @@ public class PropertiesPage extends PropertyPage {
 	private final static boolean DEBUG_MODE = false ;
 
 	private final static String WEB_CONTENT     = "WebContent" ;
-	private final static String DEFAULT_GITHUB_USER_NAME = "telosys-tools" ;
-	//private TabFolder _tabFolder ;
+	//private final static String DEFAULT_GITHUB_USER_NAME = "telosys-tools" ;
+	private final static String DEFAULT_GITHUB_USER_NAME = "telosys-templates-v3" ; // v 3.0.0
+	
 	private Composite _pageComposite ;
 	private Composite _panelNotInitialized ;
 	
@@ -142,11 +143,11 @@ public class PropertiesPage extends PropertyPage {
 	private void createTabAdvancedTemplatesFolderGroup(Composite composite) {
 		Group group = new Group(composite, SWT.NONE);
 		group.setLayoutData(getColSpan(5));
-		group.setText("Templates folder location");
+		group.setText("Templates bundles folder location");
 		group.setLayout(new GridLayout(2, false));
 
 		_rbTemplatesFolderStandard = new Button(group, SWT.RADIO);
-		_rbTemplatesFolderStandard.setText("Standard location : '" + TelosysToolsEnv.getInstance().getTemplatesFolder() + "' in current project ");
+		_rbTemplatesFolderStandard.setText("Standard location : '" + TelosysToolsEnv.getInstance().getTemplatesFolder() + "' in the current project ");
 		_rbTemplatesFolderStandard.setLayoutData(getColSpan(2));
 		
 		_rbTemplatesFolderWorkspace = new Button(group, SWT.RADIO);
@@ -566,7 +567,7 @@ public class PropertiesPage extends PropertyPage {
 //	            		// "/org.telosys.tools.eclipse.plugin.help/html/toc.html"; // Topic not found
 //	            		// "/org.telosys.tools.eclipse.plugin.help/html";  // Topic not found
 //	            	
-//	            	// TODO : 
+//	            	// Add a Table Of Content ? : 
 //	            	// "/org.telosys.tools.eclipse.plugin.help/html/toc.html"
 //	            	// in PluginHelp : 
 //	            	//   create file html/toc.html 
@@ -786,7 +787,7 @@ public class PropertiesPage extends PropertyPage {
 		//------------------------------------------------------------------------------------
 		//--- Label  ( SPAN 2 )
 		Label label = new Label(tabContent, SWT.NONE);
-		label.setText("Download bundles from GitHub (templates and resources)");
+		label.setText("Download templates bundles from GitHub (a 'bundle' is a set of templates and resources)");
 		label.setLayoutData(getColSpan(2));
 		
 		//------------------------------------------------------------------------------------
@@ -954,7 +955,9 @@ public class PropertiesPage extends PropertyPage {
 			} catch (InterruptedException e) {
 				MsgBox.info("Task interrupted");
 			}
-			
+			if ( _listGitHubRepositories.getItemCount() == 0 ) {
+				MsgBox.info("No bundle available on GitHub '" + sGitHubUserName + "'");
+			}
 		}
 	}
 	//------------------------------------------------------------------------------------------

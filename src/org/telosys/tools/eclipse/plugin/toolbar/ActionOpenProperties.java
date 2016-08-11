@@ -30,7 +30,7 @@ public class ActionOpenProperties extends ActionDelegate implements
 		}
 		else {
 			MsgBox.info("No project selected.\n\n" +
-					"Please select the project or one of its files.");
+					"Please select a project or one of its files.");
 		}
 	}
 	

@@ -10,13 +10,13 @@
 	<extension point="org.eclipse.ui.actionSets" >
 		<actionSet
 			id="org.eclipse.ui.articles.action.contribution.set"
-			label="Action 1"
+			label="Telosys"
 			visible="true">
 			<action
 				id="org.eclipse.ui.articles.action.contribution.set.action1" 
-				label="Action 1" 
+				label="Telosys configuration" 
 				icon="icons/telosys_folder.png"
-				tooltip="Tooltip for Set Action 1"
+				tooltip="Telosys configuration"
 				toolbarPath="Normal/additions"
 				class="org.telosys.tools.eclipse.plugin.toolbar.ActionOpenProperties"> 
 			</action> 
