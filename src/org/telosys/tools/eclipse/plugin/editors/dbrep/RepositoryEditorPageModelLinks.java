@@ -22,7 +22,7 @@ import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 import org.telosys.tools.eclipse.plugin.commons.Util;
 import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
-import org.telosys.tools.repository.LinksGenerator;
+import org.telosys.tools.repository.LinksManager;
 import org.telosys.tools.repository.model.LinkInDbModel;
 import org.telosys.tools.repository.model.LinksCriteria;
 import org.telosys.tools.repository.model.RepositoryModel;
@@ -454,7 +454,8 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 		RepositoryModel repositoryModel = getRepositoryModel();
 		
 		//LinksGenerator linksGenerator = new LinksGenerator(getLogger());
-		LinksGenerator linksGenerator = new LinksGenerator(RepositoryRulesProvider.getRepositoryRules(), getLogger()); // v 2.1.1
+		//LinksGenerator linksGenerator = new LinksGenerator(RepositoryRulesProvider.getRepositoryRules(), getLogger()); // v 2.1.1
+		LinksManager linksGenerator = new LinksManager(RepositoryRulesProvider.getRepositoryRules(), getLogger()); // v 3.0.0
 
 		try {
 			

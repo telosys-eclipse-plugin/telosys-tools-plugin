@@ -155,7 +155,8 @@ class TableViewerLabelProvider 	extends LabelProvider implements ITableLabelProv
 					return PluginImages.getImage(PluginImages.PRIMARYKEY_AUTOINCR);
 				}
 				//if ( column.isForeignKey() ) {
-				if ( column.isUsedInForeignKey() ) { // v 3.0.0
+				//if ( column.isUsedInForeignKey() ) { // v 3.0.0
+				if ( column.isFK() ) { // v 3.0.0
 					//--- Primary Key and Foreign Key
 					return PluginImages.getImage(PluginImages.PRIMARYKEY_FK);
 				}
@@ -163,7 +164,8 @@ class TableViewerLabelProvider 	extends LabelProvider implements ITableLabelProv
 				return PluginImages.getImage(PluginImages.PRIMARYKEY);
 			}
 			//else if ( column.isForeignKey() )
-			else if ( column.isUsedInForeignKey() ) // v 3.0.0
+			//else if ( column.isUsedInForeignKey() ) // v 3.0.0
+			else if ( column.isFK() ) // v 3.0.0
 			{
 				//--- Simple Foreign Key
 				return PluginImages.getImage(PluginImages.FOREIGNKEY);
