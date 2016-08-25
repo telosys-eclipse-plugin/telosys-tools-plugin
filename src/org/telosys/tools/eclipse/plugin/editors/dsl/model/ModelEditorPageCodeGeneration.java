@@ -59,15 +59,13 @@ import org.telosys.tools.generic.model.Entity;
 			for ( Entity entity : entities ) { 
 				String entityClassName = entity.getClassName(); 
 				
-//				if ( entityClassName == null ) entityClassName = "???" ;
-				
 	            //--- Create the row content : a single column for "entity class name"
-	            //String[] row = new String[] { getCustomizedEntityName(entity) };
 	            String[] row = new String[] { entityClassName };
 				
 	            //--- Create the TableItem and set the row content 
 	        	TableItem tableItem = new TableItem(table, SWT.NONE );
-	            tableItem.setChecked(false);                
+	            //tableItem.setChecked(false);
+	            tableItem.setChecked(true); // All entities checked by default
 	            tableItem.setText(row);      
 	            
 	            // ROW HEIGHT TESTS 

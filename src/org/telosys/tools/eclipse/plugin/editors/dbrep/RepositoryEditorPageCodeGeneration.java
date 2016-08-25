@@ -101,22 +101,15 @@ import org.telosys.tools.generic.model.Entity;
 		{
 			for ( Entity entity : entities ) { 
 				String tableName = entity.getDatabaseTable() ; // v 3.0.0
-//				if ( entity.getWarnings() != null && entity.getWarnings().size() > 0 ) {
-//					tableName = "(!) " + tableName;
-//				}
 				String entityClassName = entity.getClassName(); // v 3.0.0
-//				String entityClassNameView = entityClassName; // v 3.0.0
-//				if ( entity.getWarnings() != null && entity.getWarnings().size() > 0 ) {
-//					entityClassNameView = "(!) " + entityClassName ;
-//				}
-//				String entityClassNameView = getCustomizedEntityName(entity); // v 3.0.0
 				
                 //--- Create the row content 
                 String[] row = new String[] { entityClassName, tableName };
 				
                 //--- Create the TableItem and set the row content 
             	TableItem tableItem = new TableItem(table, SWT.NONE );
-                tableItem.setChecked(false);
+                //tableItem.setChecked(false);
+                tableItem.setChecked(true); // All entities checked by default
                 tableItem.setText(row);
                 
 	            tableItem.setImage( getEntityWarningImage(entity) ) ; // v 3.0.0
