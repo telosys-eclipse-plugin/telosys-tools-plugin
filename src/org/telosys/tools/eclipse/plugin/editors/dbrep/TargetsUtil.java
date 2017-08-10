@@ -4,8 +4,8 @@ import java.util.LinkedList;
 
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
+import org.telosys.tools.commons.bundles.TargetDefinition;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
-import org.telosys.tools.generator.target.TargetDefinition;
 
 public class TargetsUtil {
 

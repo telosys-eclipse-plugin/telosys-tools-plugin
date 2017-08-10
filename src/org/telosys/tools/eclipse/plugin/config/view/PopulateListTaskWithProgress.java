@@ -46,7 +46,8 @@ public class PopulateListTaskWithProgress implements IRunnableWithProgress
 		BundlesManager bm = new BundlesManager( this.telosysToolsCfg );
 		java.util.List<String> bundles = null ;
 		try {
-			bundles = bm.getBundlesList(userName) ;
+			//bundles = bm.getBundlesList(userName) ;
+			bundles = bm.getGitHubBundlesList(userName) ;
 		} catch (Exception e1) {			
 			MsgBox.error("Cannot get bundles from GitHub", e1);
 		}

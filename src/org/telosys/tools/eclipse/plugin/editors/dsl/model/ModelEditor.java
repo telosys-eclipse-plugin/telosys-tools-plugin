@@ -10,6 +10,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.telosys.tools.api.GenericModelLoader;
+import org.telosys.tools.api.TelosysModelException;
 import org.telosys.tools.commons.TelosysToolsException;
 import org.telosys.tools.dsl.DslModelManager;
 import org.telosys.tools.dsl.DslModelUtil;
@@ -115,31 +116,39 @@ public class ModelEditor extends AbstractModelEditor {
 		DslModelManager modelManager = new DslModelManager();
 		_modelInfo = modelManager.loadModelInformation(modelFile);
 
-    	//--- 3) Try to parse the model
+    	//--- 3) Prepare the model loader and try to load the model
 		GenericModelLoader genericModelLoader = new GenericModelLoader( getProjectConfig() ) ;
 		
 		Model model;
 		try {
+			//--- 3.1) Try to load/parse the model
 			model = genericModelLoader.loadModel(modelFile);
+			//--- 3.2) Model OK : no parsing error
+			_entitiesErrors = null ;
+			return model;
+		} catch (TelosysModelException modelException) {
+			//--- 3.2) Invalid Model : keep parsing errors
+			_entitiesErrors = modelException.getParsingErrors();
+			return null ;
 		} catch (TelosysToolsException e) {
 			MsgBox.error("Cannot load model !\n Unexpected exception" , e );
 			return null ;
 		}
 		
-		//--- 4) Errors reporting if any
-		if ( model != null ) {
-			//--- Model OK : no parsing error
-			_entitiesErrors = null ;
-			// FileMarker.removeErrorMarker(this.getFile());
-		}
-		else {
-			//--- Invalid Model : parsing errors
-			_entitiesErrors = genericModelLoader.getParsingErrors();
-			// FileMarker.setErrorMarker(this.getFile());
-		}
-		//EclipseWksUtil.refresh(this.getFile());
-		
-		return model;
+//		//--- 4) Errors reporting if any
+//		if ( model != null ) {
+//			//--- Model OK : no parsing error
+//			_entitiesErrors = null ;
+//			// FileMarker.removeErrorMarker(this.getFile());
+//		}
+//		else {
+//			//--- Invalid Model : parsing errors
+//			_entitiesErrors = genericModelLoader.getParsingErrors();
+//			// FileMarker.setErrorMarker(this.getFile());
+//		}
+//		//EclipseWksUtil.refresh(this.getFile());
+//		
+//		return model;
     }
     //----------------------------------------------------------------------------------------
     @Override

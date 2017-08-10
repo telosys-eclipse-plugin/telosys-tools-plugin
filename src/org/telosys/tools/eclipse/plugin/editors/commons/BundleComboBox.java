@@ -12,10 +12,10 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.telosys.tools.commons.StrUtil;
 import org.telosys.tools.commons.TelosysToolsException;
+import org.telosys.tools.commons.bundles.BundlesManager;
 import org.telosys.tools.commons.cfg.TelosysToolsCfg;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.config.ProjectConfigManager;
-import org.telosys.tools.generator.target.TargetsLoader;
 
 public class BundleComboBox {
 
@@ -119,9 +119,11 @@ public class BundleComboBox {
 	private List<String> getBundlesFromTemplatesFolder( IProject eclipseProject ) {
 		
 		TelosysToolsCfg telosysToolsCfg = ProjectConfigManager.loadProjectConfig( eclipseProject ); // v 3.0.0	
-		TargetsLoader targetsLoader = new TargetsLoader(telosysToolsCfg);
+		//TargetsLoader targetsLoader = new TargetsLoader(telosysToolsCfg);
+		BundlesManager bm = new BundlesManager(telosysToolsCfg);
 		try {
-			return targetsLoader.loadBundlesList();
+			//return targetsLoader.loadBundlesList();
+			return bm.getBundlesList();
 		} catch (TelosysToolsException e) {
 			MsgBox.error(e.getMessage());
 			return new LinkedList<String>();

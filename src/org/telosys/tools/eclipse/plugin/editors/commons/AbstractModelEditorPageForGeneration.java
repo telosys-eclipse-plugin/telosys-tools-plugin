@@ -25,6 +25,9 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.telosys.tools.commons.ConsoleLogger;
 import org.telosys.tools.commons.TelosysToolsException;
 import org.telosys.tools.commons.TelosysToolsLogger;
+import org.telosys.tools.commons.bundles.BundlesManager;
+import org.telosys.tools.commons.bundles.TargetDefinition;
+import org.telosys.tools.commons.bundles.TargetsDefinitions;
 import org.telosys.tools.commons.cfg.TelosysToolsCfg;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.PluginImages;
@@ -34,9 +37,6 @@ import org.telosys.tools.eclipse.plugin.editors.dbrep.ToolTipListenerForEntities
 import org.telosys.tools.eclipse.plugin.editors.dbrep.ToolTipListenerForTargetsTable;
 import org.telosys.tools.eclipse.plugin.generator.GenerationTaskWithProgress;
 import org.telosys.tools.eclipse.plugin.settings.SettingsManager;
-import org.telosys.tools.generator.target.TargetDefinition;
-import org.telosys.tools.generator.target.TargetsDefinitions;
-import org.telosys.tools.generator.target.TargetsLoader;
 import org.telosys.tools.generator.task.GenerationTask;
 import org.telosys.tools.generic.model.Entity;
 import org.telosys.tools.generic.model.Model;
@@ -542,14 +542,14 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 	}
 	//----------------------------------------------------------------------------------------------
 	private TargetsDefinitions loadTagetsDefinitions(String bundleName) {
-		TargetsLoader targetsLoader = new TargetsLoader(getProjectConfig());
+		// TargetsLoader targetsLoader = new TargetsLoader(getProjectConfig());
+		BundlesManager bm = new BundlesManager(getProjectConfig());
 		try {
-			return targetsLoader.loadTargetsDefinitions(bundleName);
-			//return targetsDefinitions ;
+			//return targetsLoader.loadTargetsDefinitions(bundleName);
+			return bm.getTargetsDefinitions(bundleName);
 		} catch (TelosysToolsException e) {
 			MsgBox.error("Cannot load targets definitions", e);
 			// if error : void lists for templates and resources 
-			//return new TargetsDefinitions(new LinkedList<TargetDefinition>(), new LinkedList<TargetDefinition>());
 			return new TargetsDefinitions();
 		} 
 	}
