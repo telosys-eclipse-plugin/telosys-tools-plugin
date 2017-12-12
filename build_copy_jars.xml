@@ -4,10 +4,10 @@
 	<property name="VERSION"    value="3.0.0" />
 	
 	<!-- set "-SNAPSHOT" to copy the current SNAPSHOT or "" to copy the current RELEASE -->
-	<!--
 	<property name="SNAPSHOT"   value="" />
-	-->
+	<!--
 	<property name="SNAPSHOT"   value="-SNAPSHOT" />
+	-->
 
 	<property name="lib_dir"    value="./lib" />
 	<property environment="env"/>
@@ -36,37 +36,8 @@
 		<echo message="  from ${maven_repo} ( version ${VERSION} )" />
 		<echo message="  to   ${lib_dir}" />
 
-
-		<copy file="${maven_repo}/org/telosys/telosys-tools-commons/${VERSION}${SNAPSHOT}/telosys-tools-commons-${VERSION}${SNAPSHOT}.jar" 
-			  tofile="${lib_dir}/telosys-tools-commons-${VERSION}.jar" 
-			  overwrite="true" verbose="true" />
-		
-		<copy file="${maven_repo}/org/telosys/telosys-tools-database/${VERSION}${SNAPSHOT}/telosys-tools-database-${VERSION}${SNAPSHOT}.jar" 
-			  tofile="${lib_dir}/telosys-tools-database-${VERSION}.jar" 
-			  overwrite="true" verbose="true" />
-
-		<copy file="${maven_repo}/org/telosys/telosys-tools-repository/${VERSION}${SNAPSHOT}/telosys-tools-repository-${VERSION}${SNAPSHOT}.jar" 
-			  tofile="${lib_dir}/telosys-tools-repository-${VERSION}.jar" 
-			  overwrite="true" verbose="true" />
-
-		<copy file="${maven_repo}/org/telosys/telosys-tools-dsl-parser/${VERSION}${SNAPSHOT}/telosys-tools-dsl-parser-${VERSION}${SNAPSHOT}.jar" 
-			  tofile="${lib_dir}/telosys-tools-dsl-parser-${VERSION}.jar" 
-			  overwrite="true" verbose="true" />
-
-		<copy file="${maven_repo}/org/telosys/telosys-tools-generic-model/${VERSION}${SNAPSHOT}/telosys-tools-generic-model-${VERSION}${SNAPSHOT}.jar" 
-			  tofile="${lib_dir}/telosys-tools-generic-model-${VERSION}.jar" 
-			  overwrite="true" verbose="true" />
-
-		<copy file="${maven_repo}/org/telosys/telosys-tools-generator/${VERSION}${SNAPSHOT}/telosys-tools-generator-${VERSION}${SNAPSHOT}.jar" 
-			  tofile="${lib_dir}/telosys-tools-generator-${VERSION}.jar" 
-			  overwrite="true" verbose="true" />
-
-		<copy file="${maven_repo}/org/telosys/telosys-tools-generator-engine/${VERSION}${SNAPSHOT}/telosys-tools-generator-engine-${VERSION}${SNAPSHOT}.jar" 
-			  tofile="${lib_dir}/telosys-tools-generator-engine-${VERSION}.jar" 
-			  overwrite="true" verbose="true" />
-
-		<copy file="${maven_repo}/org/telosys/telosys-tools-api/${VERSION}${SNAPSHOT}/telosys-tools-api-${VERSION}${SNAPSHOT}.jar" 
-			  tofile="${lib_dir}/telosys-tools-api-${VERSION}.jar" 
+		<copy file="${maven_repo}/org/telosys/telosys-tools-all/${VERSION}${SNAPSHOT}/telosys-tools-all-${VERSION}${SNAPSHOT}.jar" 
+			  tofile="${lib_dir}/telosys-tools-all-${VERSION}.jar" 
 			  overwrite="true" verbose="true" />
 
 		<echo message=" " />

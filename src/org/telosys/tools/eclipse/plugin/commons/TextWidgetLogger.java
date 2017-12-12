@@ -1,6 +1,6 @@
 package org.telosys.tools.eclipse.plugin.commons;
 
-import org.telosys.tools.commons.GenericLogger;
+import org.telosys.tools.commons.logger.GenericLogger;
 
 /**
  *  
@@ -8,8 +8,8 @@ import org.telosys.tools.commons.GenericLogger;
  * @author Laurent GUERIN
  *
  */
-public class TextWidgetLogger extends GenericLogger // implements  TelosysToolsLogger 
-{
+public class TextWidgetLogger extends GenericLogger {
+	
 	private StringBuilder  stringBuilder = new StringBuilder() ;
 	
 	//----------------------------------------------------------------------------------

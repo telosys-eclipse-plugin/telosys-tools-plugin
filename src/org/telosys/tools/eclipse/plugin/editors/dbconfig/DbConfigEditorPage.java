@@ -9,21 +9,21 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
-import org.telosys.tools.commons.ConsoleLogger;
+import org.telosys.tools.api.TelosysProject;
 import org.telosys.tools.commons.TelosysToolsLogger;
+import org.telosys.tools.commons.logger.ConsoleLogger;
+import org.telosys.tools.eclipse.plugin.commons.EclipseProjUtil;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 
-public abstract class DbConfigEditorPage extends FormPage 
-{
+public abstract class DbConfigEditorPage extends FormPage {
 	
-	private DbConfigEditor      _editor   = null ; // Ref on the Editor this page belongs to
+	private final DbConfigEditor      _editor  ; // Ref on the Editor this page belongs to
 	
-	private TelosysToolsLogger  _logger = null ;
+	private final TelosysToolsLogger  _logger ;
 	
 	private Color               _backgroundColor = null ;
 	
-	public DbConfigEditorPage(FormEditor editor, String id, String title) 
-	{
+	public DbConfigEditorPage(FormEditor editor, String id, String title) {
 		super(editor, id, title);// NB : ERROR if title is null
 		
 		_editor = (DbConfigEditor) editor;
@@ -32,66 +32,60 @@ public abstract class DbConfigEditorPage extends FormPage
 		}
 		
 		//--- Init the logger
-		_logger = _editor.getLogger();		
-		if ( null == _logger )
-		{
+		if ( _editor.getLogger() != null ) {
+			_logger = _editor.getLogger();		
+		}
+		else {
 			_logger = new ConsoleLogger();
 		}
+
 		log(this, "constructor(.., '"+id+"', '"+ title +"')..." );
 		
 		Device device = Display.getCurrent ();
 		_backgroundColor = device.getSystemColor(SWT.COLOR_GRAY);
 	}
 	
-	protected IProject getProject()
-	{
+	protected IProject getProject() {
 		return _editor.getProject();
 	}
+
+	protected TelosysProject getTelosysProject() {
+		IProject eclipseProject = getProject();
+		if ( eclipseProject != null ) {
+			String projectAbsolutePath = EclipseProjUtil.getProjectDir( eclipseProject );
+			return new TelosysProject(projectAbsolutePath);
+		}
+		else {
+			MsgBox.error("Invalid state : no project selected");
+			return null ;
+		}
+	}
 	
-	protected DbConfigEditor getDbConfigEditor()
-	{
+	protected DbConfigEditor getDbConfigEditor() {
 		return _editor ;
 	}
 	
-	protected void logException(Throwable e)
-	{
+	protected void logException(Throwable e) {
 		_logger.logStackTrace(e);
 	}
-	protected void logError(String s)
-	{
+	protected void logError(String s) {
 		_logger.error(s);
 	}
-	protected void log(String s)
-	{
+	protected void log(String s) {
 		_logger.log(s);
 	}
-	protected void log(Object o, String s)
-	{
+	protected void log(Object o, String s) {
 		_logger.log(o,s);
 	}
-	protected TelosysToolsLogger getLogger()
-	{
+	protected TelosysToolsLogger getLogger() {
 		return _logger ;
 	}
 	
-	protected void setDirty()
-	{
-		//RepositoryEditor repEditor = (RepositoryEditor) getEditor();
+	protected void setDirty() {
 		_editor.setDirty();
 	}
 	
-//	protected ProjectConfig getProjectConfig()
-//	{
-//		ProjectConfig config = _editor.getProjectConfig();
-//		if ( config == null )
-//		{
-//			MsgBox.error("ProjectConfig is null");
-//		}
-//		return config ;
-//	}
-	
-	protected void setBackgroundColor()
-	{
+	protected void setBackgroundColor() {
 		Control pageControl = this.getPartControl();
 		if ( pageControl != null ) {
 			Display display = pageControl.getDisplay();	
@@ -107,13 +101,11 @@ public abstract class DbConfigEditorPage extends FormPage
 			MsgBox.error("setBackgroundColor() : getPartControl() has returned null");
 		}		
 	}
-	protected Color getBackgroundColor()
-	{
+	protected Color getBackgroundColor() {
 		return _backgroundColor;
 	}
 	
-	protected void createFormContent(IManagedForm managedForm) 
-	{
+	protected void createFormContent(IManagedForm managedForm) {
 		log(this, "createFormContent(..)..." );
 		super.createFormContent(managedForm);
 		setBackgroundColor();

@@ -455,7 +455,7 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 		
 		//LinksGenerator linksGenerator = new LinksGenerator(getLogger());
 		//LinksGenerator linksGenerator = new LinksGenerator(RepositoryRulesProvider.getRepositoryRules(), getLogger()); // v 2.1.1
-		LinksManager linksGenerator = new LinksManager(RepositoryRulesProvider.getRepositoryRules(), getLogger()); // v 3.0.0
+		LinksManager linksGenerator = new LinksManager(RepositoryRulesProvider.getRepositoryRules() ); // v 3.0.0
 
 		try {
 			

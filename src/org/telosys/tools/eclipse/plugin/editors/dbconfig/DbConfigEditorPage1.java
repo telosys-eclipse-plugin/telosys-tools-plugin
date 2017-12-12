@@ -1,11 +1,9 @@
 package org.telosys.tools.eclipse.plugin.editors.dbconfig;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -42,6 +40,9 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.telosys.tools.api.MetaDataOptions;
+import org.telosys.tools.api.MetaDataOptionsImpl;
+import org.telosys.tools.api.TelosysProject;
 import org.telosys.tools.commons.FileUtil;
 import org.telosys.tools.commons.StrUtil;
 import org.telosys.tools.commons.TelosysToolsException;
@@ -50,28 +51,22 @@ import org.telosys.tools.commons.cfg.TelosysToolsCfg;
 import org.telosys.tools.commons.dbcfg.DatabaseConfiguration;
 import org.telosys.tools.commons.dbcfg.DatabaseType;
 import org.telosys.tools.commons.dbcfg.DatabasesConfigurations;
+import org.telosys.tools.commons.dbcfg.DbConnectionStatus;
 import org.telosys.tools.commons.jdbc.ConnectionManager;
 import org.telosys.tools.db.metadata.ColumnMetaData;
+import org.telosys.tools.db.metadata.DbInfo;
 import org.telosys.tools.db.metadata.ForeignKeyColumnMetaData;
 import org.telosys.tools.db.metadata.MetaDataManager;
 import org.telosys.tools.db.metadata.PrimaryKeyColumnMetaData;
 import org.telosys.tools.db.metadata.SchemaMetaData;
 import org.telosys.tools.db.metadata.TableMetaData;
 import org.telosys.tools.eclipse.plugin.commons.EclipseProjUtil;
-import org.telosys.tools.eclipse.plugin.commons.EclipseWksUtil;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.PluginImages;
 import org.telosys.tools.eclipse.plugin.commons.Util;
 import org.telosys.tools.eclipse.plugin.commons.mapping.MapperTextBean;
 import org.telosys.tools.eclipse.plugin.config.ProjectConfigManager;
-import org.telosys.tools.repository.RepositoryGenerator;
-import org.telosys.tools.repository.RepositoryUpdator;
-import org.telosys.tools.repository.UpdateLogWriter;
 import org.telosys.tools.repository.changelog.ChangeLog;
-import org.telosys.tools.repository.model.RepositoryModel;
-import org.telosys.tools.repository.persistence.PersistenceManager;
-import org.telosys.tools.repository.persistence.PersistenceManagerFactory;
-import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 
 
 /**
@@ -869,24 +864,24 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 		return s != null ? s : "" ;
 	}
 
-	private String quote ( String s )
-	{
-		if ( s == null ) return "null" ;
-		return "'" + s + "'" ;
-	}
-	private String arrayToString ( String[] array )
-	{
-		if ( array == null ) return "null" ;
-		StringBuilder sb = new StringBuilder();
-		sb.append("[ ");
-		for ( int i = 0 ; i < array.length ; i++ )
-		{
-			if ( i > 0 ) sb.append(", ");
-			sb.append(array[i]);
-		}
-		sb.append(" ]");
-		return sb.toString();
-	}
+//	private String quote ( String s )
+//	{
+//		if ( s == null ) return "null" ;
+//		return "'" + s + "'" ;
+//	}
+//	private String arrayToString ( String[] array )
+//	{
+//		if ( array == null ) return "null" ;
+//		StringBuilder sb = new StringBuilder();
+//		sb.append("[ ");
+//		for ( int i = 0 ; i < array.length ; i++ )
+//		{
+//			if ( i > 0 ) sb.append(", ");
+//			sb.append(array[i]);
+//		}
+//		sb.append(" ]");
+//		return sb.toString();
+//	}
 	
 	private void populateDatabaseConfigFields(int databaseId)
 	{
@@ -1119,23 +1114,23 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 		MsgBox.error(sb.toString(), e );
     }
     
-    private ConnectionManager createConnectionManager() 
-    {
-        TelosysToolsLogger logger = _editor.getTextWidgetLogger();
-
-        //--- Get libraries where to search the JDBC Driver
-        String[] libraries = getLibraries();
-        
-        ConnectionManager cm = null ;
-		try {
-			cm = new ConnectionManager( libraries, logger );
-		} catch (TelosysToolsException e) {
-			logException(e);
-			msgBoxErrorWithClassPath("Cannot create ConnectionManager", e, libraries);
-    		cm = null ;
-		}
-        return cm ;
-    }
+//    private ConnectionManager createConnectionManager() 
+//    {
+//        TelosysToolsLogger logger = _editor.getTextWidgetLogger();
+//
+//        //--- Get libraries where to search the JDBC Driver
+//        String[] libraries = getLibraries();
+//        
+//        ConnectionManager cm = null ;
+//		try {
+//			cm = new ConnectionManager( libraries, logger );
+//		} catch (TelosysToolsException e) {
+//			logException(e);
+//			msgBoxErrorWithClassPath("Cannot create ConnectionManager", e, libraries);
+//    		cm = null ;
+//		}
+//        return cm ;
+//    }
     
     /**
      * Returns the libraries where to search the JDBC driver
@@ -1249,91 +1244,91 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
         return FileUtil.buildFilePath(dir, sDatabaseName+".dbrep" );
     }
     
-    private File getRepositoryFile(String sDatabaseName) 
-    {
-		String sRepositoryFile = getRepositoryFileName( sDatabaseName ) ;
-
-		IProject project = _editor.getProject();
-        if ( project == null )
-        {
-        	MsgBox.error("actionGenerateRepository() : Cannot get project ");
-        	return null ;
-        }
-		IFile iFile = project.getFile(sRepositoryFile);
-		File file = EclipseWksUtil.toFile(iFile);
-		return file ;
-    }
+//    private File getRepositoryFile(String sDatabaseName) 
+//    {
+//		String sRepositoryFile = getRepositoryFileName( sDatabaseName ) ;
+//
+//		IProject project = _editor.getProject();
+//        if ( project == null )
+//        {
+//        	MsgBox.error("actionGenerateRepository() : Cannot get project ");
+//        	return null ;
+//        }
+//		IFile iFile = project.getFile(sRepositoryFile);
+//		File file = EclipseWksUtil.toFile(iFile);
+//		return file ;
+//    }
     
-    /**
-     * Returns the log file name ( built from the repository file name )
-     * @param sRepoFile
-     * @return
-     */
-    private String getUpdateLogFileName(String sRepoFile)
-    {
-    	Date now = new Date();
-    	String suffix = ".update." + DATE_FORMAT.format( now ) + ".log";
-    	if ( sRepoFile.endsWith(".dbrep") )
-    	{
-    		int last = sRepoFile.length() - 6 ; 
-    		return sRepoFile.substring(0,last) + suffix ;
-    	}
-    	else
-    	{
-    		return sRepoFile + suffix ;
-    	}
-    }
+//    /**
+//     * Returns the log file name ( built from the repository file name )
+//     * @param sRepoFile
+//     * @return
+//     */
+//    private String getUpdateLogFileName(String sRepoFile)
+//    {
+//    	Date now = new Date();
+//    	String suffix = ".update." + DATE_FORMAT.format( now ) + ".log";
+//    	if ( sRepoFile.endsWith(".dbrep") )
+//    	{
+//    		int last = sRepoFile.length() - 6 ; 
+//    		return sRepoFile.substring(0,last) + suffix ;
+//    	}
+//    	else
+//    	{
+//    		return sRepoFile + suffix ;
+//    	}
+//    }
     
-    private File getUpdateLogFile(String sRepoFile) 
-    {
-		String sRepositoryFile = getUpdateLogFileName( sRepoFile ) ;
-		File file = new File(sRepositoryFile);
-		return file ;
-    }
+//    private File getUpdateLogFile(String sRepoFile) 
+//    {
+//		String sRepositoryFile = getUpdateLogFileName( sRepoFile ) ;
+//		File file = new File(sRepositoryFile);
+//		return file ;
+//    }
     
-    private Connection getConnection() 
-    {
-    	DatabaseConfiguration databaseConfiguration = getCurrentDatabaseConfig(true) ;
-        if ( null == databaseConfiguration ) return null ;
-        
-		ConnectionManager cm = createConnectionManager();
-        if ( null == cm ) return null ;
-
-        try {
-			return cm.getConnection(databaseConfiguration);
-		} catch (TelosysToolsException e) {
-			logException(e);
-			Throwable cause = e.getCause();
-			if ( cause != null && cause instanceof SQLException ) {
-				SQLException sqlException = (SQLException)cause;
-	            MsgBox.error("Cannot connect to the database ! "
-	                      + "\n SQLException :"
-	                      + "\n . Message   : " + sqlException.getMessage() 
-	                      + "\n . ErrorCode : " + sqlException.getErrorCode() 
-	                      + "\n . SQLState  : " + sqlException.getSQLState() 
-	                      );
-			}
-			else {
-				msgBoxErrorWithClassPath("Cannot connect to the database !", e, cm.getLibraries());
-			}
-		} catch (Throwable e) {
-			logException(e);
-		    MsgBox.error("Cannot connect to the database ! "
-		            + "\n Exception : " + e.getClass().getName()
-		            + "\n . Message : " + e.getMessage() 
-		            );
-		}
-		return null ;
-    }
+//    private Connection getConnection() 
+//    {
+//    	DatabaseConfiguration databaseConfiguration = getCurrentDatabaseConfig(true) ;
+//        if ( null == databaseConfiguration ) return null ;
+//        
+//		ConnectionManager cm = createConnectionManager();
+//        if ( null == cm ) return null ;
+//
+//        try {
+//			return cm.getConnection(databaseConfiguration);
+//		} catch (TelosysToolsException e) {
+//			logException(e);
+//			Throwable cause = e.getCause();
+//			if ( cause != null && cause instanceof SQLException ) {
+//				SQLException sqlException = (SQLException)cause;
+//	            MsgBox.error("Cannot connect to the database ! "
+//	                      + "\n SQLException :"
+//	                      + "\n . Message   : " + sqlException.getMessage() 
+//	                      + "\n . ErrorCode : " + sqlException.getErrorCode() 
+//	                      + "\n . SQLState  : " + sqlException.getSQLState() 
+//	                      );
+//			}
+//			else {
+//				msgBoxErrorWithClassPath("Cannot connect to the database !", e, cm.getLibraries());
+//			}
+//		} catch (Throwable e) {
+//			logException(e);
+//		    MsgBox.error("Cannot connect to the database ! "
+//		            + "\n Exception : " + e.getClass().getName()
+//		            + "\n . Message : " + e.getMessage() 
+//		            );
+//		}
+//		return null ;
+//    }
     
-    private void closeConnection(Connection con) 
-    {
-	    try {
-		    con.close();
-		} catch (SQLException e) {
-			MsgBox.error("Cannot close connection (SQLException)", e );
-		}
-    }
+//    private void closeConnection(Connection con) 
+//    {
+//	    try {
+//		    con.close();
+//		} catch (SQLException e) {
+//			MsgBox.error("Cannot close connection (SQLException)", e );
+//		}
+//    }
     
     /**
      * Show the project's libraries defined in the "Java Build Path"
@@ -1358,378 +1353,473 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
     /**
      * Test the Database connection
      */
-    private void actionTestConnection() 
-    {
+//    private void actionTestConnectionOLD() 
+//    {
+//    	Shell shell = Util.cursorWait();
+//
+//    	Connection con = getConnection();
+//    	if ( con != null )
+//    	{
+//    		boolean ok = true ;
+//	    	String catalog = "" ;
+//	    	boolean autocommit = false ;
+//	    	
+//			try {
+//				catalog = con.getCatalog() ;
+//			} catch (SQLException e) {
+//				ok = false ;
+//				String s = "Cannot get 'catalog' from the connection ! " ;
+//				logError(s);
+//				MsgBox.error(s, e);
+//			}
+//	
+//			try {
+//				autocommit = con.getAutoCommit() ;
+//			} catch (SQLException e) {
+//				ok = false ;
+//				String s = "Cannot get 'auto-commit' from the connection ! " ;
+//				logError(s);
+//				MsgBox.error(s, e);
+//			} 
+//			
+//			closeConnection(con);
+//
+//			if ( ok ) {
+//				MsgBox.info("Connection is OK.\n\n" 
+//						+ " . catalog = '" + catalog + "' \n" 
+//						+ " . auto-commit = '" + autocommit + "' \n" );
+//			}
+//    	}
+//		Util.cursorArrow(shell);
+//    }
+    private void actionTestConnection() {
     	Shell shell = Util.cursorWait();
 
-    	Connection con = getConnection();
-    	if ( con != null )
-    	{
-    		boolean ok = true ;
-	    	String catalog = "" ;
-	    	boolean autocommit = false ;
-	    	
-			try {
-				catalog = con.getCatalog() ;
-			} catch (SQLException e) {
-				ok = false ;
-				String s = "Cannot get 'catalog' from the connection ! " ;
-				logError(s);
-				MsgBox.error(s, e);
-			}
-	
-			try {
-				autocommit = con.getAutoCommit() ;
-			} catch (SQLException e) {
-				ok = false ;
-				String s = "Cannot get 'auto-commit' from the connection ! " ;
-				logError(s);
-				MsgBox.error(s, e);
-			} 
-			
-			closeConnection(con);
-
-			if ( ok ) {
-				MsgBox.info("Connection is OK.\n\n" 
-						+ " . catalog = '" + catalog + "' \n" 
-						+ " . auto-commit = '" + autocommit + "' \n" );
-			}
+    	DatabaseConfiguration databaseConfiguration = getCurrentDatabaseConfig(true) ;
+		TelosysProject telosysProject = getTelosysProject();
+		try {
+			DbConnectionStatus status = telosysProject.checkDatabaseConnection(databaseConfiguration);
+			MsgBox.info("Connection OK.\n\n" 
+					+ " . product : '" + status.getProductName() + "' \n" 
+					+ " . version : '" + status.getProductVersion() + "' \n" 
+					+ " . catalog : '" + status.getCatalog() + "' \n" 
+					+ " . schema  : '" + status.getSchema() + "' \n" );
+		} catch (TelosysToolsException e) {
+			MsgBox.error("Cannot connect", e );
     	}
 		Util.cursorArrow(shell);
     }
 
-    private void actionGetInformations() 
-    {
+//    private void actionGetInformations() 
+//    {
+//    	Shell shell = Util.cursorWait();
+//    	
+//		Connection con = getConnection();
+//		if ( con != null )
+//		{
+//            try {
+//				DatabaseMetaData dbmd = con.getMetaData();
+//				
+//			    _InfoURL.setText( dbmd.getURL() );
+//			    _InfoProdName.setText( dbmd.getDatabaseProductName() );
+//			    _InfoProdVer.setText( dbmd.getDatabaseProductVersion() );
+//			    _InfoDriverName.setText( dbmd.getDriverName() );
+//			    _InfoDriverVer.setText( dbmd.getDriverVersion() );
+//			    _InfoMaxConn.setText( ""+dbmd.getMaxConnections() );
+//			    _InfoUser.setText(dbmd.getUserName());
+//			    _InfoIsolation.setText( ""+dbmd.getDefaultTransactionIsolation() );
+//			    
+//			    _InfoCatalogTerm.setText( dbmd.getCatalogTerm() );
+//			    _InfoCatalogSepar.setText( dbmd.getCatalogSeparator() );
+//				
+//			    _InfoSchemaTerm.setText( dbmd.getSchemaTerm() );
+//			    _InfoSearchEscape.setText( dbmd.getSearchStringEscape() );
+//			    
+//			    con.close();
+//			    
+//			} catch (SQLException e) {
+//		    	logException(e);				
+//				MsgBox.error("SQLException : ", e );
+//			} finally {
+//				closeConnection(con);
+//			}
+//            
+//		}
+//   		// else : nothing to do ( message already shown )
+//		
+//		DatabaseConfiguration databaseConfiguration = getCurrentDatabaseConfig(true) ;
+//		TelosysProject telosysProject = getTelosysProject();
+//		telosysProject.getDatabaseInfo(databaseConfiguration);
+//		
+//   		Util.cursorArrow(shell);
+//    }
+    
+    private void actionGetInformations() {
     	Shell shell = Util.cursorWait();
-    	
-		Connection con = getConnection();
-		if ( con != null )
+
+    	DatabaseConfiguration databaseConfiguration = getCurrentDatabaseConfig(true) ;
+		TelosysProject telosysProject = getTelosysProject();
+		DbInfo dbInfo;
+		try {
+			dbInfo = telosysProject.getDatabaseInfo(databaseConfiguration);
+		    _InfoURL.setText( dbInfo.getUrl() );
+		    _InfoProdName.setText( dbInfo.getDatabaseProductName() );
+		    _InfoProdVer.setText( dbInfo.getDatabaseProductVersion() );
+		    _InfoDriverName.setText( dbInfo.getDriverName() );
+		    _InfoDriverVer.setText( dbInfo.getDriverVersion() );
+		    _InfoMaxConn.setText( "" + dbInfo.getMaxConnections() );
+		    _InfoUser.setText(dbInfo.getUserName());
+		    _InfoIsolation.setText( "" + dbInfo.getDefaultTransactionIsolation() );
+		    
+		    _InfoCatalogTerm.setText( dbInfo.getCatalogTerm() );
+		    _InfoCatalogSepar.setText( dbInfo.getCatalogSeparator() );
+			
+		    _InfoSchemaTerm.setText( dbInfo.getSchemaTerm() );
+		    _InfoSearchEscape.setText( dbInfo.getSearchStringEscape() );
+		} catch (TelosysToolsException e) {
+			MsgBox.error("Cannot get database info", e );
+		}
+
+	    Util.cursorArrow(shell);
+    }
+    
+    private void actionGetMetaData(int whatElse) {
+    	Shell shell = Util.cursorWait();
+		
+    	DatabaseConfiguration databaseConfiguration = getCurrentDatabaseConfig(true) ;
+		TelosysProject telosysProject = getTelosysProject();
+		MetaDataOptionsImpl options = new MetaDataOptionsImpl();
+		
+		switch ( whatElse )
 		{
-            try {
-				DatabaseMetaData dbmd = con.getMetaData();
-				
-			    _InfoURL.setText( dbmd.getURL() );
-			    _InfoProdName.setText( dbmd.getDatabaseProductName() );
-			    _InfoProdVer.setText( dbmd.getDatabaseProductVersion() );
-			    _InfoDriverName.setText( dbmd.getDriverName() );
-			    _InfoDriverVer.setText( dbmd.getDriverVersion() );
-			    _InfoMaxConn.setText( ""+dbmd.getMaxConnections() );
-			    _InfoUser.setText(dbmd.getUserName());
-			    _InfoIsolation.setText( ""+dbmd.getDefaultTransactionIsolation() );
-			    
-			    _InfoCatalogTerm.setText( dbmd.getCatalogTerm() );
-			    _InfoCatalogSepar.setText( dbmd.getCatalogSeparator() );
-				
-			    _InfoSchemaTerm.setText( dbmd.getSchemaTerm() );
-			    _InfoSearchEscape.setText( dbmd.getSearchStringEscape() );
-			    
-			    con.close();
-			    
-			} catch (SQLException e) {
-		    	logException(e);				
-				MsgBox.error("SQLException : ", e );
-			} finally {
-				closeConnection(con);
-			}
-            
+		case GET_COLUMNS :
+    		log("get columns ... ");
+    		options.setColumns(true);
+			break;
+		case GET_PRIMARY_KEYS :
+    		log("get primary keys ... ");
+    		options.setPrimaryKeys(true);
+			break;
+		case GET_FOREIGN_KEYS :
+    		log("get foreign keys ... ");
+    		options.setForeignKeys(true);
+			break;
+		case GET_CATALOGS :
+    		log("get catalogs ... ");
+    		options.setCatalogs(true);
+			break;
+		case GET_SCHEMAS :
+    		log("get schemas ... ");
+    		options.setSchemas(true);
+			break;
+		default :
+    		log("default : get tables ... ");
+    		options.setTables(true);
+			break;
 		}
-   		// else : nothing to do ( message already shown )
-
-   		Util.cursorArrow(shell);
-    }
-
-    private void actionGetMetaData(int whatElse) 
-    {
-    	Shell shell = Util.cursorWait();
-		_tMetaData.setText("");
-    	Connection con = getConnection();
-    	if ( con != null )
-    	{
-    		log("connected.");
-
-    		DatabaseConfiguration db = getCurrentDatabaseConfig(true) ;
-            if ( null == db ) return ;
-    		String sCatalog = db.getMetadataCatalog() ;
-    		String sSchema  = db.getMetadataSchema() ;
-    		String sTableNamePattern = db.getMetadataTableNamePattern() ;
-    		String[] tableTypes = db.getMetadataTableTypesArray() ;
-    		String sTableNameInclude = db.getMetadataTableNameInclude() ;
-    		String sTableNameExclude = db.getMetadataTableNameExclude() ;
-    		
-    		log("get DatabaseMetaData from connection...");
-			DatabaseMetaData dbmd = null ;
-			List<TableMetaData> tables = null ;
-			try {
-				//--- Get the database Meta-Data
-				dbmd = con.getMetaData();		
-
-			} catch (SQLException e) {
-		    	logException(e);
-				MsgBox.error("Cannot get meta-data ! ", e );
-			} 
-
-			log("DatabaseMetaData instance ready.");
-			
-			TelosysToolsLogger logger = _editor.getTextWidgetLogger();
-    		MetaDataManager metaDataManager = new MetaDataManager(logger);
-
-    		//--- Get the tables
-    		log("get tables from DatabaseMetaData ... ");
-    		log(" . catalog = " + quote(sCatalog) );
-    		log(" . schema  = " + quote(sSchema) );
-    		log(" . pattern = " + quote(sTableNamePattern) );
-    		log(" . types   = " + arrayToString(tableTypes) );
-    		log(" . include   = " + quote(sTableNameInclude) );
-    		log(" . exclude   = " + quote(sTableNameExclude) );
-    		try {
-				tables = metaDataManager.getTables(dbmd, sCatalog, sSchema, sTableNamePattern, tableTypes, sTableNameInclude, sTableNameExclude );
-			} catch (SQLException e) {
-				tables = null ;
-		    	logException(e);
-				MsgBox.error("Cannot get tables from meta-data ! ", e );
-			} 
-			
-			if ( tables != null ) 
-			{
-				switch ( whatElse )
-				{
-				case GET_COLUMNS :
-		    		log("get columns ... ");
-					getMetaDataColumns( metaDataManager, dbmd, tables, sCatalog, sSchema);
-					break;
-					
-				case GET_PRIMARY_KEYS :
-		    		log("get primary keys ... ");
-					getMetaDataPrimaryKeys( metaDataManager, dbmd, tables, sCatalog, sSchema);
-					break;
-					
-				case GET_FOREIGN_KEYS :
-		    		log("get foreign keys ... ");
-					getMetaDataForeignKeys( metaDataManager, dbmd, tables, sCatalog, sSchema);
-					break;
-					
-				case GET_CATALOGS :
-		    		log("get catalogs ... ");
-					getMetaDataCatalogs( metaDataManager, dbmd);
-					break;
-					
-				case GET_SCHEMAS :
-		    		log("get schemas ... ");
-					getMetaDataSchemas( metaDataManager, dbmd);
-					break;
-					
-				default :
-					printMetaDataTables(tables);
-					break;
-				}
-			}
-			closeConnection(con);
-    	}
+		
+		try {
+			String result = telosysProject.getMetaData(databaseConfiguration, options);
+			_tMetaData.setText(result);
+		} catch (TelosysToolsException e) {
+			MsgBox.error("Cannot get metadata", e );
+		}    	
+		
 		Util.cursorArrow(shell);
     }
     
-    private void getMetaDataColumns(MetaDataManager metaDataManager, DatabaseMetaData dbmd, 
-    		List<TableMetaData> tables, String sCatalog, String sSchema) 
-    {
-    	if ( tables.size() > 0 ) {    		
-			//--- Get the columns for each table
-			for ( TableMetaData t : tables ) {
-				String sTableName = t.getTableName();
-				try {
-					List<ColumnMetaData> columns = metaDataManager.getColumns(dbmd, sCatalog, sSchema, sTableName );
-					printMetaDataColumns(sTableName, columns);
-				} catch (SQLException e) {
-			    	logException(e);
-					MsgBox.error("Cannot get columns for table '" + sTableName + "'", e );
-					break;
-				} catch (Exception e) {
-			    	logException(e);
-					MsgBox.error("Cannot get columns for table '" + sTableName + "'", e );
-					break;
-				}
-			}
-    	}
-    	else {
-    		_tMetaData.append("No table => no column.\n");
-    	}
-    }
+//    private void actionGetMetaData(int whatElse) 
+//    {
+//    	Shell shell = Util.cursorWait();
+//		_tMetaData.setText("");
+//    	Connection con = getConnection();
+//    	if ( con != null )
+//    	{
+//    		log("connected.");
+//
+//    		DatabaseConfiguration db = getCurrentDatabaseConfig(true) ;
+//            if ( null == db ) return ;
+//    		String sCatalog = db.getMetadataCatalog() ;
+//    		String sSchema  = db.getMetadataSchema() ;
+//    		String sTableNamePattern = db.getMetadataTableNamePattern() ;
+//    		String[] tableTypes = db.getMetadataTableTypesArray() ;
+//    		String sTableNameInclude = db.getMetadataTableNameInclude() ;
+//    		String sTableNameExclude = db.getMetadataTableNameExclude() ;
+//    		
+//    		log("get DatabaseMetaData from connection...");
+//			DatabaseMetaData dbmd = null ;
+//			List<TableMetaData> tables = null ;
+//			try {
+//				//--- Get the database Meta-Data
+//				dbmd = con.getMetaData();		
+//
+//			} catch (SQLException e) {
+//		    	logException(e);
+//				MsgBox.error("Cannot get meta-data ! ", e );
+//			} 
+//
+//			log("DatabaseMetaData instance ready.");
+//			
+//			TelosysToolsLogger logger = _editor.getTextWidgetLogger();
+//    		MetaDataManager metaDataManager = new MetaDataManager(logger);
+//
+//    		//--- Get the tables
+//    		log("get tables from DatabaseMetaData ... ");
+//    		log(" . catalog = " + quote(sCatalog) );
+//    		log(" . schema  = " + quote(sSchema) );
+//    		log(" . pattern = " + quote(sTableNamePattern) );
+//    		log(" . types   = " + arrayToString(tableTypes) );
+//    		log(" . include   = " + quote(sTableNameInclude) );
+//    		log(" . exclude   = " + quote(sTableNameExclude) );
+//    		try {
+//				tables = metaDataManager.getTables(dbmd, sCatalog, sSchema, sTableNamePattern, tableTypes, sTableNameInclude, sTableNameExclude );
+//			} catch (SQLException e) {
+//				tables = null ;
+//		    	logException(e);
+//				MsgBox.error("Cannot get tables from meta-data ! ", e );
+//			} 
+//			
+//			if ( tables != null ) 
+//			{
+//				switch ( whatElse )
+//				{
+//				case GET_COLUMNS :
+//		    		log("get columns ... ");
+//					getMetaDataColumns( metaDataManager, dbmd, tables, sCatalog, sSchema);
+//					break;
+//					
+//				case GET_PRIMARY_KEYS :
+//		    		log("get primary keys ... ");
+//					getMetaDataPrimaryKeys( metaDataManager, dbmd, tables, sCatalog, sSchema);
+//					break;
+//					
+//				case GET_FOREIGN_KEYS :
+//		    		log("get foreign keys ... ");
+//					getMetaDataForeignKeys( metaDataManager, dbmd, tables, sCatalog, sSchema);
+//					break;
+//					
+//				case GET_CATALOGS :
+//		    		log("get catalogs ... ");
+//					getMetaDataCatalogs( metaDataManager, dbmd);
+//					break;
+//					
+//				case GET_SCHEMAS :
+//		    		log("get schemas ... ");
+//					getMetaDataSchemas( metaDataManager, dbmd);
+//					break;
+//					
+//				default :
+//					printMetaDataTables(tables);
+//					break;
+//				}
+//			}
+//			closeConnection(con);
+//    	}
+//		Util.cursorArrow(shell);
+//    }
     
-    private void getMetaDataPrimaryKeys(MetaDataManager metaDataManager, DatabaseMetaData dbmd, 
-    		List<TableMetaData> tables, String sCatalog, String sSchema) 
-    {
-    	if ( tables.size() > 0 ) {
-    		
-			//--- Get the columns for each table
-			for ( TableMetaData t : tables ) {
-				String sTableName = t.getTableName();
-				try {
-					List<PrimaryKeyColumnMetaData> columns = metaDataManager.getPKColumns(dbmd, sCatalog, sSchema, sTableName );
-					printMetaDataPrimaryKeys(sTableName, columns);
-				} catch (SQLException e) {
-			    	logException(e);
-					MsgBox.error("Cannot get Primary Key for table '" + sTableName + "'", e );
-					break;
-				} catch (Exception e) {
-			    	logException(e);
-					MsgBox.error("Cannot get Primary Key for table '" + sTableName + "'", e );
-					break;
-				} 
-			}
-		}
-		else {
-			_tMetaData.append("No table => no primary key.\n");
-		}		
-    }
+//    private void getMetaDataColumns(MetaDataManager metaDataManager, DatabaseMetaData dbmd, 
+//    		List<TableMetaData> tables, String sCatalog, String sSchema) 
+//    {
+//    	if ( tables.size() > 0 ) {    		
+//			//--- Get the columns for each table
+//			for ( TableMetaData t : tables ) {
+//				String sTableName = t.getTableName();
+//				try {
+//					List<ColumnMetaData> columns = metaDataManager.getColumns(dbmd, sCatalog, sSchema, sTableName );
+//					printMetaDataColumns(sTableName, columns);
+//				} catch (SQLException e) {
+//			    	logException(e);
+//					MsgBox.error("Cannot get columns for table '" + sTableName + "'", e );
+//					break;
+//				} catch (Exception e) {
+//			    	logException(e);
+//					MsgBox.error("Cannot get columns for table '" + sTableName + "'", e );
+//					break;
+//				}
+//			}
+//    	}
+//    	else {
+//    		_tMetaData.append("No table => no column.\n");
+//    	}
+//    }
+    
+//    private void getMetaDataPrimaryKeys(MetaDataManager metaDataManager, DatabaseMetaData dbmd, 
+//    		List<TableMetaData> tables, String sCatalog, String sSchema) 
+//    {
+//    	if ( tables.size() > 0 ) {
+//    		
+//			//--- Get the columns for each table
+//			for ( TableMetaData t : tables ) {
+//				String sTableName = t.getTableName();
+//				try {
+//					List<PrimaryKeyColumnMetaData> columns = metaDataManager.getPKColumns(dbmd, sCatalog, sSchema, sTableName );
+//					printMetaDataPrimaryKeys(sTableName, columns);
+//				} catch (SQLException e) {
+//			    	logException(e);
+//					MsgBox.error("Cannot get Primary Key for table '" + sTableName + "'", e );
+//					break;
+//				} catch (Exception e) {
+//			    	logException(e);
+//					MsgBox.error("Cannot get Primary Key for table '" + sTableName + "'", e );
+//					break;
+//				} 
+//			}
+//		}
+//		else {
+//			_tMetaData.append("No table => no primary key.\n");
+//		}		
+//    }
 
-    private void getMetaDataForeignKeys(MetaDataManager metaDataManager, DatabaseMetaData dbmd, 
-    		List<TableMetaData> tables, String sCatalog, String sSchema) 
-    {
-    	if ( tables.size() > 0 ) {
-    		
-			//--- Get the columns for each table
-			for ( TableMetaData t : tables ) {
-				String sTableName = t.getTableName();
-				try {
-					List<ForeignKeyColumnMetaData> columns = metaDataManager.getFKColumns(dbmd, sCatalog, sSchema, sTableName );
-					printMetaDataForeignKeys(sTableName, columns);
-				} catch (SQLException e) {
-			    	logException(e);
-					MsgBox.error("Cannot get Foreign Keys for table '" + sTableName + "'", e );
-					break;
-				} catch (Exception e) {
-			    	logException(e);
-					MsgBox.error("Cannot get Foreign Keys for table '" + sTableName + "'", e );
-					break;
-				} 
-			}
-    	}
-    	else {
-    		_tMetaData.append("No table => no foreign key.\n");    		
-    	}
-    }
+//    private void getMetaDataForeignKeys(MetaDataManager metaDataManager, DatabaseMetaData dbmd, 
+//    		List<TableMetaData> tables, String sCatalog, String sSchema) 
+//    {
+//    	if ( tables.size() > 0 ) {
+//    		
+//			//--- Get the columns for each table
+//			for ( TableMetaData t : tables ) {
+//				String sTableName = t.getTableName();
+//				try {
+//					List<ForeignKeyColumnMetaData> columns = metaDataManager.getFKColumns(dbmd, sCatalog, sSchema, sTableName );
+//					printMetaDataForeignKeys(sTableName, columns);
+//				} catch (SQLException e) {
+//			    	logException(e);
+//					MsgBox.error("Cannot get Foreign Keys for table '" + sTableName + "'", e );
+//					break;
+//				} catch (Exception e) {
+//			    	logException(e);
+//					MsgBox.error("Cannot get Foreign Keys for table '" + sTableName + "'", e );
+//					break;
+//				} 
+//			}
+//    	}
+//    	else {
+//    		_tMetaData.append("No table => no foreign key.\n");    		
+//    	}
+//    }
     
-    //----------------------------------------------------------------------------------------------------
-    private void getMetaDataCatalogs(MetaDataManager metaDataManager, DatabaseMetaData dbmd ) 
-    {
-    	try {
-			List<String> list = metaDataManager.getCatalogs(dbmd);
-			printMetaDataCatalogs(list);
-		} catch (SQLException e) {
-	    	logException(e);
-			MsgBox.error("Cannot get catalogs", e );
-		} catch (Exception e) {
-	    	logException(e);
-			MsgBox.error("Cannot get catalogs", e );
-		}
-    }
-    private void printMetaDataCatalogs(List<String> list)
-    {
-    	if ( list.size() > 0 ) {
-    		for ( String s : list ) {
-    			_tMetaData.append(" . " + s + " \n");
-    		}
-    	}
-    	else {
-			_tMetaData.append("No catalog.\n");
-    	}
-    }
+//    //----------------------------------------------------------------------------------------------------
+//    private void getMetaDataCatalogs(MetaDataManager metaDataManager, DatabaseMetaData dbmd ) 
+//    {
+//    	try {
+//			List<String> list = metaDataManager.getCatalogs(dbmd);
+//			printMetaDataCatalogs(list);
+//		} catch (SQLException e) {
+//	    	logException(e);
+//			MsgBox.error("Cannot get catalogs", e );
+//		} catch (Exception e) {
+//	    	logException(e);
+//			MsgBox.error("Cannot get catalogs", e );
+//		}
+//    }
+//    private void printMetaDataCatalogs(List<String> list)
+//    {
+//    	if ( list.size() > 0 ) {
+//    		for ( String s : list ) {
+//    			_tMetaData.append(" . " + s + " \n");
+//    		}
+//    	}
+//    	else {
+//			_tMetaData.append("No catalog.\n");
+//    	}
+//    }
 
-    //----------------------------------------------------------------------------------------------------
-    private void getMetaDataSchemas(MetaDataManager metaDataManager, DatabaseMetaData dbmd ) 
-    {
-    	try {
-			List<SchemaMetaData> list = metaDataManager.getSchemas(dbmd);
-			printMetaDataSchemas(list);
-		} catch (SQLException e) {
-	    	logException(e);
-			MsgBox.error("Cannot get schemas", e );
-		} catch (Exception e) {
-	    	logException(e);
-			MsgBox.error("Cannot get schemas", e );
-		}
-    }
-    private void printMetaDataSchemas(List<SchemaMetaData> list)
-    {
-    	if ( list.size() > 0 ) {
-			for ( SchemaMetaData schema : list ) {
-				_tMetaData.append(" . " + schema.getSchemaName() + " ( catalog : "+ schema.getSchemaName() + " ) \n");
-			}
-    	}
-    	else {
-			_tMetaData.append("No schema.\n");
-    	}
-    }
-    //----------------------------------------------------------------------------------------------------
+//    //----------------------------------------------------------------------------------------------------
+//    private void getMetaDataSchemas(MetaDataManager metaDataManager, DatabaseMetaData dbmd ) 
+//    {
+//    	try {
+//			List<SchemaMetaData> list = metaDataManager.getSchemas(dbmd);
+//			printMetaDataSchemas(list);
+//		} catch (SQLException e) {
+//	    	logException(e);
+//			MsgBox.error("Cannot get schemas", e );
+//		} catch (Exception e) {
+//	    	logException(e);
+//			MsgBox.error("Cannot get schemas", e );
+//		}
+//    }
+//    private void printMetaDataSchemas(List<SchemaMetaData> list)
+//    {
+//    	if ( list.size() > 0 ) {
+//			for ( SchemaMetaData schema : list ) {
+//				_tMetaData.append(" . " + schema.getSchemaName() + " ( catalog : "+ schema.getSchemaName() + " ) \n");
+//			}
+//    	}
+//    	else {
+//			_tMetaData.append("No schema.\n");
+//    	}
+//    }
+//    //----------------------------------------------------------------------------------------------------
     
-    private void printMetaDataTables(List<TableMetaData> tables)
-    {
-    	if ( tables.size() > 0 ) {
-			for ( TableMetaData t : tables ) {
-				_tMetaData.append(" . " + t.getTableName() + " (" + t.getTableType() + ") "
-					+ " catalog = '" + t.getCatalogName() + "'"
-					+ " schema = '" + t.getSchemaName() + "'" 
-					+ "\n");
-	
-			}
-    	}
-    	else {
-			_tMetaData.append("No table.\n");
-    	}
-    }
-    private void printMetaDataColumns(String tableName, List<ColumnMetaData> columns)
-    {
-    	_tMetaData.append("Table '" + tableName + "' : \n");
-		for ( ColumnMetaData c : columns ) {
-			String s = 
-					"[" +c.getOrdinalPosition() + "]"
-					+ " " + c.getColumnName() + " : " 
-					+ "  " + c.getDbTypeName() 
-					+ "  (jdbc:" + c.getJdbcTypeCode()+")" 
-					+ "  size=" + c.getSize()
-					+ "  " + ( c.isNotNull() ? "NOT NULL" : "" )
-					+ "  charOctetLength=" + c.getCharOctetLength()
-					+ "  decimalDigits=" + c.getDecimalDigits()
-					+ "  numPrecRadix=" + c.getNumPrecRadix()
-					+ "  defaultValue=" + c.getDefaultValue()
-					;
-			
-			_tMetaData.append(" . " + s + " \n");
-		}
-    	_tMetaData.append("\n");
-    }
+//    private void printMetaDataTables(List<TableMetaData> tables)
+//    {
+//    	if ( tables.size() > 0 ) {
+//			for ( TableMetaData t : tables ) {
+//				_tMetaData.append(" . " + t.getTableName() + " (" + t.getTableType() + ") "
+//					+ " catalog = '" + t.getCatalogName() + "'"
+//					+ " schema = '" + t.getSchemaName() + "'" 
+//					+ "\n");
+//	
+//			}
+//    	}
+//    	else {
+//			_tMetaData.append("No table.\n");
+//    	}
+//    }
+//    private void printMetaDataColumns(String tableName, List<ColumnMetaData> columns)
+//    {
+//    	_tMetaData.append("Table '" + tableName + "' : \n");
+//		for ( ColumnMetaData c : columns ) {
+//			String s = 
+//					"[" +c.getOrdinalPosition() + "]"
+//					+ " " + c.getColumnName() + " : " 
+//					+ "  " + c.getDbTypeName() 
+//					+ "  (jdbc:" + c.getJdbcTypeCode()+")" 
+//					+ "  size=" + c.getSize()
+//					+ "  " + ( c.isNotNull() ? "NOT NULL" : "" )
+//					+ "  charOctetLength=" + c.getCharOctetLength()
+//					+ "  decimalDigits=" + c.getDecimalDigits()
+//					+ "  numPrecRadix=" + c.getNumPrecRadix()
+//					+ "  defaultValue=" + c.getDefaultValue()
+//					;
+//			
+//			_tMetaData.append(" . " + s + " \n");
+//		}
+//    	_tMetaData.append("\n");
+//    }
     
-    private void printMetaDataPrimaryKeys(String tableName, List<PrimaryKeyColumnMetaData> columns)
-    {
-    	_tMetaData.append("Table '" + tableName + "' : \n");
-		for ( PrimaryKeyColumnMetaData c : columns ) {
-			String s = 
-					" " + c.getPkName() + " : " 
-					+ " [" + c.getPkSequence() + "]"
-					+ "  " + c.getColumnName()
-					;
-			
-			_tMetaData.append(" . " + s + " \n");
-		}
-    	_tMetaData.append("\n");
-    }
+//    private void printMetaDataPrimaryKeys(String tableName, List<PrimaryKeyColumnMetaData> columns)
+//    {
+//    	_tMetaData.append("Table '" + tableName + "' : \n");
+//		for ( PrimaryKeyColumnMetaData c : columns ) {
+//			String s = 
+//					" " + c.getPkName() + " : " 
+//					+ " [" + c.getPkSequence() + "]"
+//					+ "  " + c.getColumnName()
+//					;
+//			
+//			_tMetaData.append(" . " + s + " \n");
+//		}
+//    	_tMetaData.append("\n");
+//    }
     
-    private void printMetaDataForeignKeys(String tableName, List<ForeignKeyColumnMetaData> columns)
-    {
-    	_tMetaData.append("Table '" + tableName + "' : \n");
-		for ( ForeignKeyColumnMetaData c : columns ) {
-			
-			String s = 
-					" " + c.getFkName() + " : " 
-					+ c.getFkTableName() + "." + c.getFkColumnName()
-					+ " --> " 
-					+ c.getPkTableName()  + "." + c.getPkColumnName()
-					+ "  ( PK : " + c.getPkName() + ")"
-					;
-			
-			_tMetaData.append(" . " + s + " \n");
-		}
-    	_tMetaData.append("\n");
-    }
+//    private void printMetaDataForeignKeys(String tableName, List<ForeignKeyColumnMetaData> columns)
+//    {
+//    	_tMetaData.append("Table '" + tableName + "' : \n");
+//		for ( ForeignKeyColumnMetaData c : columns ) {
+//			
+//			String s = 
+//					" " + c.getFkName() + " : " 
+//					+ c.getFkTableName() + "." + c.getFkColumnName()
+//					+ " --> " 
+//					+ c.getPkTableName()  + "." + c.getPkColumnName()
+//					+ "  ( PK : " + c.getPkName() + ")"
+//					;
+//			
+//			_tMetaData.append(" . " + s + " \n");
+//		}
+//    	_tMetaData.append("\n");
+//    }
     
     private IProject getEclipseProject()
     {
@@ -1945,32 +2035,35 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
     		IFile repositoryFile,
     		TelosysToolsLogger logger ) 
     {
-		RepositoryModel repo = null ;
+//		RepositoryModel repo = null ;
 
 		//--- 1) Generate the repository in memory
 		try {
-			ConnectionManager connectionManager = createConnectionManager();
-			RepositoryGenerator generator = new RepositoryGenerator(connectionManager, RepositoryRulesProvider.getRepositoryRules(), logger) ;	
-			
-			repo = generator.generate(db); // ver 2.1.1
+//			ConnectionManager connectionManager = createConnectionManager();
+//			RepositoryGenerator generator = new RepositoryGenerator(connectionManager, RepositoryRulesProvider.getRepositoryRules(), logger) ;	
+//			repo = generator.generate(db); // ver 2.1.1
+
+			TelosysProject telosysProject = getTelosysProject();
+			telosysProject.createNewDbModel(db) ;
+
 		} catch (TelosysToolsException e) {
-			MsgBox.error("Cannot generate.", e);
+			MsgBox.error("Cannot generate db-model", e);
 			return false ;
 		}
 			
-		//--- 2) Save the repository in the file
-		try {
-			File file = EclipseWksUtil.toFile(repositoryFile);
-			logger.info("Saving repository in file " + file.getAbsolutePath() );
-			//StandardFilePersistenceManager pm = new StandardFilePersistenceManager(file, logger);
-			PersistenceManager pm = PersistenceManagerFactory.createPersistenceManager(file, logger);
-			pm.save(repo);
-			logger.info("Repository saved.");
-			
-		} catch (TelosysToolsException e) {
-			MsgBox.error("Cannot save file", e);
-			return false ;
-		}
+//		//--- 2) Save the repository in the file
+//		try {
+//			File file = EclipseWksUtil.toFile(repositoryFile);
+//			logger.info("Saving repository in file " + file.getAbsolutePath() );
+//			//StandardFilePersistenceManager pm = new StandardFilePersistenceManager(file, logger);
+//			PersistenceManager pm = PersistenceManagerFactory.createPersistenceManager(file, logger);
+//			pm.save(repo);
+//			logger.info("Repository saved.");
+//			
+//		} catch (TelosysToolsException e) {
+//			MsgBox.error("Cannot save file", e);
+//			return false ;
+//		}
 
 		return true ;
     }
@@ -1984,33 +2077,39 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
      * @return
      * @throws TelosysToolsException
      */
-    //private int updateRepository(Connection con, DatabaseConfiguration db, ProjectConfig projectConfig, TelosysToolsLogger logger ) 
-    private int updateRepository(DatabaseConfiguration db, TelosysToolsLogger logger ) // v 3.0.0
-    	throws TelosysToolsException
-    {
-		
-		//--- 1) LOAD the repository from the file
-		File repositoryFile = getRepositoryFile( db.getDatabaseName() );
-		logger.info("Load repository from file " + repositoryFile.getAbsolutePath());
-		//StandardFilePersistenceManager persistenceManager = new StandardFilePersistenceManager(repositoryFile, logger);
-		PersistenceManager persistenceManager = PersistenceManagerFactory.createPersistenceManager(repositoryFile, logger);
-		RepositoryModel repositoryModel = persistenceManager.load();		
-		logger.info("Repository loaded : " + repositoryModel.getNumberOfEntities() + " entitie(s)"  );
-		
-		//--- 2) UPDATE the repository in memory
-		File updateLogFile = getUpdateLogFile( repositoryFile.getAbsolutePath() );
-		UpdateLogWriter updateLogger = new UpdateLogWriter( updateLogFile ) ;
-		
-		ConnectionManager connectionManager = createConnectionManager();
-		RepositoryUpdator updator = new RepositoryUpdator(connectionManager, RepositoryRulesProvider.getRepositoryRules(), logger,  updateLogger);// #LGU ver 2.1.1
-		
-		ChangeLog changeLog = updator.updateRepository(db, repositoryModel); // #LGU ver 2.1.1
-		
-		//--- 3) SAVE the repository in the file
-		logger.info("Save repository in file " + repositoryFile.getAbsolutePath());
-		persistenceManager.save(repositoryModel);
-		logger.info("Repository saved.");
-		
+//    //private int updateRepository(Connection con, DatabaseConfiguration db, ProjectConfig projectConfig, TelosysToolsLogger logger ) 
+//    private int updateRepository(DatabaseConfiguration db, TelosysToolsLogger logger ) // v 3.0.0
+//    	throws TelosysToolsException
+//    {
+//		
+//		//--- 1) LOAD the repository from the file
+//		File repositoryFile = getRepositoryFile( db.getDatabaseName() );
+//		logger.info("Load repository from file " + repositoryFile.getAbsolutePath());
+//		//StandardFilePersistenceManager persistenceManager = new StandardFilePersistenceManager(repositoryFile, logger);
+//		PersistenceManager persistenceManager = PersistenceManagerFactory.createPersistenceManager(repositoryFile, logger);
+//		RepositoryModel repositoryModel = persistenceManager.load();		
+//		logger.info("Repository loaded : " + repositoryModel.getNumberOfEntities() + " entitie(s)"  );
+//		
+//		//--- 2) UPDATE the repository in memory
+//		File updateLogFile = getUpdateLogFile( repositoryFile.getAbsolutePath() );
+//		UpdateLogWriter updateLogger = new UpdateLogWriter( updateLogFile ) ;
+//		
+//		ConnectionManager connectionManager = createConnectionManager();
+//		RepositoryUpdator updator = new RepositoryUpdator(connectionManager, RepositoryRulesProvider.getRepositoryRules(), logger,  updateLogger);// #LGU ver 2.1.1
+//		
+//		ChangeLog changeLog = updator.updateRepository(db, repositoryModel); // #LGU ver 2.1.1
+//		
+//		//--- 3) SAVE the repository in the file
+//		logger.info("Save repository in file " + repositoryFile.getAbsolutePath());
+//		persistenceManager.save(repositoryModel);
+//		logger.info("Repository saved.");
+//		
+//		return changeLog.getNumberOfEntities() ;
+//    }
+    
+    private int updateRepository(DatabaseConfiguration db, TelosysToolsLogger logger ) throws TelosysToolsException {
+		TelosysProject telosysProject = getTelosysProject();
+		ChangeLog changeLog = telosysProject.updateDbModel(db) ;
 		return changeLog.getNumberOfEntities() ;
     }
     
